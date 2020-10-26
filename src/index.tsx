@@ -1,13 +1,12 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import ReactDOM from 'react-dom';
 
-class Nyma extends Component {
-	render() {
-		return (
-			<div className="" />
-		);
-	}
+class Nyma extends PureComponent {
+  render() {
+    return (
+      <div className="nyma" />
+    );
+  }
 }
 
-
-ReactDOM.render(<Nyma/>, document.getElementById('root'));
+ReactDOM.render(<Nyma />, document.getElementById('root'));
