@@ -10,6 +10,7 @@ module.exports = {
   devServer: {
     hot: true,
     open: true,
+    stats: 'errors-only',
   },
   module: {
     rules: [
