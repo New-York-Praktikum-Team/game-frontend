@@ -11,6 +11,7 @@ module.exports = {
     hot: true,
     open: true,
     stats: 'errors-only',
+    port: 3000
   },
   module: {
     rules: [
