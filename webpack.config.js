@@ -11,18 +11,33 @@ module.exports = {
     hot: true,
     open: true,
     stats: 'errors-only',
-    port: 3000
+    port: 3000,
+  },
+  resolve: {
+    extensions: ['.tsx', '.ts', '.js'],
   },
   module: {
     rules: [
       {
-        test: /\.(js|jsx|ts|tsx)$/i,
+        test: /\.tsx?$/,
+        use: ['babel-loader', 'ts-loader', 'eslint-loader'],
         exclude: /node_modules/,
-        use: ['babel-loader', 'eslint-loader'],
       },
       {
-        test: /\.css$/i,
-        use: ['style-loader', 'css-loader'],
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader', {
+          loader: 'postcss-loader',
+          options: {
+            postcssOptions: {
+              plugins: [
+                [
+                  'postcss-preset-env',
+                ],
+              ],
+            },
+          },
+        },
+        ],
       },
       {
         test: /\.(png|jpe?g|gif|ico)$/i,
