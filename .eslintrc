@@ -4,7 +4,8 @@
   "rules": {
     "react/jsx-filename-extension": [1, { "extensions": [".tsx", ".ts"] }],
     "import/extensions": "off",
-    "import/no-unresolved": "off"
+    "import/no-unresolved": "off",
+    "import/prefer-default-export": "off"
   },
   "env": {
     "browser": true
