@@ -6,7 +6,8 @@
   "scripts": {
     "start": "webpack serve --mode development",
     "build": "webpack --mode production",
-    "test": "test"
+    "test": "test",
+    "lint": "eslint \"**/*.{js,ts,tsx}\" --config ./.eslintrc --fix"
   },
   "repository": {
     "type": "git",
@@ -56,7 +57,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "eslint --fix"
+      "pre-commit": "npm run lint"
     }
   }
 }
