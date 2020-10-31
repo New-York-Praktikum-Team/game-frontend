@@ -1,33 +1,45 @@
 import React, { FC } from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import { Profile } from '../Profile';
-import { SignUp } from '../SignUp';
-import { Home } from '../Home';
-import { SignIn } from '../SignIn';
-import { Game } from '../Game';
+import {
+  BrowserRouter as Router, Switch, Route, Link,
+} from 'react-router-dom';
+import { Profile } from '../../pages/Profile';
+import { SignUp } from '../../pages/SignUp';
+import { Home } from '../../pages/Home';
+import { SignIn } from '../../pages/SignIn';
+import { Game } from '../../pages/Game';
+import { Leaderboard } from '../../pages/Leaderboard';
 
 export const App: FC = () => (
   <div className="app">
     <Router>
       <Switch>
-        <Route path="/" exact>
+        <Route exact path="/">
           <Home />
         </Route>
 
-        <Route path="/sign-in">
+        <Route exact path="/sign-in">
           <SignIn />
         </Route>
 
-        <Route path="/sign-up">
+        <Route exact path="/sign-up">
           <SignUp />
         </Route>
 
-        <Route path="/profile">
+        <Route exact path="/profile">
           <Profile />
         </Route>
 
-        <Route path="/game">
+        <Route exact path="/play">
           <Game />
+        </Route>
+
+        <Route exact path="/leaderboard">
+          <Leaderboard />
+        </Route>
+
+        <Route>
+          <div>Whoops, there is nothing here!</div>
+          <Link to="/">Home</Link>
         </Route>
       </Switch>
     </Router>
