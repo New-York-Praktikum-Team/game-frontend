@@ -6,12 +6,14 @@ module.exports = {
   output: {
     path: path.join(__dirname, '/dist'),
     filename: 'bundle.js',
+    publicPath: '/',
   },
   devServer: {
     hot: true,
     open: true,
     stats: 'errors-only',
     port: 3000,
+    historyApiFallback: true,
   },
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
