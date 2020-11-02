@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "webpack serve --mode development",
+    "start:prod": "node ./server/app.js",
     "build": "webpack --mode production",
     "test": "echo \"Error: Tests is not implemented\" && exit 1",
     "lint": "eslint --fix ./src --config ./.eslintrc --ext .js,.ts,.tsx"
@@ -56,6 +57,7 @@
   },
   "dependencies": {
     "html-webpack-plugin": "4.5.0",
+    "express": "^4.17.1",
     "react": "17.0.1",
     "react-dom": "17.0.1",
     "react-router-dom": "^5.2.0"
