@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/New-York-Praktikum-Team/play-frontend.git"
+    "url": "git+https://github.com/New-York-Praktikum-Team/game-frontend.git"
   },
   "keywords": [
     "game"
@@ -19,9 +19,9 @@
   "author": "New York Praktikum Team",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/New-York-Praktikum-Team/play-frontend/issues"
+    "url": "https://github.com/New-York-Praktikum-Team/game-frontend/issues"
   },
-  "homepage": "https://github.com/New-York-Praktikum-Team/play-frontend#readme",
+  "homepage": "https://github.com/New-York-Praktikum-Team/game-frontend#readme",
   "devDependencies": {
     "@babel/core": "7.12.3",
     "@babel/preset-env": "7.12.1",
