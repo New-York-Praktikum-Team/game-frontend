@@ -25,21 +25,22 @@ Install the dependencies first:
 npm install
 ```
 
-The runs the app in development mode:
+Then run the app in development mode:
 ```
 npm start
 ```
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+
+<br>
 
 Or build the app for production to the `dist` folder.
 ```
 npm run build
 ```
 It correctly bundles React in production mode and optimizes the build for the best performance.
-
 The build is minified.
 
-Your app is ready to be deployed.
+Your app is ready to be deployed!
 
 ## Development Team
    - [Inna Lytkina](https://github.com/innayarantseva)
