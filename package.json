@@ -7,7 +7,7 @@
     "start": "webpack serve --mode development",
     "build": "webpack --mode production",
     "test": "echo \"Error: Tests is not implemented\" && exit 1",
-    "lint": "eslint \"**/*.{js,ts,tsx}\" --config ./.eslintrc --fix"
+    "lint": "eslint --fix ./src --config ./.eslintrc --ext .js,.ts,.tsx"
   },
   "repository": {
     "type": "git",
