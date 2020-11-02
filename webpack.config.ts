@@ -14,13 +14,13 @@ module.exports = {
     port: 3000,
   },
   resolve: {
-    extensions: ['.tsx', '.ts', '.js'],
+    extensions: ['*', '.js', '.jsx', '.tsx', '.ts'],
   },
   module: {
     rules: [
       {
-        test: /\.tsx?$/,
-        use: ['babel-loader', 'ts-loader', 'eslint-loader'],
+        test: /\.(js|jsx|tsx|ts)$/,
+        use: ['babel-loader'],
         exclude: /node_modules/,
       },
       {
