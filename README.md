@@ -2,7 +2,7 @@
 
 Version: v.1.0.0
 
-[Nyma live](https://dashboard.heroku.com/)
+[Nyma live](https://nyma-game.herokuapp.com/)
 
 ## Overview
 
@@ -16,7 +16,7 @@ At the end of the game the total amount of points is calculated and displayed to
 
   - Webpack for script bundling and serving
   - HTML5 Canvas for graphics rendering
-  - React + Typescrit for building webpages and game logic
+  - React + Typescript for building webpages and game logic
 
 ## Install
 
