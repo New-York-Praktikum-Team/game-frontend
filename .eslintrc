@@ -1,8 +1,11 @@
 {
-  "parser": "babel-eslint",
-  "extends": ["airbnb"],
+  "parser": "@typescript-eslint/parser",
+  "extends": ["airbnb-typescript/base"],
   "rules": {
-    "react/jsx-filename-extension": [1, { "extensions": [".tsx", ".ts"] }],
+    "@typescript-eslint/dot-notation": "off",
+    "@typescript-eslint/no-implied-eval": "off",
+    "@typescript-eslint/no-throw-literal": "off",
+    "@typescript-eslint/no-unused-vars": 2,
     "import/extensions": "off",
     "import/no-unresolved": "off",
     "import/prefer-default-export": "off"
