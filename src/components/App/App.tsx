@@ -2,46 +2,36 @@ import React, { FC } from 'react';
 import {
   BrowserRouter as Router, Switch, Route, Link,
 } from 'react-router-dom';
-import { Profile } from '../../pages/Profile';
-import { SignUp } from '../../pages/SignUp';
-import { Home } from '../../pages/Home';
-import { SignIn } from '../../pages/SignIn';
-import { Game } from '../../pages/Game';
-import { Leaderboard } from '../../pages/Leaderboard';
+import { AppUrls } from '../../routes/appUrls';
+import { ROUTES } from '../../routes/routes';
 
 export const App: FC = () => (
-  <div className="app">
+  <article className="app">
     <Router>
-      <Switch>
-        <Route exact path="/">
-          <Home />
-        </Route>
+      <header>
+        <nav>
+          <ul>
+            {
+              Object.keys(AppUrls).map((sectionName) => {
+                // needed to cast a particular type as it was inferred as simple string
+                const sectionUrl = AppUrls[(sectionName as keyof typeof AppUrls)];
 
-        <Route exact path="/sign-in">
-          <SignIn />
-        </Route>
+                return (
+                  <li key={sectionName}>
+                    <Link to={sectionUrl}>{sectionName}</Link>
+                  </li>
+                );
+              })
+            }
+          </ul>
+        </nav>
+      </header>
 
-        <Route exact path="/sign-up">
-          <SignUp />
-        </Route>
-
-        <Route exact path="/profile">
-          <Profile />
-        </Route>
-
-        <Route exact path="/play">
-          <Game />
-        </Route>
-
-        <Route exact path="/leaderboard">
-          <Leaderboard />
-        </Route>
-
-        <Route>
-          <div>Whoops, there is nothing here!</div>
-          <Link to="/">Home</Link>
-        </Route>
-      </Switch>
+      <main>
+        <Switch>
+          {ROUTES.map((routeProps, index) => <Route key={index} {...routeProps}/>)}
+        </Switch>
+      </main>
     </Router>
-  </div>
+  </article>
 );

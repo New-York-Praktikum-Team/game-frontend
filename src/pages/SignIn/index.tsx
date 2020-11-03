@@ -2,8 +2,8 @@ import React, { FC, SyntheticEvent, useState } from 'react';
 import { Link, withRouter, RouteComponentProps } from 'react-router-dom';
 
 const SignInComponent: FC<RouteComponentProps> = ({ history }: RouteComponentProps) => {
-  const [login, setLogin] = useState<string | undefined>();
-  const [password, setPassword] = useState<string | undefined>();
+  const [login, setLogin] = useState('');
+  const [password, setPassword] = useState('');
 
   const handleFormSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
