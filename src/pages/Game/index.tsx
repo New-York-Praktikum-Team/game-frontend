@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
 import { Link } from 'react-router-dom';
+import { AppUrls } from '../../routes/appUrls';
 
 export const Game: FC = () => (
   <section>
@@ -9,12 +10,12 @@ export const Game: FC = () => (
     <p>Meanwhile, you can</p>
     <ul>
       <li>
-        <Link to="/">back home</Link>
+        <Link to={AppUrls.Home}>back home</Link>
       </li>
       <li>
         take a look at the
         {' '}
-        <Link to="/leaderboard">leaderboard</Link>
+        <Link to={AppUrls.Leaderboard}>leaderboard</Link>
       </li>
     </ul>
 

@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
 import { Link } from 'react-router-dom';
+import { AppUrls } from '../../routes/appUrls';
 
 export const SignUp: FC = () => (
   <section>
@@ -7,10 +8,10 @@ export const SignUp: FC = () => (
 
     <ul>
       <li>
-        <Link to="/sign-in">I already have an account</Link>
+        <Link to={AppUrls.SignIn}>I already have an account</Link>
       </li>
       <li>
-        <Link to="/">I&apos;d rather get back home</Link>
+        <Link to={AppUrls.Home}>I&apos;d rather get back home</Link>
       </li>
     </ul>
   </section>

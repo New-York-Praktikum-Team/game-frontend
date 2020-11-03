@@ -1,5 +1,6 @@
 import React, { FC, SyntheticEvent, useState } from 'react';
 import { Link, withRouter, RouteComponentProps } from 'react-router-dom';
+import { AppUrls } from '../../routes/appUrls';
 
 const SignInComponent: FC<RouteComponentProps> = ({ history }: RouteComponentProps) => {
   const [login, setLogin] = useState('');
@@ -17,10 +18,10 @@ const SignInComponent: FC<RouteComponentProps> = ({ history }: RouteComponentPro
 
       <ul>
         <li>
-          <Link to="/sign-up">I dont have an account</Link>
+          <Link to={AppUrls.SignUp}>I dont have an account</Link>
         </li>
         <li>
-          <Link to="/">I&apos;d rather get back home</Link>
+          <Link to={AppUrls.Home}>I&apos;d rather get back home</Link>
         </li>
       </ul>
 
