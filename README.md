@@ -46,3 +46,4 @@ Your app is ready to be deployed!
    - [Inna Lytkina](https://github.com/innayarantseva)
    - [Vadim Konchik](https://github.com/elfexor) 
    - [Irina Tishchenko](https://github.com/IrinaT1)
+  
