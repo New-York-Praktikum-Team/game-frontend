@@ -1,9 +1,19 @@
 import React, { Component, ErrorInfo } from 'react';
 
-export class ErrorBoundary extends Component {
-  state = {
-    hasError: false,
-  };
+type IErrorBoundaryProps = {};
+
+type IErrorBoundaryState = {
+  hasError: boolean
+};
+
+export class ErrorBoundary extends Component<IErrorBoundaryProps, IErrorBoundaryState> {
+  constructor(props: IErrorBoundaryProps) {
+    super(props);
+
+    this.state = {
+      hasError: false,
+    };
+  }
 
   static getDerivedStateFromError() {
     return { hasError: true };
