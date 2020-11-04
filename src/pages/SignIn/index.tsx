@@ -1,8 +1,8 @@
 import React, { FC, SyntheticEvent, useState } from 'react';
-import { Link, withRouter, RouteComponentProps } from 'react-router-dom';
+import { Link, RouteComponentProps } from 'react-router-dom';
 import { AppUrls } from '../../routes/appUrls';
 
-const SignInComponent: FC<RouteComponentProps> = ({ history }: RouteComponentProps) => {
+export const SignIn: FC<RouteComponentProps> = ({ history }: RouteComponentProps) => {
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
 
@@ -51,5 +51,3 @@ const SignInComponent: FC<RouteComponentProps> = ({ history }: RouteComponentPro
     </section>
   );
 };
-
-export const SignIn = withRouter(SignInComponent);

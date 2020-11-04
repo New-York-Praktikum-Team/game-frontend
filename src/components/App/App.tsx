@@ -12,16 +12,11 @@ export const App: FC = () => (
         <nav>
           <ul>
             {
-              Object.keys(AppUrls).map((sectionName) => {
-                // needed to cast a particular type as it was inferred as simple string
-                const sectionUrl = AppUrls[(sectionName as keyof typeof AppUrls)];
-
-                return (
+              Object.entries(AppUrls).map(([sectionName, sectionUrl]) => (
                   <li key={sectionName}>
                     <Link to={sectionUrl}>{sectionName}</Link>
                   </li>
-                );
-              })
+              ))
             }
           </ul>
         </nav>
