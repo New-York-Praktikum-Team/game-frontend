@@ -1,4 +1,5 @@
 import React, { Component, ErrorInfo } from 'react';
+import { Link } from 'react-router-dom';
 
 type ErrorBoundaryProps = {};
 
@@ -31,7 +32,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
       return (
         <section>
           <h1>Oops... Something went wrong.</h1>
-          <p>Try refreshing the page.</p>
+          <p>Try refreshing the page, or go to the <Link to="/">home</Link> page</p>
         </section>
       );
     }
