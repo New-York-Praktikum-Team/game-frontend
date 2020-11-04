@@ -12,6 +12,7 @@ module.exports = {
     open: true,
     stats: 'errors-only',
     port: 3000,
+    historyApiFallback: true,
   },
   resolve: {
     extensions: ['*', '.js', '.jsx', '.tsx', '.ts'],
