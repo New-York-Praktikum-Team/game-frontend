@@ -1,53 +1,56 @@
-import React, { FC, SyntheticEvent, useState } from 'react';
-import { Link, RouteComponentProps } from 'react-router-dom';
+import './SignIn.css';
+
+import React, { FC } from 'react';
+import { Formik, Form } from 'formik';
+import { object, string } from 'yup';
 import { AppUrls } from '../../routes/appUrls';
+import { FormField } from '../../components/FormField';
+import { FormButton } from '../../components/FormButton';
+import { FormLink } from '../../components/FormLink';
 
-export const SignIn: FC<RouteComponentProps> = ({ history }: RouteComponentProps) => {
-  const [login, setLogin] = useState('');
-  const [password, setPassword] = useState('');
+interface SignInFormValues {
+  login: string;
+  password: string;
+}
 
-  const handleFormSubmit = (e: SyntheticEvent) => {
-    e.preventDefault();
-    console.log({ login, password });
-    history.push('/profile');
+export const SignIn: FC = () => {
+  const initialValues: SignInFormValues = {
+    login: '',
+    password: '',
   };
 
+  const validationSchema = object().shape({
+    login: string().required('Username is required'),
+    password: string().required('Password is required'),
+  });
+
   return (
-    <section>
-      <h1>This is the Sign In Page.</h1>
+    <div className='sign-in-wrapper'>
+      <h1>Log in</h1>
 
-      <ul>
-        <li>
-          <Link to={AppUrls.SignUp}>I dont have an account</Link>
-        </li>
-        <li>
-          <Link to={AppUrls.Home}>I&apos;d rather get back home</Link>
-        </li>
-      </ul>
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        validateOnChange={false}
+        validateOnBlur={true}
+        onSubmit={(values: SignInFormValues, { setSubmitting }) => {
+          setTimeout(() => {
+            console.log('Logging in, values = ', values);
+            setSubmitting(false);
+          }, 400);
+        }}
+      >
+        {({ isSubmitting }) => (
+          <Form className='sign-in-form'>
+            <FormField type='text' label='Username' name='login' />
+            <FormField type='password' label='Password' name='password' />
 
-      <form onSubmit={handleFormSubmit}>
-        <label htmlFor="login">
-          <div>Login</div>
-          <input
-            type="text"
-            name="login"
-            onChange={(e) => setLogin(e.target.value)}
-          />
-        </label>
-        <label htmlFor="password">
-          <div>Password</div>
-          <input
-            type="password"
-            name="password"
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </label>
+            <FormButton text='Log in' disabled={isSubmitting} />
+            <FormLink text='Need an account? Sign Up' to={AppUrls.SignUp} />
 
-        <button type="submit">
-          Alright, just let me in
-        </button>
-      </form>
-
-    </section>
+          </Form>
+        )}
+      </Formik>
+    </div>
   );
 };
