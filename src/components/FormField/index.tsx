@@ -6,12 +6,14 @@ import { Field, ErrorMessage, connect } from 'formik';
 type FormFieldProps = {
   name: string,
   label: string
-}
+};
 
 type OtherFormFieldProps = Record<string, any>;
 
 export const FormField = connect((props: FormFieldProps & OtherFormFieldProps) => {
-  const { label, name, formik, ...rest } = props
+  const {
+    label, name, formik, ...rest
+  } = props;
   return (
     <div className='form-field'>
       <label className='form-field-label' htmlFor={name}>{label}</label>
@@ -29,5 +31,5 @@ export const FormField = connect((props: FormFieldProps & OtherFormFieldProps) =
         name={name}
       />
     </div>
-  )
-})
+  );
+});
