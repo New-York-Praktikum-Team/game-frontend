@@ -8,7 +8,7 @@ export const SignIn: FC<RouteComponentProps> = ({ history }: RouteComponentProps
 
   const handleFormSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
-    window.console.log({ login, password });
+    console.log({ login, password });
     history.push('/profile');
   };
 
