@@ -14,20 +14,24 @@ export const FormField = connect((props: FormFieldProps & OtherFormFieldProps) =
   const {
     label, name, formik, ...rest
   } = props;
+
+  const value = formik.values[name];
+
   return (
-    <div className='form-field'>
-      <label className='form-field-label' htmlFor={name}>{label}</label>
+    <div className='input-field'>
       <Field
-        className='form-field-input'
         name={name}
+        id={name}
         onFocus={() => {
           formik.setFieldError({ name }.name, '');
         }}
         {...rest}
       />
+
+      <label className={value ? 'active' : ''} htmlFor={name}>{label}</label>
       <ErrorMessage
-        className='form-field-error'
-        component='div'
+        className='helper-text error'
+        component='span'
         name={name}
       />
     </div>

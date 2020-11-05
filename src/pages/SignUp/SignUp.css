@@ -1,3 +1,5 @@
-.sign-up-wrapper {}
-
-.sign-up-form {}
+.signup-form-wrapper {
+  max-width: 500px;
+  margin-left: 50px;
+  margin-bottom: 50px;
+}

@@ -25,7 +25,7 @@ export const SignIn: FC = () => {
   });
 
   return (
-    <div className='sign-in-wrapper'>
+    <div className='signin-form-wrapper'>
       <h1>Log in</h1>
 
       <Formik
@@ -41,7 +41,7 @@ export const SignIn: FC = () => {
         }}
       >
         {({ isSubmitting }) => (
-          <Form className='sign-in-form'>
+          <Form>
             <FormField type='text' label='Username' name='login' />
             <FormField type='password' label='Password' name='password' />
 

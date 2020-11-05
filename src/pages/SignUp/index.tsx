@@ -40,7 +40,7 @@ export const SignUp: FC = () => {
   });
 
   return (
-    <div className='sign-up-wrapper'>
+    <div className='signup-form-wrapper'>
       <h1>Create account</h1>
 
       <Formik
@@ -56,7 +56,7 @@ export const SignUp: FC = () => {
         }}
       >
         {({ isSubmitting }) => (
-          <Form className='sign-up-form'>
+          <Form>
             <FormField type='email' label='Email' name='email' />
             <FormField type='text' label='Username' name='login' />
             <FormField type='text' label='First Name' name='firstName' />
