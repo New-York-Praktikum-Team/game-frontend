@@ -35,7 +35,9 @@ export const SignIn: FC = () => {
         validateOnBlur={true}
         onSubmit={(values: SignInFormValues, { setSubmitting }) => {
           setTimeout(() => {
+            /* eslint-disable no-console */
             console.log('Logging in, values = ', values);
+            /* eslint-enable */
             setSubmitting(false);
           }, 400);
         }}

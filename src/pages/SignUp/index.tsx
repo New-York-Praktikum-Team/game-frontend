@@ -50,7 +50,9 @@ export const SignUp: FC = () => {
         validateOnBlur={true}
         onSubmit={(values: SignUpFormValues, { setSubmitting }) => {
           setTimeout(() => {
+            /* eslint-disable no-console */
             console.log('Signing up, values = ', values);
+            /* eslint-enable */
             setSubmitting(false);
           }, 400);
         }}

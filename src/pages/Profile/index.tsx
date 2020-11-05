@@ -49,7 +49,9 @@ export const Profile: FC = () => {
         validateOnBlur={true}
         onSubmit={(values: ProfileFormValues, { setSubmitting }) => {
           setTimeout(() => {
+            /* eslint-disable no-console */
             console.log('Changing profile info, values = ', values);
+            /* eslint-enable */
             setSubmitting(false);
           }, 400);
         }}
@@ -68,7 +70,9 @@ export const Profile: FC = () => {
                   name='avatar'
                   accept='image/*'
                   onChange={
+                    /* eslint-disable no-console */
                     (e) => { console.log('Changing avatar to ', e.target.value); }
+                    /* eslint-enable */
                   }
                 />
               </div>
