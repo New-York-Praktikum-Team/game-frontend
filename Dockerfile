@@ -1,17 +1,17 @@
-# Базовый слой
+# Base layer
 FROM node:13
 
-# рабочая папка
+# Working directory
 WORKDIR /tmp
-# Копируем все файлы за исключением тех, которые в игноре
+# Copy all files from root, exept dockerignored
 COPY . /tmp
-# Устанавливаем зависимости, в образе появится /node_modules
-# Устанавливаем registry для ускорения установки
+# Install required dependencies, results in /node_modules directory is created
+# Set registry for fastening installation
 RUN npm config set registry http://registry.npmjs.org/ && npm ci
-# сборка приложения
+# Production build
 RUN npm run build
 
-# Переносим нужные файлы в папку, откуда будем запускать приложение
+# Move necessary files in app folder
 WORKDIR /app
 
 COPY . /app
@@ -20,12 +20,12 @@ RUN cp -a /tmp/node_modules /app
 RUN cp -a /tmp/server /app
 RUN cp -a /tmp/dist /app
 
-# сетапим перемнные окружения, которые понадобятся в сервере
+# Set up environment variables which are required for static server
 ENV NODE_ENV=production
 ENV PORT=80
 
-# При старте контейнер начнёт общаться через 80 порт
+# Container will be available at port 80
 EXPOSE 80
 
-# Сервер раздаёт статику из dist
+# Server serves static files from /dist
 CMD npm run start:prod
