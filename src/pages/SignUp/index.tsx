@@ -40,7 +40,7 @@ export const SignUp: FC = () => {
   });
 
   return (
-    <div className='signup-form-wrapper'>
+    <section className='signup-form-wrapper'>
       <h1>Create account</h1>
 
       <Formik
@@ -73,6 +73,6 @@ export const SignUp: FC = () => {
           </Form>
         )}
       </Formik>
-    </div>
+    </section>
   );
 };

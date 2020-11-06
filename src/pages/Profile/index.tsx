@@ -39,7 +39,7 @@ export const Profile: FC = () => {
   });
 
   return (
-    <div className='profile-form-wrapper'>
+    <section className='profile-form-wrapper'>
       <h1>Hi, {initialValues.displayName}!</h1>
 
       <Formik
@@ -91,6 +91,6 @@ export const Profile: FC = () => {
           </Form>
         )}
       </Formik>
-    </div>
+    </section>
   );
 };
