@@ -1,11 +1,12 @@
-import React, { Component, ErrorInfo, Fragment } from 'react';
+import React, { PureComponent, ErrorInfo, Fragment } from 'react';
 import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
+import { AppUrls } from '../../routes/appUrls';
 
 type ErrorBoundaryState = {
   hasError: boolean
 };
 
-class ErrorBoundaryHOC extends Component<RouteComponentProps, ErrorBoundaryState> {
+class ErrorBoundaryHOC extends PureComponent<RouteComponentProps, ErrorBoundaryState> {
   constructor(props: RouteComponentProps) {
     super(props);
 
@@ -30,7 +31,7 @@ class ErrorBoundaryHOC extends Component<RouteComponentProps, ErrorBoundaryState
   public render() {
     const { hasError } = this.state;
     const { pathname } = this.props.location;
-    const isHomePage = pathname === '/';
+    const isHomePage = pathname === AppUrls.Home;
 
     if (hasError) {
       return (
@@ -39,7 +40,7 @@ class ErrorBoundaryHOC extends Component<RouteComponentProps, ErrorBoundaryState
           <p>Try <u onClick={this.refresh}>refreshing</u> the page,
             {isHomePage
               ? ' or come back later.'
-              : <Fragment> or go to the <Link to="/">home</Link> page.</Fragment>}
+              : <Fragment> or go to the <Link to={AppUrls.Home}>home</Link> page.</Fragment>}
           </p>
         </section>
       );
