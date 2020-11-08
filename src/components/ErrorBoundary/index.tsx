@@ -6,31 +6,27 @@ type ErrorBoundaryState = {
   hasError: boolean
 };
 
-class ErrorBoundaryHOC extends PureComponent<RouteComponentProps, ErrorBoundaryState> {
-  constructor(props: RouteComponentProps) {
-    super(props);
+class WithRouterErrorBoundary extends PureComponent<RouteComponentProps, ErrorBoundaryState> {
+  state = {
+    hasError: false,
+  };
 
-    this.state = {
-      hasError: false,
-    };
-  }
+  static getDerivedStateFromError = (): Record<'hasError', boolean> => ({ hasError: true });
 
-  static getDerivedStateFromError() {
-    return { hasError: true };
-  }
-
-  public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+  public componentDidCatch = (error: Error, errorInfo: ErrorInfo):void => {
+    // eslint-disable-next-line no-console
     console.log(error);
+    // eslint-disable-next-line no-console
     console.log(errorInfo);
-  }
+  };
 
-  public refresh() {
+  public refresh = ():void => {
     window.location.reload();
-  }
+  };
 
   public render() {
     const { hasError } = this.state;
-    const { pathname } = this.props.location;
+    const { location: { pathname }, children } = this.props;
     const isHomePage = pathname === AppUrls.Home;
 
     if (hasError) {
@@ -46,8 +42,8 @@ class ErrorBoundaryHOC extends PureComponent<RouteComponentProps, ErrorBoundaryS
       );
     }
 
-    return this.props.children;
+    return children;
   }
 }
 
-export const ErrorBoundary = withRouter(ErrorBoundaryHOC);
+export const ErrorBoundary = withRouter(WithRouterErrorBoundary);
