@@ -22,7 +22,7 @@ export const FormField = connect<FormFieldProps, FormikValues>(
     const value = formik.values[name];
 
     const onFocusHandler = useCallback(() => {
-      formik.setFieldError({ name }.name, '');
+      formik.setFieldError(name, '');
     }, [formik, name]);
 
     return (
