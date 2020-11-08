@@ -1,4 +1,4 @@
-import React, { PureComponent, ErrorInfo, Fragment } from 'react';
+import React, { ErrorInfo, Fragment, PureComponent } from 'react';
 import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
 import { AppUrls } from '../../routes/appUrls';
 
