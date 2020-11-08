@@ -1,6 +1,8 @@
 {
   "parser": "@typescript-eslint/parser",
-  "extends": ["airbnb-typescript/base"],
+  "extends": [
+    "airbnb-typescript/base"
+  ],
   "rules": {
     "@typescript-eslint/dot-notation": "off",
     "@typescript-eslint/no-implied-eval": "off",
@@ -8,7 +10,13 @@
     "@typescript-eslint/no-unused-vars": 2,
     "import/extensions": "off",
     "import/no-unresolved": "off",
-    "import/prefer-default-export": "off"
+    "import/prefer-default-export": "off",
+    "sort-imports": [
+      "error",
+      {
+        "ignoreDeclarationSort": true
+      }
+    ]
   },
   "env": {
     "browser": true

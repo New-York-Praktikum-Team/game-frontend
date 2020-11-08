@@ -1,7 +1,6 @@
-import './FormLink.css';
-
 import React, { AnchorHTMLAttributes } from 'react';
 import { Link } from 'react-router-dom';
+import './FormLink.css';
 
 interface FormLinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
   text: string;
