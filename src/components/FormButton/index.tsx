@@ -1,14 +1,12 @@
 import './FormButton.css';
 
-import React from 'react';
+import React, { ButtonHTMLAttributes } from 'react';
 
-type FormButtonProps = {
+interface FormButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   text: string
-};
+}
 
-type OtherFormButtonProps = Record<string, any>;
-
-export const FormButton = (props: FormButtonProps & OtherFormButtonProps) => {
+export const FormButton = (props: FormButtonProps) => {
   const { text, ...rest } = props;
   return (
     <button className='waves-effect waves-light btn' type='submit' {...rest}>

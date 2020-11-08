@@ -1,39 +1,41 @@
 import './FormField.css';
 
-import React from 'react';
-import { Field, ErrorMessage, connect } from 'formik';
+import React, { InputHTMLAttributes } from 'react';
+import {
+  Field, ErrorMessage, connect, FormikContextType, FormikValues,
+} from 'formik';
 
-type FormFieldProps = {
+interface FormFieldProps extends InputHTMLAttributes<HTMLInputElement> {
   name: string,
-  label: string
-};
+  label: string,
+}
 
-type OtherFormFieldProps = Record<string, any>;
+export const FormField = connect<FormFieldProps, FormikValues>(
+  (props: FormFieldProps & { formik: FormikContextType<FormikValues> }) => {
+    const {
+      label, name, formik, ...rest
+    } = props;
 
-export const FormField = connect((props: FormFieldProps & OtherFormFieldProps) => {
-  const {
-    label, name, formik, ...rest
-  } = props;
+    const value = formik.values[name];
 
-  const value = formik.values[name];
+    return (
+      <div className='input-field'>
+        <Field
+          name={name}
+          id={name}
+          onFocus={() => {
+            formik.setFieldError({ name }.name, '');
+          }}
+          {...rest}
+        />
 
-  return (
-    <div className='input-field'>
-      <Field
-        name={name}
-        id={name}
-        onFocus={() => {
-          formik.setFieldError({ name }.name, '');
-        }}
-        {...rest}
-      />
-
-      <label className={value ? 'active' : ''} htmlFor={name}>{label}</label>
-      <ErrorMessage
-        className='helper-text error'
-        component='span'
-        name={name}
-      />
-    </div>
-  );
-});
+        <label className={value ? 'active' : ''} htmlFor={name}>{label}</label>
+        <ErrorMessage
+          className='helper-text materialize-red-text'
+          component='span'
+          name={name}
+        />
+      </div>
+    );
+  },
+);

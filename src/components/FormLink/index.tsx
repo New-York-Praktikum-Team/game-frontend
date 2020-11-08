@@ -1,16 +1,14 @@
 import './FormLink.css';
 
-import React from 'react';
+import React, { AnchorHTMLAttributes } from 'react';
 import { Link } from 'react-router-dom';
 
-type FormLinkProps = {
-  text: string,
-  to: string
-};
+interface FormLinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
+  text: string;
+  to: string;
+}
 
-type OtherFormLinkProps = Record<string, any>;
-
-export const FormLink = (props: FormLinkProps & OtherFormLinkProps) => {
+export const FormLink = (props: FormLinkProps) => {
   const { text, to, ...rest } = props;
   return (
     <Link className='form-link' to={to} {...rest}>
