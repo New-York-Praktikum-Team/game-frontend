@@ -24,11 +24,10 @@
     "paths": {
       "*": ["./src/*"],
     },
-    "typeRoots": ["typings/**/*.d.ts", "node_modules/@types"]
+    "typeRoots": ["src/typings.d.ts", "node_modules/@types"]
   },
   "include": [
     "src",
-    "typings/**/*.d.ts",
     "./node_modules/@types"
   ],
   "exclude": [

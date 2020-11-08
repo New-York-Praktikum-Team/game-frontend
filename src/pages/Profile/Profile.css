@@ -1,0 +1,37 @@
+.profile-form-wrapper {
+  max-width: 500px;
+  margin-left: 50px;
+  margin-bottom: 50px;
+}
+
+.avatar-wrapper {
+  display: flex; 
+  flex-direction: column;
+  align-items: center;
+}
+
+.avatar {
+  position: relative;
+  flex: 0 0 200px;
+  min-width: 200px;
+  max-width: 200px;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: gray;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+}
+
+.change-avatar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 25%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  color: #ffffff;
+  background-color: rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+}

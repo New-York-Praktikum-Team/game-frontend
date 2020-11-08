@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import {
-  BrowserRouter as Router, Switch, Route, Link,
+  Link, Route, BrowserRouter as Router, Switch,
 } from 'react-router-dom';
 import { ErrorBoundary } from '../../components/ErrorBoundary';
 import { AppUrls } from '../../routes/appUrls';
