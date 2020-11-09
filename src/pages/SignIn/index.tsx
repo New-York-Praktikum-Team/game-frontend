@@ -1,10 +1,13 @@
-import React, { FC } from 'react';
-import { Form, Formik } from 'formik';
+import React from 'react';
+import { Form, Formik, FormikHelpers } from 'formik';
 import { object, string } from 'yup';
+import { withRouter } from 'react-router-dom';
+import { notification } from '../../components/Notification';
 import { AppUrls } from '../../routes/appUrls';
 import { FormField } from '../../components/FormField';
 import { FormButton } from '../../components/FormButton';
 import { FormLink } from '../../components/FormLink';
+import { authApi } from '../../modules/api/auth';
 import './SignIn.css';
 
 interface SignInFormValues {
@@ -22,33 +25,39 @@ const validationSchema = object().shape({
   password: string().required('Password is required'),
 });
 
-export const SignIn: FC = () => (
-  <section className='signin-form-wrapper'>
-    <h1>Log in</h1>
+export const SignIn = withRouter(({ history }) => {
+  const send = (values: SignInFormValues, { setSubmitting }: FormikHelpers<SignInFormValues>) => {
+    setSubmitting(true);
 
-    <Formik
-      initialValues={initialValues}
-      validationSchema={validationSchema}
-      validateOnChange={false}
-      validateOnBlur={true}
-      onSubmit={(values: SignInFormValues, { setSubmitting }) => {
-        setTimeout(() => {
-          // eslint-disable-next-line no-console
-          console.log('Logging in, values = ', values);
-          setSubmitting(false);
-        }, 400);
-      }}
-    >
-      {({ isSubmitting }) => (
-        <Form>
-          <FormField label='Username' name='login' />
-          <FormField type='password' label='Password' name='password' />
+    authApi.signin(values.login, values.password).then(() => {
+      history.push(AppUrls.Leaderboard);
+    }).catch(() => {
+      notification.error('Incorrect login or password');
+    }).finally(() => {
+      setSubmitting(false);
+    });
+  };
 
-          <FormButton text='Log in' disabled={isSubmitting} />
-          <FormLink text='Need an account? Sign Up' to={AppUrls.SignUp} />
+  return (
+    <section className='signin-form-wrapper'>
+      <h1>Log in</h1>
 
-        </Form>
-      )}
-    </Formik>
-  </section>
-);
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        validateOnChange={false}
+        validateOnBlur={true}
+        onSubmit={send}
+      >
+        {({ isSubmitting }) => (
+          <Form>
+            <FormField label='Username' name='login' />
+            <FormField type='password' label='Password' name='password' />
+            <FormButton text='Log in' disabled={isSubmitting} />
+            <FormLink text='Need an account? Sign Up' to={AppUrls.SignUp} />
+          </Form>
+        )}
+      </Formik>
+    </section>
+  );
+});
