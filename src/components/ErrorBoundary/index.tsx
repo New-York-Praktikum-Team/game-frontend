@@ -2,9 +2,9 @@ import React, { ErrorInfo, Fragment, PureComponent } from 'react';
 import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
 import { AppUrls } from '../../routes/appUrls';
 
-type ErrorBoundaryState = {
+interface ErrorBoundaryState {
   hasError: boolean
-};
+}
 
 class WithRouterErrorBoundary extends PureComponent<RouteComponentProps, ErrorBoundaryState> {
   state = {

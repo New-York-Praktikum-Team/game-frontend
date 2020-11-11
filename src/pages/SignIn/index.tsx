@@ -3,7 +3,7 @@ import { Form, Formik, FormikHelpers } from 'formik';
 import { object, string } from 'yup';
 import { withRouter } from 'react-router-dom';
 import { getErrorFromRequest } from '../../modules/getErrorFromRequest';
-import { baseApi } from '../../modules/api';
+import * as api from '../../modules/api';
 import { notification } from '../../components/Notification';
 import { AppUrls } from '../../routes/appUrls';
 import { FormField } from '../../components/FormField';
@@ -33,8 +33,8 @@ export const SignIn = withRouter(({ history }) => {
     setSubmitting(true);
 
     try {
-      await baseApi.auth.signIn(values.login, values.password);
-      history.push(AppUrls.Leaderboard);
+      await api.signIn(values.login, values.password);
+      history.push(AppUrls.Game);
     } catch (responseError) {
       const error = await getErrorFromRequest(responseError);
       notification.error(error.message);

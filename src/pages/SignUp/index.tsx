@@ -4,7 +4,7 @@ import { object, ref, string } from 'yup';
 import { withRouter } from 'react-router-dom';
 import { getErrorFromRequest } from '../../modules/getErrorFromRequest';
 import { notification } from '../../components/Notification';
-import { baseApi } from '../../modules/api';
+import * as api from '../../modules/api';
 import { SignUpRequest } from '../../interfaces';
 import { AppUrls } from '../../routes/appUrls';
 import { FormField } from '../../components/FormField';
@@ -39,7 +39,7 @@ export const SignUp = withRouter(({ history }) => {
     setSubmitting(true);
 
     try {
-      await baseApi.auth.signUp(values);
+      await api.signUp(values);
       notification.success('You are successfully registered, please log in');
       history.push(AppUrls.SignIn);
     } catch (responseError) {
