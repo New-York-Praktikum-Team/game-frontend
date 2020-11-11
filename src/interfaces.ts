@@ -29,6 +29,16 @@ export interface SignUpRequestDTO {
   password: string;
 }
 
+export interface SignUpRequest {
+  email: string;
+  login: string;
+  firstName: string;
+  secondName: string;
+  phone: string;
+  password: string;
+  verifyPassword: string;
+}
+
 export interface SignUpResponse {
   id: number
 }
