@@ -1,9 +1,5 @@
-import ky, { Options } from 'ky';
+import { authApi } from './auth';
 
-const defaultOptions: Options = {
-  prefixUrl: 'https://ya-praktikum.tech/api/v2',
-  json: true,
-  throwHttpErrors: true,
+export const baseApi = {
+  auth: authApi,
 };
-
-export const HTTPTransport = ky.create(defaultOptions);

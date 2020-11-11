@@ -2,12 +2,12 @@ import React from 'react';
 import { Form, Formik, FormikHelpers } from 'formik';
 import { object, string } from 'yup';
 import { withRouter } from 'react-router-dom';
+import { baseApi } from '../../modules/api';
 import { notification } from '../../components/Notification';
 import { AppUrls } from '../../routes/appUrls';
 import { FormField } from '../../components/FormField';
 import { FormButton } from '../../components/FormButton';
 import { FormLink } from '../../components/FormLink';
-import { authApi } from '../../modules/api/auth';
 import './SignIn.css';
 
 interface SignInFormValues {
@@ -29,7 +29,7 @@ export const SignIn = withRouter(({ history }) => {
   const send = (values: SignInFormValues, { setSubmitting }: FormikHelpers<SignInFormValues>) => {
     setSubmitting(true);
 
-    authApi.signin(values.login, values.password).then(() => {
+    baseApi.auth.signin(values.login, values.password).then(() => {
       history.push(AppUrls.Leaderboard);
     }).catch(() => {
       notification.error('Incorrect login or password');
