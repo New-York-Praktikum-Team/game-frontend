@@ -5,9 +5,9 @@ import {
 } from '../../../interfaces';
 
 class AuthApi {
-  public signin = (login: string, password: string): Promise<string> => HTTPTransport.post('auth/signin', { json: { login, password } }).text();
+  public signIn = (login: string, password: string): Promise<string> => HTTPTransport.post('auth/signin', { json: { login, password } }).text();
 
-  public signup = (user: SignUpRequestDTO): Promise<SignUpResponse> => HTTPTransport.post('auth/signup', { json: user }).json<SignUpResponse>();
+  public signUp = (user: SignUpRequestDTO): Promise<SignUpResponse> => HTTPTransport.post('auth/signup', { json: user }).json<SignUpResponse>();
 
   public getUserInfo = async (): Promise<User> => {
     const response = await HTTPTransport.get('auth/user').json<UserDTO>();

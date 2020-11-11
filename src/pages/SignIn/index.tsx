@@ -2,6 +2,7 @@ import React from 'react';
 import { Form, Formik, FormikHelpers } from 'formik';
 import { object, string } from 'yup';
 import { withRouter } from 'react-router-dom';
+import { getErrorFromRequest } from '../../modules/getErrorFromRequest';
 import { baseApi } from '../../modules/api';
 import { notification } from '../../components/Notification';
 import { AppUrls } from '../../routes/appUrls';
@@ -26,16 +27,20 @@ const validationSchema = object().shape({
 });
 
 export const SignIn = withRouter(({ history }) => {
-  const send = (values: SignInFormValues, { setSubmitting }: FormikHelpers<SignInFormValues>) => {
+  const send = async (
+    values: SignInFormValues,
+    { setSubmitting }: FormikHelpers<SignInFormValues>) => {
     setSubmitting(true);
 
-    baseApi.auth.signin(values.login, values.password).then(() => {
+    try {
+      await baseApi.auth.signIn(values.login, values.password);
       history.push(AppUrls.Leaderboard);
-    }).catch(() => {
-      notification.error('Incorrect login or password');
-    }).finally(() => {
-      setSubmitting(false);
-    });
+    } catch (responseError) {
+      const error = await getErrorFromRequest(responseError);
+      notification.error(error.message);
+    }
+
+    setSubmitting(false);
   };
 
   return (
