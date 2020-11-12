@@ -3,15 +3,26 @@ import { Position } from '../Position';
 
 export class LinearPath extends Path {
   public next(current: Position, distanceDelta: number): Position {
-    const k = (this.end.y - this.start.y) / (this.end.x - this.start.x);
-    const b = this.start.y - k * this.start.y;
+    let k;
+
+    if (this.end.y === this.start.y) {
+      k = 0;
+    } else if (this.end.x === this.start.x) {
+      throw new Error("don't do that");
+    } else {
+      k = (this.end.y - this.start.y) / (this.end.x - this.start.x);
+    }
+
+    const b = this.start.y - k * this.start.x;
 
     if (current.y.toFixed(2) !== (k * current.x + b).toFixed(2)) {
       // eslint-disable-next-line no-console
       console.log("Current position isn't on the path");
     }
 
-    const newX = current.x + k * distanceDelta;
+    // TODO: debug!!!!!
+    // const newX = current.x + k * distanceDelta;
+    const newX = current.x + distanceDelta;
     const newY = k * newX + b;
 
     return { x: newX, y: newY };

@@ -1,4 +1,6 @@
 import { GameObject } from './GameObject';
+import { Path } from './path/Path';
+import { Position } from './Position';
 
 export abstract class MovingGameObject extends GameObject {
   // pixels per second
@@ -6,18 +8,24 @@ export abstract class MovingGameObject extends GameObject {
 
   public isMoving = false;
 
-  protected abstract move(dist: number): MovingGameObject;
+  protected abstract move(dist: number, path: Path): MovingGameObject;
 
   // time in milliseconds
-  public clock(time: number, context: CanvasRenderingContext2D): MovingGameObject {
-    return this.moveAndDraw((this.velocity * time) / 1000, context);
+  public clock(time: number, path: Path, context: CanvasRenderingContext2D): MovingGameObject {
+    return this.moveAndDraw((this.velocity * time) / 1000, path, context);
   }
 
-  public moveAndDraw(dist: number, context: CanvasRenderingContext2D): MovingGameObject {
+  public moveAndDraw(dist: number, path: Path, context: CanvasRenderingContext2D)
+    : MovingGameObject {
     if (this.isMoving) {
-      this.move(dist);
+      this.move(dist, path);
       this.draw(context);
     }
+    return this;
+  }
+
+  moveToPosition(pos: Position): MovingGameObject {
+    this.pos = pos;
     return this;
   }
 

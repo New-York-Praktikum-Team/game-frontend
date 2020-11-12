@@ -1,5 +1,6 @@
 import { Color } from './Color';
 import { MovingGameObject } from './MovingGameObject';
+import { Path } from './path/Path';
 import { Position } from './Position';
 
 export class Ball extends MovingGameObject {
@@ -8,11 +9,9 @@ export class Ball extends MovingGameObject {
     this.isMoving = true;
   }
 
-  move(dist: number): MovingGameObject {
-    const dx = dist / Math.sqrt(2);
-    const dy = dist / Math.sqrt(2);
-
-    return super.moveTo(dx, dy);
+  protected move(dist: number, path: Path): MovingGameObject {
+    const nextPos = path.next(this.pos, dist);
+    return super.moveToPosition(nextPos);
   }
 
   draw(context: CanvasRenderingContext2D): void {

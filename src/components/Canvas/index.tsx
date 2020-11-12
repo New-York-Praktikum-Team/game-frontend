@@ -118,9 +118,10 @@ export class Canvas extends Component<CanvasProps, CanvasState> {
     // adding new balls with 20px distance from each other
     const currentSnakeLength = this.ballSnake!.length;
     if (
-      currentSnakeLength === 0
+      (currentSnakeLength === 0
       || this.ballSnake![currentSnakeLength - 1]
-        .distanceToPosition(this.state.level!.path().start) > 20
+        .distanceToPosition(this.state.level!.path().start) > 20)
+        && currentSnakeLength < this.state.snakeLength
     ) {
       this.addBall();
     }
@@ -129,7 +130,7 @@ export class Canvas extends Component<CanvasProps, CanvasState> {
     this.drawObjects();
 
     this.ballSnake!.forEach((ball) => {
-      ball.clock(timeDelta, ctx);
+      ball.clock(timeDelta, this.state.level!.path(), ctx);
     });
 
     if (multiply < 1) {
