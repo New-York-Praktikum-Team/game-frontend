@@ -64,7 +64,7 @@ export class Canvas extends Component<CanvasProps, CanvasState> {
 
   lastTime: number = 0;
 
-  animationTime = 50000;
+  maxAnimationTime = 50000;
 
   animateStep = 0;
 
@@ -109,9 +109,6 @@ export class Canvas extends Component<CanvasProps, CanvasState> {
     const ctx = this.state.context!;
 
     const time = performance.now();
-    const shiftTime = time - this.startTime;
-    const multiply = shiftTime / this.animationTime;
-
     const timeDelta = time - this.lastTime;
     this.lastTime = time;
 
@@ -140,7 +137,7 @@ export class Canvas extends Component<CanvasProps, CanvasState> {
       return;
     }
 
-    if (multiply < 1) {
+    if (time <= this.startTime + this.maxAnimationTime) {
       this.animateStep += 1;
       requestAnimationFrame(() => { this.updateCanvas(); });
     }
