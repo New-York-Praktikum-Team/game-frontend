@@ -2,7 +2,7 @@ import { GameObject } from './GameObject';
 
 export abstract class MovingGameObject extends GameObject {
   // pixels per second
-  public velosity = 30;
+  public velocity = 30;
 
   public isMoving = false;
 
@@ -10,7 +10,7 @@ export abstract class MovingGameObject extends GameObject {
 
   // time in milliseconds
   public clock(time: number, context: CanvasRenderingContext2D): MovingGameObject {
-    return this.moveAndDraw((this.velosity * time) / 1000, context);
+    return this.moveAndDraw((this.velocity * time) / 1000, context);
   }
 
   public moveAndDraw(dist: number, context: CanvasRenderingContext2D): MovingGameObject {
