@@ -12,12 +12,12 @@ module.exports = {
     hot: true,
     open: true,
     stats: 'errors-only',
-    port: 3000,
+    port: 3005,
     historyApiFallback: true,
   },
   resolve: {
     extensions: ['*', '.js', '.jsx', '.tsx', '.ts'],
-    plugins: [new TsconfigPathsPlugin()]
+    plugins: [new TsconfigPathsPlugin()],
   },
   module: {
     rules: [

@@ -15,3 +15,5 @@ export const getUserInfo = async (): Promise<User> => {
   const response = await HTTPTransport.get('auth/user').json<UserDTO>();
   return transformUser(response);
 };
+
+export const logout = (): Promise<string> => HTTPTransport.post('auth/logout').text();

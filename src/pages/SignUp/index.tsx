@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Form, Formik, FormikHelpers } from 'formik';
 import { object, ref, string } from 'yup';
 import { withRouter } from 'react-router-dom';
@@ -33,7 +33,7 @@ const validationSchema = object().shape({
 });
 
 export const SignUp = withRouter(({ history }) => {
-  const send = async (
+  const send = useCallback(async (
     values: SignUpRequest,
     { setSubmitting }: FormikHelpers<SignUpRequest>) => {
     setSubmitting(true);
@@ -48,7 +48,7 @@ export const SignUp = withRouter(({ history }) => {
     }
 
     setSubmitting(false);
-  };
+  }, []);
 
   return (
     <section className='signup-form-wrapper'>

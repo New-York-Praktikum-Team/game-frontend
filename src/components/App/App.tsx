@@ -14,9 +14,9 @@ export const App: FC = () => (
           <ul>
             {
               Object.entries(AppUrls).map(([sectionName, sectionUrl]) => (
-                  <li key={sectionName}>
-                    <Link to={sectionUrl}>{sectionName}</Link>
-                  </li>
+                <li key={sectionName}>
+                  <Link to={sectionUrl}>{sectionName}</Link>
+                </li>
               ))
             }
           </ul>
