@@ -1,11 +1,11 @@
 import { RouteProps } from 'react-router-dom';
-import { Profile } from '../pages/Profile';
-import { SignUp } from '../pages/SignUp';
-import { Home } from '../pages/Home';
-import { SignIn } from '../pages/SignIn';
-import { Game } from '../pages/Game';
-import { Leaderboard } from '../pages/Leaderboard';
-import { NotFound } from '../pages/NotFound';
+import { Profile } from 'pages/Profile';
+import { SignUp } from 'pages/SignUp';
+import { Home } from 'pages/Home';
+import { SignIn } from 'pages/SignIn';
+import { Game } from 'pages/Game';
+import { Leaderboard } from 'pages/Leaderboard';
+import { NotFound } from 'pages/NotFound';
 import { AppUrls } from './appUrls';
 
 export const ROUTES: RouteProps[] = [

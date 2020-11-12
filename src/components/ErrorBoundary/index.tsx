@@ -1,6 +1,6 @@
 import React, { ErrorInfo, Fragment, PureComponent } from 'react';
 import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
-import { AppUrls } from '../../routes/appUrls';
+import { AppUrls } from 'routes/appUrls';
 
 interface ErrorBoundaryState {
   hasError: boolean

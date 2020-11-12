@@ -2,13 +2,13 @@ import React from 'react';
 import { Form, Formik, FormikHelpers } from 'formik';
 import { object, string } from 'yup';
 import { withRouter } from 'react-router-dom';
-import { getErrorFromRequest } from '../../modules/getErrorFromRequest';
-import * as api from '../../modules/api';
-import { notification } from '../../components/Notification';
-import { AppUrls } from '../../routes/appUrls';
-import { FormField } from '../../components/FormField';
-import { FormButton } from '../../components/FormButton';
-import { FormLink } from '../../components/FormLink';
+import { getErrorFromRequest } from 'modules/getErrorFromRequest';
+import * as api from 'modules/api';
+import { notification } from 'components/Notification';
+import { AppUrls } from 'routes/appUrls';
+import { FormField } from 'components/FormField';
+import { FormButton } from 'components/FormButton';
+import { FormLink } from 'components/FormLink';
 import './SignIn.css';
 
 interface SignInFormValues {
