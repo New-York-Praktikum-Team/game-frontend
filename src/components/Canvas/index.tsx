@@ -123,14 +123,15 @@ export class Canvas extends Component<CanvasProps, CanvasState> {
         .distanceToPosition(this.state.level!.path().start) > 20)
         && currentSnakeLength < this.state.snakeLength
     ) {
-      this.addBall();
+      const ball = this.addBall();
+      ball.setPath(this.state.level!.path());
     }
 
     ctx.clearRect(0, 0, this.state.canvasDim.width, this.state.canvasDim.height);
     this.drawObjects();
 
     this.ballSnake!.forEach((ball) => {
-      ball.clock(timeDelta, this.state.level!.path(), ctx);
+      ball.clock(timeDelta, ctx);
     });
 
     if (multiply < 1) {
