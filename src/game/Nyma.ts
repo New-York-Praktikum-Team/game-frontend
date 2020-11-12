@@ -24,12 +24,17 @@ export class Nyma extends GameObject {
   draw(context: CanvasRenderingContext2D): void {
     context.beginPath();
     context.arc(this.pos.x, this.pos.y, this.radius, 0, 2 * Math.PI);
-    context.fillStyle = 'hotpink';
+    context.fillStyle = 'DarkViolet';
     context.fill();
     context.closePath();
 
     this.fireBall.draw(context);
     this.nextBall.draw(context);
+
+    context.fillStyle = 'white';
+    context.textAlign = 'center';
+    context.font = '16px Arial';
+    context.fillText('Nyma', this.pos.x, this.pos.y - 15);
   }
 
   rotate(angle: number) {

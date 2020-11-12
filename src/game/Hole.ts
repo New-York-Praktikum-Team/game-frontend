@@ -13,5 +13,9 @@ export class Hole extends GameObject {
     context.fillStyle = 'black';
     context.fill();
     context.closePath();
+    context.fillStyle = 'white';
+    context.textAlign = 'center';
+    context.font = '16px Arial';
+    context.fillText('Hole', this.pos.x, this.pos.y);
   }
 }
