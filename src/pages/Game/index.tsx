@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { Link } from 'react-router-dom';
-import { AppUrls } from '../../routes/appUrls';
+import { AppUrls } from 'routes/appUrls';
 
 export const Game: FC = () => (
   <section>

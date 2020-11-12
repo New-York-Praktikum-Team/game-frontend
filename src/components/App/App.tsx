@@ -2,9 +2,9 @@ import React, { FC } from 'react';
 import {
   Link, Route, BrowserRouter as Router, Switch,
 } from 'react-router-dom';
-import { ErrorBoundary } from '../../components/ErrorBoundary';
-import { AppUrls } from '../../routes/appUrls';
-import { ROUTES } from '../../routes/routes';
+import { ErrorBoundary } from 'components/ErrorBoundary';
+import { AppUrls } from 'routes/appUrls';
+import { ROUTES } from 'routes/routes';
 
 export const App: FC = () => (
   <article className="app">

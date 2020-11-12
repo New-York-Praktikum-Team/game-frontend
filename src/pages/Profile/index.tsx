@@ -1,10 +1,10 @@
 import React, { FC } from 'react';
 import { Form, Formik } from 'formik';
 import { object, string } from 'yup';
-import { AppUrls } from '../../routes/appUrls';
-import { FormField } from '../../components/FormField';
-import { FormButton } from '../../components/FormButton';
-import { FormLink } from '../../components/FormLink';
+import { AppUrls } from 'routes/appUrls';
+import { FormField } from 'components/FormField';
+import { FormButton } from 'components/FormButton';
+import { FormLink } from 'components/FormLink';
 import './Profile.css';
 
 interface ProfileFormValues {
