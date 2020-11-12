@@ -1,29 +1,25 @@
 import { Color } from './Color';
-import { MovingGameObject } from './GameObject';
+import { MovingGameObject } from './MovingGameObject';
 import { Position } from './Position';
 
 export class Ball extends MovingGameObject {
-  constructor(public color: Color, pos: Position, rad: number = 10) {
+  constructor(pos: Position, rad: number, public color: Color) {
     super(pos, rad);
+    this.isMoving = true;
   }
 
   move(dist: number): MovingGameObject {
-    let dx = dist/Math.sqrt(2);
-    let dy = dist/Math.sqrt(2);
+    const dx = dist / Math.sqrt(2);
+    const dy = dist / Math.sqrt(2);
+
     return super.moveTo(dx, dy);
   }
-}
 
-export class FireBall extends Ball {
-  public angle = 0;
-
-  constructor(color: Color, pos: Position, rad: number = 10) {
-    super(color, pos, rad);
-  }
-
-  move(dist: number): MovingGameObject {
-    let dx = Math.cos(this.angle) * dist;
-    let dy = Math.sin(this.angle) * dist;
-    return super.moveTo(dx, dy);
+  draw(context: CanvasRenderingContext2D): void {
+    context.beginPath();
+    context.arc(this.pos.x, this.pos.y, this.radius, 0, 2 * Math.PI);
+    context.fillStyle = this.color;
+    context.fill();
+    context.closePath();
   }
 }

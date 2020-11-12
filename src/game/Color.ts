@@ -2,7 +2,7 @@ export enum Color {
   Red = '#FF0000',
   Blue = '#0000FF',
   Yellow = '#FFFF00',
-  Green = '#00FF00'
+  Green = '#00FF00',
 }
 
 function randomEnum<T>(anEnum: T): T[keyof T] {

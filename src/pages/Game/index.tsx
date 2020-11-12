@@ -2,7 +2,7 @@ import { Canvas } from 'components/Canvas';
 import React, { FC } from 'react';
 import { Link } from 'react-router-dom';
 import { AppUrls } from 'routes/appUrls';
-import "./Game.css";
+import './Game.css';
 
 export const Game: FC = () => (
   <section className="game-wrapper">
@@ -21,5 +21,4 @@ export const Game: FC = () => (
 
   </section>
 
-  
 );

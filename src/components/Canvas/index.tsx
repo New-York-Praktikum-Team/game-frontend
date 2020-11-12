@@ -1,51 +1,145 @@
-import React, { Component } from 'react';
+import { Ball } from 'game/Ball';
+import { randomColor } from 'game/Color';
+import { BallRadius } from 'game/Defaults';
+import { GameObject } from 'game/GameObject';
+import { Hole } from 'game/Hole';
+import { Nyma } from 'game/Nyma';
+import React, { Component, RefObject } from 'react';
 
-export class Canvas extends Component {
-  public myRef: any;
+enum AppMode {
+  Start, Game, End,
+}
 
-  constructor(props: any) {
+type CanvasProps = {};
+type CanvasDimension = { width: number, height: number };
+
+interface CanvasState {
+  appMode: AppMode;
+  context: CanvasRenderingContext2D | null;
+  canvasDim: CanvasDimension;
+  snakeLength: number;
+  score: number;
+}
+
+export class Canvas extends Component<CanvasProps, CanvasState> {
+  state: CanvasState = {
+    appMode: AppMode.Start,
+    context: null,
+    canvasDim: {
+      width: 500,
+      height: 500,
+    },
+    snakeLength: 10,
+    score: 0,
+  };
+
+  canvasRef: RefObject<HTMLCanvasElement>;
+
+  gameObjects: GameObject[] = [];
+
+  nyma: Nyma;
+
+  hole: Hole;
+
+  ballSnake: Ball[];
+
+  constructor(props: CanvasProps) {
     super(props);
-    this.myRef = React.createRef();
+    this.canvasRef = React.createRef<HTMLCanvasElement>();
+
+    this.nyma = new Nyma({ x: this.state.canvasDim.width / 2, y: this.state.canvasDim.height / 2 });
+    this.hole = new Hole({ x: this.state.canvasDim.width / 3, y: this.state.canvasDim.height / 3 });
+    this.ballSnake = [];
+
+    this.gameObjects.push(this.nyma);
+    this.gameObjects.push(this.hole);
   }
 
   componentDidMount() {
-    this.updateCanvas();
+    const context = this.canvasRef.current!.getContext('2d')!;
+
+    this.setState({ context }, () => {
+      this.startGame();
+    });
+  }
+
+  startTime: number = 0;
+
+  lastTime: number = 0;
+
+  animationTime = 50000;
+
+  animateStep = 0;
+
+  startGame() {
+    this.setState({
+      appMode: AppMode.Start,
+      score: 0,
+    });
+    this.drawObjects();
+
+    this.startTime = performance.now();
+    this.lastTime = this.startTime;
+    this.animateStep = 0;
+
+    requestAnimationFrame(() => { this.updateCanvas(); });
+  }
+
+  drawObjects(): void {
+    const ctx = this.state.context!;
+    ctx.fillStyle = '#AFEEEE';
+    ctx.fillRect(0, 0, this.state.canvasDim.width, this.state.canvasDim.height);
+    this.gameObjects.forEach((o) => o.draw(this.state.context!));
+  }
+
+  addBall(): Ball {
+    const ball = new Ball({ x: 200, y: 0 }, BallRadius, randomColor());
+    this.ballSnake.push(ball);
+    this.gameObjects.push(ball);
+    ball.draw(this.state.context!);
+
+    return ball;
   }
 
   updateCanvas() {
-    const ctx = this.myRef.current.getContext('2d');
-    ctx.fillStyle = "#AFEEEE";
-    ctx.fillRect(0, 0, 500, 500);
+    const ctx = this.state.context!;
 
-    ctx.beginPath();
-    ctx.lineWidth = 3;
+    const time = performance.now();
+    const shiftTime = time - this.startTime;
+    const multiply = shiftTime / this.animationTime;
 
-    ctx.moveTo(60, 120);
-    ctx.bezierCurveTo(90, 30, 200, 130, 310, 55);
+    const timeDelta = time - this.lastTime;
+    this.lastTime = time;
 
-    ctx.moveTo(60, 120);
-    ctx.bezierCurveTo(90, 170, 200, 110, 310, 160);
+    // adding new ball every 1 second until total number reaches this.state.snakeLength
+    const newBallTimeRate = 1000; // milliseconds
 
-    ctx.moveTo(310, 55);
-    ctx.quadraticCurveTo(320, 80, 280, 110);
+    if (this.ballSnake.length < Math.min(shiftTime / newBallTimeRate, this.state.snakeLength)) {
+      this.addBall();
+    }
 
-    ctx.moveTo(310, 160);
-    ctx.quadraticCurveTo(320, 120, 280, 110);
+    ctx.clearRect(0, 0, this.state.canvasDim.width, this.state.canvasDim.height);
+    this.drawObjects();
 
-    ctx.moveTo(100, 100);
-    ctx.arc(100, 100, 5, 0, 2 * Math.PI);
+    this.ballSnake.forEach((ball) => {
+      ball.clock(timeDelta, ctx);
+    });
 
-    ctx.moveTo(60, 120);
-    ctx.lineTo(80, 120);
-    ctx.stroke();
+    if (multiply < 1) {
+      this.animateStep += 1;
+      requestAnimationFrame(() => { this.updateCanvas(); });
+    }
   }
 
   render() {
     return (
       <div>
-        <canvas ref={this.myRef} width={500} height={500} />
+        <canvas
+          ref={this.canvasRef}
+          width={this.state.canvasDim.width}
+          height={this.state.canvasDim.height}
+        />
       </div>
     );
   }
-
 }
