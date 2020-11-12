@@ -134,6 +134,12 @@ export class Canvas extends Component<CanvasProps, CanvasState> {
       ball.clock(timeDelta, ctx);
     });
 
+    if (this.ballSnake![0].collidesWith(this.hole!)) {
+      // eslint-disable-next-line no-console
+      console.log('Om Nom Nom, Game over!');
+      return;
+    }
+
     if (multiply < 1) {
       this.animateStep += 1;
       requestAnimationFrame(() => { this.updateCanvas(); });
