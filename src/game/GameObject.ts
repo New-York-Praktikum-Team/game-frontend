@@ -5,11 +5,18 @@ export abstract class GameObject {
 
   public abstract draw(context: CanvasRenderingContext2D): void;
 
+  distanceToPosition(pos: Position): number {
+    const dist = Math.sqrt((this.pos.x - pos.x) ** 2 + (this.pos.y - pos.y) ** 2) - this.radius;
+    return dist;
+  }
+
+  distanceTo(obj: GameObject): number {
+    const dist = this.distanceToPosition(obj.pos) - obj.radius;
+    return dist;
+  }
+
   collidesWith(obj: GameObject): boolean {
-    const dist = Math.sqrt((this.pos.x - obj.pos.x) ** 2 + (this.pos.y - obj.pos.y) ** 2);
-    if (dist <= this.radius + obj.radius) {
-      return true;
-    }
-    return false;
+    const dist = this.distanceTo(obj);
+    return (dist <= 0);
   }
 }

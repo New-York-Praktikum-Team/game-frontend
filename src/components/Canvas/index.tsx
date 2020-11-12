@@ -3,6 +3,8 @@ import { randomColor } from 'game/Color';
 import { BallRadius } from 'game/Defaults';
 import { GameObject } from 'game/GameObject';
 import { Hole } from 'game/Hole';
+import { Level } from 'game/levels/Level';
+import { Level1 } from 'game/levels/Level1';
 import { Nyma } from 'game/Nyma';
 import React, { Component, RefObject } from 'react';
 
@@ -19,6 +21,7 @@ interface CanvasState {
   canvasDim: CanvasDimension;
   snakeLength: number;
   score: number;
+  level: Level | undefined;
 }
 
 export class Canvas extends Component<CanvasProps, CanvasState> {
@@ -31,34 +34,28 @@ export class Canvas extends Component<CanvasProps, CanvasState> {
     },
     snakeLength: 10,
     score: 0,
+    level: undefined,
   };
 
   canvasRef: RefObject<HTMLCanvasElement>;
 
   gameObjects: GameObject[] = [];
 
-  nyma: Nyma;
+  nyma?: Nyma;
 
-  hole: Hole;
+  hole?: Hole;
 
-  ballSnake: Ball[];
+  ballSnake?: Ball[];
 
   constructor(props: CanvasProps) {
     super(props);
     this.canvasRef = React.createRef<HTMLCanvasElement>();
-
-    this.nyma = new Nyma({ x: this.state.canvasDim.width / 2, y: this.state.canvasDim.height / 2 });
-    this.hole = new Hole({ x: this.state.canvasDim.width / 3, y: this.state.canvasDim.height / 3 });
-    this.ballSnake = [];
-
-    this.gameObjects.push(this.nyma);
-    this.gameObjects.push(this.hole);
   }
 
   componentDidMount() {
     const context = this.canvasRef.current!.getContext('2d')!;
 
-    this.setState({ context }, () => {
+    this.setState({ context, level: new Level1() }, () => {
       this.startGame();
     });
   }
@@ -72,6 +69,13 @@ export class Canvas extends Component<CanvasProps, CanvasState> {
   animateStep = 0;
 
   startGame() {
+    this.nyma = new Nyma({ x: this.state.canvasDim.width / 2, y: this.state.canvasDim.height / 2 });
+    this.hole = new Hole(this.state.level!.path().end);
+    this.ballSnake = [];
+
+    this.gameObjects.push(this.nyma);
+    this.gameObjects.push(this.hole);
+
     this.setState({
       appMode: AppMode.Start,
       score: 0,
@@ -93,8 +97,8 @@ export class Canvas extends Component<CanvasProps, CanvasState> {
   }
 
   addBall(): Ball {
-    const ball = new Ball({ x: 200, y: 0 }, BallRadius, randomColor());
-    this.ballSnake.push(ball);
+    const ball = new Ball(this.state.level!.path().start, BallRadius, randomColor());
+    this.ballSnake!.push(ball);
     this.gameObjects.push(ball);
     ball.draw(this.state.context!);
 
@@ -111,17 +115,20 @@ export class Canvas extends Component<CanvasProps, CanvasState> {
     const timeDelta = time - this.lastTime;
     this.lastTime = time;
 
-    // adding new ball every 1 second until total number reaches this.state.snakeLength
-    const newBallTimeRate = 1000; // milliseconds
-
-    if (this.ballSnake.length < Math.min(shiftTime / newBallTimeRate, this.state.snakeLength)) {
+    // adding new balls with 20px distance from each other
+    const currentSnakeLength = this.ballSnake!.length;
+    if (
+      currentSnakeLength === 0
+      || this.ballSnake![currentSnakeLength - 1]
+        .distanceToPosition(this.state.level!.path().start) > 20
+    ) {
       this.addBall();
     }
 
     ctx.clearRect(0, 0, this.state.canvasDim.width, this.state.canvasDim.height);
     this.drawObjects();
 
-    this.ballSnake.forEach((ball) => {
+    this.ballSnake!.forEach((ball) => {
       ball.clock(timeDelta, ctx);
     });
 
