@@ -34,6 +34,8 @@ export const SignIn = withRouter(({ history }) => {
 
     try {
       await api.signIn(values.login, values.password);
+      // const user = await api.getUserInfo();
+      // console.log(user);
       history.push(AppUrls.Game);
     } catch (responseError) {
       const error = await getErrorFromRequest(responseError);
