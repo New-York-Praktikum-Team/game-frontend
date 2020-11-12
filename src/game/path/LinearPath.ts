@@ -20,9 +20,7 @@ export class LinearPath extends Path {
       console.log("Current position isn't on the path");
     }
 
-    // TODO: debug!!!!!
-    // const newX = current.x + k * distanceDelta;
-    const newX = current.x + distanceDelta;
+    const newX = current.x + Math.cos(Math.asin(k)) * distanceDelta;
     const newY = k * newX + b;
 
     return { x: newX, y: newY };

@@ -4,8 +4,8 @@ import { Level } from './Level';
 
 export class Level1 extends Level {
   path(): Path {
-    const start = { x: 0, y: 100 };
-    const end = { x: 450, y: 100 };
+    const start = { x: 0, y: 0 };
+    const end = { x: 450, y: 200 };
 
     return new LinearPath(start, end);
   }
