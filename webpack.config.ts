@@ -12,7 +12,7 @@ module.exports = {
     hot: true,
     open: true,
     stats: 'errors-only',
-    port: 3005,
+    port: 3000,
     historyApiFallback: true,
   },
   resolve: {
