@@ -17,7 +17,7 @@ export class NymaGame {
   constructor(public context: CanvasRenderingContext2D, options: GameOptions) {
     this.level = options.level ?? new Level1();
     this.canvasDim = options.canvasDim;
-    this.snakeLength = 10;
+    this.snakeLength = this.level.snakeLength();
   }
 
   level: Level;
@@ -40,8 +40,6 @@ export class NymaGame {
 
   maxAnimationTime = 50000;
 
-  animateStep = 0;
-
   resolve: Function = () => {};
 
   play(): Promise<AppMode> {
@@ -52,7 +50,7 @@ export class NymaGame {
   }
 
   startGame() {
-    this.nyma = new Nyma({ x: this.canvasDim.width / 2, y: this.canvasDim.height / 2 });
+    this.nyma = new Nyma(this.level.nymaPosition());
     this.hole = new Hole(this.level.path().end);
     this.ballSnake = [];
 
@@ -63,7 +61,6 @@ export class NymaGame {
 
     this.startTime = performance.now();
     this.lastTime = this.startTime;
-    this.animateStep = 0;
 
     requestAnimationFrame(() => { this.updateCanvas(); });
   }
@@ -116,7 +113,6 @@ export class NymaGame {
     }
 
     if (time <= this.startTime + this.maxAnimationTime) {
-      this.animateStep += 1;
       requestAnimationFrame(() => { this.updateCanvas(); });
     } else {
       this.resolve(AppMode.End_win);

@@ -52,10 +52,10 @@ export class Canvas extends Component<CanvasProps, CanvasState> {
       }
       case AppMode.End_lose: {
         const ctx = this.state.context!;
-        ctx.fillStyle = 'red';
+        ctx.fillStyle = 'darkblue';
         ctx.textAlign = 'center';
         ctx.font = '60px Arial';
-        ctx.fillText('You LOST! Haha', this.state.canvasDim.width / 2, 0.75 * this.state.canvasDim.height);
+        ctx.fillText('You LOST! Haha', this.state.canvasDim.width / 2, 0.85 * this.state.canvasDim.height);
         break;
       }
       case AppMode.End_win: {
