@@ -14,6 +14,6 @@ export abstract class GameObject {
   }
 
   collidesWith(obj: GameObject): boolean {
-    return (this.distanceTo(obj) <= 0);
+    return this.distanceTo(obj) <= 0;
   }
 }

@@ -1,17 +1,14 @@
+import { Level } from 'game/levels/Level';
 import { FireBall } from './FireBall';
-import { randomColor } from './Color';
 import { GameObject } from './GameObject';
-import { Position } from './Position';
-import { BallRadius, NymaRadius } from './Defaults';
 
 export class Nyma extends GameObject {
-  constructor(pos: Position, radius: number = NymaRadius) {
-    super(pos, radius);
-    this.fireBall = new FireBall(this.pos, BallRadius, randomColor());
+  constructor(level: Level) {
+    super(level.nymaPosition, level.nymaRadius);
+    this.fireBall = new FireBall(level.nymaPosition, level);
     this.nextBall = new FireBall(
-      { x: this.pos.x + BallRadius * 2, y: this.pos.y + BallRadius * 2 },
-      BallRadius,
-      randomColor(),
+      { x: this.pos.x + level.ballRadius * 2, y: this.pos.y + level.ballRadius * 2 },
+      level,
     );
   }
 

@@ -1,10 +1,9 @@
-import { HoleRadius } from './Defaults';
+import { Level } from 'game/levels/Level';
 import { GameObject } from './GameObject';
-import { Position } from './Position';
 
 export class Hole extends GameObject {
-  constructor(pos: Position, radius: number = HoleRadius) {
-    super(pos, radius);
+  constructor(level: Level) {
+    super(level.snakePath.end, level.holeRadius);
   }
 
   draw(context: CanvasRenderingContext2D): void {

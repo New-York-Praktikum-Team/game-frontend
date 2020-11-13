@@ -1,21 +1,32 @@
 import { LinearPath } from 'game/path/LinearPath';
 import { Path } from 'game/path/Path';
-import { Position } from 'game/Position';
+import { Position } from 'game/objects/Position';
 import { Level } from './Level';
 
+enum Color {
+  Red = 'red',
+  Blue = 'blue',
+  Yellow = 'yellow',
+  Green = 'forestgreen',
+}
+
 export class Level1 extends Level {
-  path(): Path {
+  get snakePath(): Path {
     const start = { x: 0, y: 0 };
     const end = { x: 450, y: 200 };
 
     return new LinearPath(start, end);
   }
 
-  nymaPosition(): Position {
+  get nymaPosition(): Position {
     return { x: 150, y: 350 };
   }
 
-  snakeLength(): number {
+  get snakeLength(): number {
     return 10;
+  }
+
+  get randomColor(): string {
+    return this.randomEnum(Color);
   }
 }

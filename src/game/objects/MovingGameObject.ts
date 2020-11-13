@@ -1,22 +1,28 @@
+import { Path } from 'game/path/Path';
 import { GameObject } from './GameObject';
-import { Path } from './path/Path';
 
 export abstract class MovingGameObject extends GameObject {
-  // pixels per second
-  public velocity = 50;
+  public isMoving = false;
 
   private path?: Path;
 
-  public isMoving = false;
-
-  public setPath(path: Path) {
+  protected setPath(path: Path) {
     this.path = path;
+  }
+
+  private velocity?: number;
+
+  protected setVelocity(velocity: number) {
+    this.velocity = velocity;
   }
 
   // time in milliseconds
   public clock(time: number, context: CanvasRenderingContext2D): MovingGameObject {
     if (!this.path) {
       throw new Error('Object path was not provided');
+    }
+    if (!this.velocity) {
+      throw new Error('Object velocity was not provided');
     }
     return this.moveAndDraw((this.velocity * time) / 1000, this.path, context);
   }

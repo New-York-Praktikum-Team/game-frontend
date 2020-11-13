@@ -1,11 +1,9 @@
-import { Color } from './Color';
 import { MovingGameObject } from './MovingGameObject';
 import { Position } from './Position';
 
-export class Ball extends MovingGameObject {
-  constructor(pos: Position, rad: number, public color: Color) {
+export abstract class Ball extends MovingGameObject {
+  constructor(pos: Position, rad: number, public color: string) {
     super(pos, rad);
-    this.isMoving = true;
   }
 
   draw(context: CanvasRenderingContext2D): void {

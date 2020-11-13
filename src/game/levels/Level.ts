@@ -1,11 +1,48 @@
 import { Path } from 'game/path/Path';
-import { Position } from 'game/Position';
+import { Position } from 'game/objects/Position';
 
 export abstract class Level {
-  // TODO: add ball color and velocity to this object so they can vary by level
-  abstract path(): Path;
+  get ballRadius(): number {
+    return 10;
+  }
 
-  abstract nymaPosition(): Position;
+  get nymaRadius(): number {
+    return 50;
+  }
 
-  abstract snakeLength(): number;
+  get holeRadius(): number {
+    return 30;
+  }
+
+  // pixels per second
+  get snakeBallVelocity(): number {
+    return 50;
+  }
+
+  // pixels per second
+  get fireBallVelocity(): number {
+    return 50;
+  }
+
+  get ballDistance(): number {
+    return 15;
+  }
+
+  abstract get snakePath(): Path;
+
+  abstract get nymaPosition(): Position;
+
+  abstract get snakeLength(): number;
+
+  abstract get randomColor(): string;
+
+  get snakeBallStartPosition(): Position {
+    return this.snakePath.start;
+  }
+
+  protected randomEnum<T>(anEnum: T): T[keyof T] {
+    const enumValues = (Object.values(anEnum) as unknown) as T[keyof T][];
+    const randomIndex = Math.floor(Math.random() * enumValues.length);
+    return enumValues[randomIndex];
+  }
 }

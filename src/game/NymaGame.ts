@@ -1,12 +1,10 @@
 import { AppMode, CanvasDimension } from 'components/Canvas';
-import { Ball } from './Ball';
-import { randomColor } from './Color';
-import { BallRadius } from './Defaults';
-import { GameObject } from './GameObject';
-import { Hole } from './Hole';
 import { Level } from './levels/Level';
 import { Level1 } from './levels/Level1';
-import { Nyma } from './Nyma';
+import { GameObject } from './objects/GameObject';
+import { Hole } from './objects/Hole';
+import { Nyma } from './objects/Nyma';
+import { SnakeBall } from './objects/SnakeBall';
 
 interface GameOptions {
   level?: Level;
@@ -17,14 +15,11 @@ export class NymaGame {
   constructor(public context: CanvasRenderingContext2D, options: GameOptions) {
     this.level = options.level ?? new Level1();
     this.canvasDim = options.canvasDim;
-    this.snakeLength = this.level.snakeLength();
   }
 
   level: Level;
 
   canvasDim: CanvasDimension;
-
-  snakeLength: number;
 
   gameObjects: GameObject[] = [];
 
@@ -32,28 +27,22 @@ export class NymaGame {
 
   hole?: Hole;
 
-  ballSnake?: Ball[];
-
-  startTime: number = 0;
+  ballSnake?: SnakeBall[];
 
   lastTime: number = 0;
 
-  maxAnimationTime = 50000;
-
-  ballDistance = 15;
-
-  resolve: Function = () => { };
+  resolveCallback: Function = () => { };
 
   play(): Promise<AppMode> {
     return new Promise((resolve) => {
-      this.resolve = resolve;
+      this.resolveCallback = resolve;
       this.startGame();
     });
   }
 
   startGame(): void {
-    this.nyma = new Nyma(this.level.nymaPosition());
-    this.hole = new Hole(this.level.path().end);
+    this.nyma = new Nyma(this.level);
+    this.hole = new Hole(this.level);
     this.ballSnake = [];
 
     this.gameObjects.push(this.nyma);
@@ -61,8 +50,7 @@ export class NymaGame {
 
     this.drawObjects();
 
-    this.startTime = performance.now();
-    this.lastTime = this.startTime;
+    this.lastTime = performance.now();
 
     requestAnimationFrame(() => { this.updateCanvas(); });
   }
@@ -74,8 +62,8 @@ export class NymaGame {
     this.gameObjects.forEach((o) => o.draw(this.context!));
   }
 
-  addBall(): Ball {
-    const ball = new Ball(this.level.path().start, BallRadius, randomColor());
+  addBall(): SnakeBall {
+    const ball = new SnakeBall(this.level);
     this.ballSnake!.push(ball);
     this.gameObjects.push(ball);
     ball.draw(this.context);
@@ -87,9 +75,10 @@ export class NymaGame {
     const currentSnakeLength = this.ballSnake!.length;
     return (
       currentSnakeLength === 0
-      || this.ballSnake![currentSnakeLength - 1].distanceToPosition(this.level.path().start)
-      > this.ballDistance)
-      && currentSnakeLength < this.snakeLength;
+      || this.ballSnake![currentSnakeLength - 1]
+        .distanceToPosition(this.level.snakeBallStartPosition)
+      > this.level.ballDistance)
+      && currentSnakeLength < this.level.snakeLength;
   }
 
   updateCanvas(): void {
@@ -100,8 +89,7 @@ export class NymaGame {
     this.lastTime = time;
 
     if (this.shouldAddAnotherBall()) {
-      const ball = this.addBall();
-      ball.setPath(this.level.path());
+      this.addBall();
     }
 
     ctx.clearRect(0, 0, this.canvasDim.width, this.canvasDim.height);
@@ -112,14 +100,10 @@ export class NymaGame {
     });
 
     if (this.ballSnake![0].collidesWith(this.hole!)) {
-      this.resolve(AppMode.End_lose);
+      this.resolveCallback(AppMode.End_lose);
       return;
     }
 
-    if (time <= this.startTime + this.maxAnimationTime) {
-      requestAnimationFrame(() => this.updateCanvas());
-    } else {
-      this.resolve(AppMode.End_win);
-    }
+    requestAnimationFrame(() => this.updateCanvas());
   }
 }
