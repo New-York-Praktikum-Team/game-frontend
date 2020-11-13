@@ -77,7 +77,7 @@ export class NymaGame {
       currentSnakeLength === 0
       || this.ballSnake![currentSnakeLength - 1]
         .distanceToPosition(this.level.snakeBallStartPosition)
-      > this.level.ballDistance)
+      > this.level.ballDistance + this.level.ballRadius)
       && currentSnakeLength < this.level.snakeLength;
   }
 

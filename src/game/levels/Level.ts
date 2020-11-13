@@ -25,7 +25,7 @@ export abstract class Level {
   }
 
   get ballDistance(): number {
-    return 15;
+    return 5;
   }
 
   abstract get snakePath(): Path;
