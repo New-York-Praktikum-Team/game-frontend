@@ -3,7 +3,7 @@ import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
 import { AppUrls } from 'routes/appUrls';
 
 interface ErrorBoundaryState {
-  hasError: boolean
+  hasError: boolean;
 }
 
 class WithRouterErrorBoundary extends PureComponent<RouteComponentProps, ErrorBoundaryState> {

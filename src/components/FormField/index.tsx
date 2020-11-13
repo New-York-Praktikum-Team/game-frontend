@@ -5,8 +5,8 @@ import {
 import './FormField.css';
 
 interface FormFieldProps extends InputHTMLAttributes<HTMLInputElement> {
-  name: string,
-  label: string,
+  name: string;
+  label: string;
 }
 
 interface ConnectedFormFieldProps extends FormFieldProps {

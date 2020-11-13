@@ -9,7 +9,7 @@ import { NotFound } from 'pages/NotFound';
 import { AppUrls } from './appUrls';
 
 export interface AppRoute extends RouteProps {
-  isPrivate: boolean
+  isPrivate: boolean;
 }
 
 export const ROUTES: AppRoute[] = [
