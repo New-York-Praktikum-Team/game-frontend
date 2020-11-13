@@ -40,5 +40,5 @@ export interface SignUpRequest {
 }
 
 export interface SignUpResponse {
-  id: number
+  id: number;
 }

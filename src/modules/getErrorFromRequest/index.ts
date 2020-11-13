@@ -1,10 +1,10 @@
 interface ApiError {
-  code: number | null,
-  message: string
+  code: number | null;
+  message: string;
 }
 
 interface HTTPError {
-  response: Response
+  response: Response;
 }
 
 export const getErrorFromRequest = async (HTTPError: HTTPError): Promise<ApiError> => {
