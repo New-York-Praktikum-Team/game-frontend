@@ -40,7 +40,9 @@ export class NymaGame {
 
   maxAnimationTime = 50000;
 
-  resolve: Function = () => {};
+  ballDistance = 15;
+
+  resolve: Function = () => { };
 
   play(): Promise<AppMode> {
     return new Promise((resolve) => {
@@ -49,7 +51,7 @@ export class NymaGame {
     });
   }
 
-  startGame() {
+  startGame(): void {
     this.nyma = new Nyma(this.level.nymaPosition());
     this.hole = new Hole(this.level.path().end);
     this.ballSnake = [];
@@ -81,21 +83,23 @@ export class NymaGame {
     return ball;
   }
 
-  updateCanvas() {
+  shouldAddAnotherBall(): boolean {
+    const currentSnakeLength = this.ballSnake!.length;
+    return (
+      currentSnakeLength === 0
+      || this.ballSnake![currentSnakeLength - 1].distanceToPosition(this.level.path().start)
+      > this.ballDistance)
+      && currentSnakeLength < this.snakeLength;
+  }
+
+  updateCanvas(): void {
     const ctx = this.context;
 
     const time = performance.now();
     const timeDelta = time - this.lastTime;
     this.lastTime = time;
 
-    // adding new ball when previous one is 15px away from start
-    const currentSnakeLength = this.ballSnake!.length;
-    if (
-      (currentSnakeLength === 0
-        || this.ballSnake![currentSnakeLength - 1]
-          .distanceToPosition(this.level.path().start) > 15)
-      && currentSnakeLength < this.snakeLength
-    ) {
+    if (this.shouldAddAnotherBall()) {
       const ball = this.addBall();
       ball.setPath(this.level.path());
     }
@@ -113,7 +117,7 @@ export class NymaGame {
     }
 
     if (time <= this.startTime + this.maxAnimationTime) {
-      requestAnimationFrame(() => { this.updateCanvas(); });
+      requestAnimationFrame(() => this.updateCanvas());
     } else {
       this.resolve(AppMode.End_win);
     }

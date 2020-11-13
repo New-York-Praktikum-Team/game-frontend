@@ -39,14 +39,14 @@ export class Canvas extends Component<CanvasProps, CanvasState> {
   componentDidUpdate() {
     switch (this.state.appMode) {
       case AppMode.Start: {
-        this.start().then((mode) => {
-          this.setState({ appMode: mode });
+        this.start().then((appMode) => {
+          this.setState({ appMode });
         });
         break;
       }
       case AppMode.Game: {
-        this.play().then((mode) => {
-          this.setState({ appMode: mode });
+        this.play().then((appMode) => {
+          this.setState({ appMode });
         });
         break;
       }
