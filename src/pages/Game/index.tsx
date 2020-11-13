@@ -17,7 +17,7 @@ export const Game: FC = () => (
       </li>
     </ul>
 
-    <Canvas></Canvas>
+    <Canvas />
 
   </section>
 

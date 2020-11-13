@@ -3,7 +3,7 @@ import { Path } from './path/Path';
 
 export abstract class MovingGameObject extends GameObject {
   // pixels per second
-  public velocity = 30;
+  public velocity = 50;
 
   private path?: Path;
 

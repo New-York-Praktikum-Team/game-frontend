@@ -88,12 +88,12 @@ export class NymaGame {
     const timeDelta = time - this.lastTime;
     this.lastTime = time;
 
-    // adding new balls with 20px distance from each other
+    // adding new ball when previous one is 15px away from start
     const currentSnakeLength = this.ballSnake!.length;
     if (
       (currentSnakeLength === 0
         || this.ballSnake![currentSnakeLength - 1]
-          .distanceToPosition(this.level.path().start) > 20)
+          .distanceToPosition(this.level.path().start) > 15)
       && currentSnakeLength < this.snakeLength
     ) {
       const ball = this.addBall();
