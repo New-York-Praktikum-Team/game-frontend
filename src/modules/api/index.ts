@@ -1,8 +1,9 @@
-import { HTTPTransport } from '../HTTPTransport';
-import { transformSignUp, transformUser } from '../transform';
+import { transformSignUp, transformUser } from 'modules/transform';
+import { HTTPTransport } from 'modules/HTTPTransport';
+
 import {
   SignUpRequest, SignUpRequestDTO, SignUpResponse, User, UserDTO,
-} from '../../interfaces';
+} from 'interfaces';
 
 export const signIn = (login: string, password: string): Promise<string> => HTTPTransport.post('auth/signin', { json: { login, password } }).text();
 

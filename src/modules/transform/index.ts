@@ -1,6 +1,6 @@
 import {
   SignUpRequest, SignUpRequestDTO, User, UserDTO,
-} from '../../interfaces';
+} from 'interfaces';
 
 export const transformUser = (user: UserDTO): User => ({
   id: user.id,
