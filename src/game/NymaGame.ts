@@ -111,9 +111,7 @@ export class NymaGame {
     });
 
     if (this.ballSnake![0].collidesWith(this.hole!)) {
-      // eslint-disable-next-line no-console
-      console.log('Om Nom Nom, Game over!');
-      this.resolve(AppMode.End);
+      this.resolve(AppMode.End_lose);
       return;
     }
 
@@ -121,7 +119,7 @@ export class NymaGame {
       this.animateStep += 1;
       requestAnimationFrame(() => { this.updateCanvas(); });
     } else {
-      this.resolve(AppMode.End);
+      this.resolve(AppMode.End_win);
     }
   }
 }

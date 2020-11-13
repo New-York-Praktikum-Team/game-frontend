@@ -2,7 +2,7 @@ import { NymaGame } from 'game/NymaGame';
 import React, { Component, RefObject } from 'react';
 
 export enum AppMode {
-  Start, Game, End,
+  Start, Game, End_lose, End_win,
 }
 
 type CanvasProps = {};
@@ -50,7 +50,15 @@ export class Canvas extends Component<CanvasProps, CanvasState> {
         });
         break;
       }
-      case AppMode.End: {
+      case AppMode.End_lose: {
+        const ctx = this.state.context!;
+        ctx.fillStyle = 'red';
+        ctx.textAlign = 'center';
+        ctx.font = '60px Arial';
+        ctx.fillText('You LOST! Haha', this.state.canvasDim.width / 2, 0.75 * this.state.canvasDim.height);
+        break;
+      }
+      case AppMode.End_win: {
         break;
       }
       default: {
@@ -63,9 +71,16 @@ export class Canvas extends Component<CanvasProps, CanvasState> {
 
   start(): Promise<AppMode> {
     return new Promise(((resolve) => {
-      // eslint-disable-next-line no-console
-      console.log('Start mode, wait!');
-      setTimeout(resolve, 1000, AppMode.Game);
+      const ctx = this.state.context!;
+      ctx.fillStyle = '#ffff1f';
+      ctx.fillRect(0, 0, this.state.canvasDim.width, this.state.canvasDim.height);
+
+      ctx.fillStyle = 'black';
+      ctx.textAlign = 'center';
+      ctx.font = '48px Arial';
+      ctx.fillText('Game Start!', this.state.canvasDim.width / 2, this.state.canvasDim.height / 2);
+
+      setTimeout(resolve, 2000, AppMode.Game);
     }));
   }
 
