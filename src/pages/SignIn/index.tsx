@@ -1,4 +1,6 @@
-import React, { useCallback, useContext } from 'react';
+import React, {
+  RefObject, createRef, useCallback, useContext,
+} from 'react';
 import { Form, Formik, FormikHelpers } from 'formik';
 import { object, string } from 'yup';
 import { withRouter } from 'react-router-dom';
@@ -29,6 +31,7 @@ const validationSchema = object().shape({
 
 export const SignIn = withRouter(({ history }) => {
   const store = useContext(Store);
+  const formRef:RefObject<HTMLFormElement> = createRef();
 
   const send = useCallback(async (
     values: SignInFormValues,
@@ -42,6 +45,7 @@ export const SignIn = withRouter(({ history }) => {
       store.setLogged(true);
       history.push(AppUrls.Game);
     } catch (responseError) {
+      formRef.current!.password.focus();
       const error = await getErrorFromRequest(responseError);
       notification.error(error.message);
     }
@@ -61,7 +65,7 @@ export const SignIn = withRouter(({ history }) => {
         onSubmit={send}
       >
         {({ isSubmitting }) => (
-          <Form>
+          <Form ref={formRef}>
             <FormField label='Username' name='login' />
             <FormField type='password' label='Password' name='password' />
             <FormButton text='Log in' disabled={isSubmitting} />

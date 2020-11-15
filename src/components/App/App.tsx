@@ -17,6 +17,9 @@ export const App: FC = () => {
     api.getUserInfo().then((result) => {
       setUser(result);
       setLogged(true);
+    }).catch((err) => {
+      // eslint-disable-next-line no-console
+      console.log(err);
     }).finally(() => {
       setReady(true);
     });
