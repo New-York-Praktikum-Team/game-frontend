@@ -1,20 +1,18 @@
+import { Position } from 'game/objects/Position';
 import { Path } from './Path';
-import { Position } from '../Position';
 
-export class LinearPath extends Path {
+export class LinearPath implements Path {
+  constructor(public start: Position, public end: Position) { }
+
   public next(current: Position, distanceDelta: number): Position {
     if ((this.start.x === this.end.x && this.start.y === this.end.y) || distanceDelta === 0) {
       throw new Error('Not enough data to calculate path');
     }
 
     if (this.end.x === this.start.x) {
-      let newY;
-      if (this.start.y < this.end.y) {
-        newY = current.y + distanceDelta;
-      } else {
-        newY = current.y - distanceDelta;
-      }
-      return { x: current.x, y: newY };
+      const sign = this.start.y < this.end.y ? 1 : -1;
+      const nextY = current.y + sign * distanceDelta;
+      return { x: current.x, y: nextY };
     }
 
     const k = (this.end.y - this.start.y) / (this.end.x - this.start.x);
@@ -25,14 +23,10 @@ export class LinearPath extends Path {
       console.log("Current position isn't on the path");
     }
 
-    let newX;
-    if (this.start.x < this.end.x) {
-      newX = current.x + Math.cos(Math.atan(k)) * distanceDelta;
-    } else {
-      newX = current.x - Math.cos(Math.atan(k)) * distanceDelta;
-    }
-    const newY = k * newX + b;
+    const sign = this.start.x < this.end.x ? 1 : -1;
+    const nextX = current.x + sign * Math.cos(Math.atan(k)) * distanceDelta;
+    const nextY = k * nextX + b;
 
-    return { x: newX, y: newY };
+    return { x: nextX, y: nextY };
   }
 }

@@ -1,7 +1,7 @@
-import { Position } from 'game/Position';
+import { Position } from 'game/objects/Position';
 
-export abstract class Path {
-  constructor(public start: Position, public end: Position) { }
-
-  public abstract next(current: Position, distanceDelta: number): Position;
+export interface Path {
+  start: Position;
+  end: Position;
+  next(current: Position, distanceDelta: number): Position;
 }

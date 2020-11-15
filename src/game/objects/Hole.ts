@@ -1,4 +1,5 @@
 import { Level } from 'game/levels/Level';
+import { CanvasHelper } from 'helpers/CanvasHelper';
 import { GameObject } from './GameObject';
 
 export class Hole extends GameObject {
@@ -7,14 +8,16 @@ export class Hole extends GameObject {
   }
 
   draw(context: CanvasRenderingContext2D): void {
-    context.beginPath();
-    context.arc(this.pos.x, this.pos.y, this.radius, 0, 2 * Math.PI);
-    context.fillStyle = 'black';
-    context.fill();
-    context.closePath();
-    context.fillStyle = 'white';
-    context.textAlign = 'center';
-    context.font = '16px Arial';
-    context.fillText('Hole', this.pos.x, this.pos.y);
+    CanvasHelper.renderCircle(context, this.pos, this.radius);
+    CanvasHelper.renderText(
+      context,
+      'Hole', {
+        x: this.pos.x,
+        y: this.pos.y,
+        color: 'white',
+        align: 'center',
+        font: '16px Arial',
+      },
+    );
   }
 }

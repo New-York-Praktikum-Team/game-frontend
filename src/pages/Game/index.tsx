@@ -1,4 +1,4 @@
-import { Canvas } from 'components/Canvas';
+import { GameCanvas } from 'components/GameCanvas';
 import React, { FC } from 'react';
 import { Link } from 'react-router-dom';
 import { AppUrls } from 'routes/appUrls';
@@ -17,7 +17,7 @@ export const Game: FC = () => (
       </li>
     </ul>
 
-    <Canvas />
+    <GameCanvas />
 
   </section>
 

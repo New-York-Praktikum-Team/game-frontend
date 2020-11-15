@@ -1,4 +1,5 @@
 import { Level } from 'game/levels/Level';
+import { CanvasHelper } from 'helpers/CanvasHelper';
 import { FireBall } from './FireBall';
 import { GameObject } from './GameObject';
 
@@ -19,19 +20,20 @@ export class Nyma extends GameObject {
   public nextBall: FireBall;
 
   draw(context: CanvasRenderingContext2D): void {
-    context.beginPath();
-    context.arc(this.pos.x, this.pos.y, this.radius, 0, 2 * Math.PI);
-    context.fillStyle = 'DarkViolet';
-    context.fill();
-    context.closePath();
+    CanvasHelper.renderCircle(context, this.pos, this.radius, 'DarkViolet');
+    CanvasHelper.renderText(
+      context,
+      'Nyma', {
+        x: this.pos.x,
+        y: this.pos.y - 15,
+        color: 'white',
+        align: 'center',
+        font: '16px Arial',
+      },
+    );
 
     this.fireBall.draw(context);
     this.nextBall.draw(context);
-
-    context.fillStyle = 'white';
-    context.textAlign = 'center';
-    context.font = '16px Arial';
-    context.fillText('Nyma', this.pos.x, this.pos.y - 15);
   }
 
   rotate(angle: number) {

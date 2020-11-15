@@ -1,4 +1,5 @@
-import { AppMode, CanvasDimension } from 'components/Canvas';
+import { AppMode } from 'components/GameCanvas';
+import { CanvasHelper, CanvasSize } from 'helpers/CanvasHelper';
 import { Level } from './levels/Level';
 import { Level1 } from './levels/Level1';
 import { GameObject } from './objects/GameObject';
@@ -8,18 +9,18 @@ import { SnakeBall } from './objects/SnakeBall';
 
 interface GameOptions {
   level?: Level;
-  canvasDim: CanvasDimension;
+  canvasSize: CanvasSize;
 }
 
 export class NymaGame {
   constructor(public context: CanvasRenderingContext2D, options: GameOptions) {
     this.level = options.level ?? new Level1();
-    this.canvasDim = options.canvasDim;
+    this.canvasSize = options.canvasSize;
   }
 
   level: Level;
 
-  canvasDim: CanvasDimension;
+  canvasSize: CanvasSize;
 
   gameObjects: GameObject[] = [];
 
@@ -56,9 +57,7 @@ export class NymaGame {
   }
 
   drawObjects(): void {
-    const ctx = this.context!;
-    ctx.fillStyle = '#AFEEEE';
-    ctx.fillRect(0, 0, this.canvasDim.width, this.canvasDim.height);
+    CanvasHelper.clear(this.context!, this.canvasSize, '#AFEEEE');
     this.gameObjects.forEach((o) => o.draw(this.context!));
   }
 
@@ -92,7 +91,7 @@ export class NymaGame {
       this.addBall();
     }
 
-    ctx.clearRect(0, 0, this.canvasDim.width, this.canvasDim.height);
+    ctx.clearRect(0, 0, this.canvasSize.width, this.canvasSize.height);
     this.drawObjects();
 
     this.ballSnake!.forEach((ball) => {
@@ -100,7 +99,7 @@ export class NymaGame {
     });
 
     if (this.ballSnake![0].collidesWith(this.hole!)) {
-      this.resolveCallback(AppMode.End_lose);
+      this.resolveCallback(AppMode.Losing);
       return;
     }
 

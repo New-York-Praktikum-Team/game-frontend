@@ -1,3 +1,4 @@
+import { CanvasHelper } from 'helpers/CanvasHelper';
 import { MovingGameObject } from './MovingGameObject';
 import { Position } from './Position';
 
@@ -7,10 +8,6 @@ export abstract class Ball extends MovingGameObject {
   }
 
   draw(context: CanvasRenderingContext2D): void {
-    context.beginPath();
-    context.arc(this.pos.x, this.pos.y, this.radius, 0, 2 * Math.PI);
-    context.fillStyle = this.color;
-    context.fill();
-    context.closePath();
+    CanvasHelper.renderCircle(context, this.pos, this.radius, this.color);
   }
 }

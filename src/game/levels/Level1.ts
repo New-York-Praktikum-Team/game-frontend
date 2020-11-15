@@ -1,6 +1,7 @@
 import { LinearPath } from 'game/path/LinearPath';
 import { Path } from 'game/path/Path';
 import { Position } from 'game/objects/Position';
+import { Helpers } from 'helpers/Helpers';
 import { Level } from './Level';
 
 enum Color {
@@ -27,6 +28,6 @@ export class Level1 extends Level {
   }
 
   get randomColor(): string {
-    return this.randomEnum(Color);
+    return Helpers.randomEnum(Color);
   }
 }
