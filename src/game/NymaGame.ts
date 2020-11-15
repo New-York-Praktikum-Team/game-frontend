@@ -42,8 +42,8 @@ export class NymaGame {
   }
 
   startGame(): void {
-    this.nyma = new Nyma(this.level);
-    this.hole = new Hole(this.level);
+    this.nyma = new Nyma(this.context, this.level);
+    this.hole = new Hole(this.context, this.level);
     this.ballSnake = [];
 
     this.gameObjects.push(this.nyma);
@@ -57,15 +57,15 @@ export class NymaGame {
   }
 
   drawObjects(): void {
-    CanvasHelper.clear(this.context!, this.canvasSize, '#AFEEEE');
-    this.gameObjects.forEach((o) => o.draw(this.context!));
+    CanvasHelper.clear(this.context, this.canvasSize, '#AFEEEE');
+    this.gameObjects.forEach((o) => o.draw());
   }
 
   addBall(): SnakeBall {
-    const ball = new SnakeBall(this.level);
+    const ball = new SnakeBall(this.context, this.level);
     this.ballSnake!.push(ball);
     this.gameObjects.push(ball);
-    ball.draw(this.context);
+    ball.draw();
 
     return ball;
   }
@@ -95,7 +95,7 @@ export class NymaGame {
     this.drawObjects();
 
     this.ballSnake!.forEach((ball) => {
-      ball.clock(timeDelta, ctx);
+      ball.clock(timeDelta);
     });
 
     if (this.ballSnake![0].collidesWith(this.hole!)) {

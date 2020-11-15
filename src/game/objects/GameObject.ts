@@ -1,9 +1,13 @@
 import { Position } from './Position';
 
 export abstract class GameObject {
-  constructor(public pos: Position, public radius: number) { }
+  constructor(
+    public context: CanvasRenderingContext2D,
+    public pos: Position,
+    public radius: number,
+  ) { }
 
-  public abstract draw(context: CanvasRenderingContext2D): void;
+  public abstract draw(): void;
 
   distanceToPosition(pos: Position): number {
     return Math.sqrt((this.pos.x - pos.x) ** 2 + (this.pos.y - pos.y) ** 2) - this.radius;

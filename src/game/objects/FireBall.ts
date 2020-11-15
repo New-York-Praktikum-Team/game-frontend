@@ -4,8 +4,8 @@ import { Ball } from './Ball';
 import { Position } from './Position';
 
 export class FireBall extends Ball {
-  constructor(pos: Position, level: Level) {
-    super(pos, level.ballRadius, level.randomColor);
+  constructor(context: CanvasRenderingContext2D, pos: Position, level: Level) {
+    super(context, pos, level.ballRadius, level.randomColor);
     this.setPath(new LinearPath(this.pos, { x: this.pos.x + 1, y: this.pos.y }));
     this.setVelocity(level.fireBallVelocity);
     this.isMoving = false;

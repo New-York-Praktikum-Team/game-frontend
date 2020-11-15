@@ -4,10 +4,11 @@ import { FireBall } from './FireBall';
 import { GameObject } from './GameObject';
 
 export class Nyma extends GameObject {
-  constructor(level: Level) {
-    super(level.nymaPosition, level.nymaRadius);
-    this.fireBall = new FireBall(level.nymaPosition, level);
+  constructor(context: CanvasRenderingContext2D, level: Level) {
+    super(context, level.nymaPosition, level.nymaRadius);
+    this.fireBall = new FireBall(context, level.nymaPosition, level);
     this.nextBall = new FireBall(
+      context,
       { x: this.pos.x + level.ballRadius * 2, y: this.pos.y + level.ballRadius * 2 },
       level,
     );
@@ -19,10 +20,10 @@ export class Nyma extends GameObject {
 
   public nextBall: FireBall;
 
-  draw(context: CanvasRenderingContext2D): void {
-    CanvasHelper.renderCircle(context, this.pos, this.radius, 'DarkViolet');
+  draw(): void {
+    CanvasHelper.renderCircle(this.context, this.pos, this.radius, 'DarkViolet');
     CanvasHelper.renderText(
-      context,
+      this.context,
       'Nyma', {
         x: this.pos.x,
         y: this.pos.y - 15,
@@ -32,8 +33,8 @@ export class Nyma extends GameObject {
       },
     );
 
-    this.fireBall.draw(context);
-    this.nextBall.draw(context);
+    this.fireBall.draw();
+    this.nextBall.draw();
   }
 
   rotate(angle: number) {
