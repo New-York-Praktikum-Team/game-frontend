@@ -7,7 +7,7 @@ export const privateRoute = (
   appRoute: AppRoute,
   isLogged: boolean,
 ): ReactElement => {
-  const { isPrivate, path } = appRoute;
+  const { isPrivate, path = 'not-found' } = appRoute;
 
   if (isPrivate && !isLogged) {
     return <Redirect from={path} to={AppUrls.SignIn} key={path}/>;
