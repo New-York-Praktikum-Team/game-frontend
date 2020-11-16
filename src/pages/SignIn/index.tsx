@@ -1,6 +1,4 @@
-import React, {
-  RefObject, createRef, useCallback, useContext,
-} from 'react';
+import React, { useCallback, useContext, useRef } from 'react';
 import { Form, Formik, FormikHelpers } from 'formik';
 import { object, string } from 'yup';
 import { withRouter } from 'react-router-dom';
@@ -31,7 +29,7 @@ const validationSchema = object().shape({
 
 export const SignIn = withRouter(({ history }) => {
   const store = useContext(Store);
-  const formRef:RefObject<HTMLFormElement> = createRef();
+  const formRef = useRef<HTMLFormElement>(null);
 
   const send = useCallback(async (
     values: SignInFormValues,
@@ -51,7 +49,7 @@ export const SignIn = withRouter(({ history }) => {
     }
 
     setSubmitting(false);
-  }, []);
+  }, [formRef]);
 
   return (
     <section className='signin-form-wrapper'>

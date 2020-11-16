@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import { AppUrls } from 'routes/appUrls';
 import { NavLink } from 'react-router-dom';
 import { Store } from 'store';
+import './Navigation.css';
 
 const {
   SignIn, Game, Home, Leaderboard, Profile, SignUp,
@@ -23,7 +24,7 @@ export const Navigation: FC = () => (
            {
             Object.entries(isLogged ? privateLinks : publicLinks).map(([name, url]) => (
               <li key={url}>
-                <NavLink to={url}>{name}</NavLink>
+                <NavLink exact={true} className="navigation__a" to={url}>{name}</NavLink>
               </li>
             ))
            }
