@@ -4,9 +4,9 @@ import { ErrorBoundary } from 'components/ErrorBoundary';
 import { ROUTES } from 'routes/routes';
 import { User } from 'interfaces';
 import * as api from 'modules/api';
+import { privateRoute } from 'components/PrivateRoute';
 import { Navigation } from 'components/Navigation';
 import { Store } from 'store';
-import { usePrivateRoute } from 'modules/hooks';
 
 export const App: FC = () => {
   const [isReady, setReady] = useState<boolean>(false);
@@ -25,30 +25,28 @@ export const App: FC = () => {
     });
   }, []);
 
-  if (isReady) {
-    return (
-      <article className="app">
-        <Store.Provider value={{
-          user, setUser, isLogged, setLogged,
-        }}>
-          <Router>
-            <header>
-              <Navigation />
-            </header>
-            <main>
-              <ErrorBoundary>
-                <Switch>
-                  {ROUTES.map((routeProps, index) => (
-                    usePrivateRoute(routeProps, isLogged, index)
-                  ))}
-                </Switch>
-              </ErrorBoundary>
-            </main>
-          </Router>
-        </Store.Provider>
-      </article>
-    );
+  if (!isReady) {
+    return null;
   }
 
-  return null;
+  return (
+    <article className="app">
+      <Store.Provider value={{
+        user, setUser, isLogged, setLogged,
+      }}>
+        <Router>
+          <header>
+            <Navigation />
+          </header>
+          <main>
+            <ErrorBoundary>
+              <Switch>
+                {ROUTES.map((appRoute) => privateRoute(appRoute, isLogged))}
+              </Switch>
+            </ErrorBoundary>
+          </main>
+        </Router>
+      </Store.Provider>
+    </article>
+  );
 };

@@ -10,6 +10,7 @@ import { AppUrls } from './appUrls';
 
 export interface AppRoute extends RouteProps {
   isPrivate: boolean;
+  path?: string
 }
 
 export const ROUTES: AppRoute[] = [

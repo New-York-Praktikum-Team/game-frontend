@@ -1,10 +1,11 @@
 import React, { FC } from 'react';
 import { Link } from 'react-router-dom';
 import { AppUrls } from 'routes/appUrls';
+import './NotFound.css';
 
 export const NotFound: FC = () => (
-  <section>
-    <div>Whoops, there is nothing here!</div>
+  <section className="not_found">
+    <h1>Whoops, there is nothing here!</h1>
     <Link to={AppUrls.Home}>Home</Link>
   </section>
 );
