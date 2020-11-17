@@ -20,6 +20,6 @@ export const useAuth = () => {
   }, []);
 
   return {
-    isReady, isLogged, user, setLogged, setUser,
+    isReady, isLogged, setLogged, user, setUser,
   };
 };
