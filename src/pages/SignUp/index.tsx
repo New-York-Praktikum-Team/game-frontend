@@ -50,7 +50,7 @@ export const SignUp = withRouter(({ history }) => {
       if (user) {
         store.setUser(user);
         store.setLogged(true);
-        notification.success(`You are logged in as ${store.user!.login}`);
+        notification.success(`You are logged in as ${user.login}`);
         history.push(AppUrls.Game);
       } else {
         history.push(AppUrls.SignIn);
