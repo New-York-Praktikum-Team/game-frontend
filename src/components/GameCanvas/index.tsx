@@ -1,4 +1,5 @@
 import { NymaGame } from 'game/NymaGame';
+import { StartScene } from 'game/scenes/GameStart';
 import React, { Component, RefObject } from 'react';
 import { CanvasHelper, CanvasSize } from 'helpers/CanvasHelper';
 
@@ -11,6 +12,7 @@ type CanvasProps = {};
 interface CanvasState {
   appMode: AppMode;
   context: CanvasRenderingContext2D | null;
+  clientRect: ClientRect | null;
   canvasSize: CanvasSize;
 }
 
@@ -18,6 +20,7 @@ export class GameCanvas extends Component<CanvasProps, CanvasState> {
   state: CanvasState = {
     appMode: AppMode.Main,
     context: null,
+    clientRect: null,
     canvasSize: {
       width: 500,
       height: 500,
@@ -28,7 +31,8 @@ export class GameCanvas extends Component<CanvasProps, CanvasState> {
 
   componentDidMount() {
     const context = this.canvasRef.current!.getContext('2d')!;
-    this.setState({ context });
+    const clientRect = this.canvasRef.current!.getBoundingClientRect();
+    this.setState({ context, clientRect });
   }
 
   componentDidUpdate() {
@@ -70,19 +74,14 @@ export class GameCanvas extends Component<CanvasProps, CanvasState> {
   }
 
   start(): Promise<AppMode> {
-    return new Promise(((resolve) => {
-      CanvasHelper.clear(this.state.context!, this.state.canvasSize, '#ffff1f');
-      CanvasHelper.renderText(
-        this.state.context!,
-        'Game Start!', {
-          x: this.state.canvasSize.width / 2,
-          y: this.state.canvasSize.height / 2,
-          align: 'center',
-          font: '48px Arial',
-        },
-      );
-      setTimeout(resolve, 2000, AppMode.Game);
-    }));
+    const startScene = new StartScene(
+      this.state.context,
+      this.canvasRef.current,
+      this.state.canvasSize,
+      this.state.clientRect,
+    );
+
+    return startScene.render();
   }
 
   play(): Promise<AppMode> {
