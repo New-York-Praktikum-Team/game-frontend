@@ -5,4 +5,5 @@ export enum AppUrls {
   Game = '/play',
   Leaderboard = '/leaderboard',
   Profile = '/profile',
+  NotFound = '/not-found',
 }

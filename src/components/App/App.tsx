@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { BrowserRouter as Router, Switch } from 'react-router-dom';
 import { ErrorBoundary } from 'components/ErrorBoundary';
 import { ROUTES } from 'routes/routes';
-import { privateRoute } from 'components/PrivateRoute';
+import { PrivateRoute } from 'components/PrivateRoute';
 import { Navigation } from 'components/Navigation';
 import { Store } from 'store';
 import { useAuth } from 'hooks/useAuth';
@@ -28,7 +28,7 @@ export const App: FC = () => {
           <main>
             <ErrorBoundary>
               <Switch>
-                {ROUTES.map((appRoute) => privateRoute(appRoute, isLogged))}
+                {ROUTES.map((appRoute) => PrivateRoute(appRoute, isLogged))}
               </Switch>
             </ErrorBoundary>
           </main>
