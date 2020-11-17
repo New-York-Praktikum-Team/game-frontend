@@ -1,23 +1,19 @@
-import React, { FC } from 'react';
-import { Form, Formik } from 'formik';
+import React, { useCallback, useContext } from 'react';
+import { Form, Formik, FormikHelpers } from 'formik';
 import { object, ref, string } from 'yup';
+import { withRouter } from 'react-router-dom';
+import { getErrorFromRequest } from 'modules/getErrorFromRequest';
+import { notification } from 'components/Notification';
+import * as api from 'modules/api';
+import { SignUpRequest } from 'interfaces';
 import { AppUrls } from 'routes/appUrls';
 import { FormField } from 'components/FormField';
 import { FormButton } from 'components/FormButton';
 import { FormLink } from 'components/FormLink';
 import './SignUp.css';
+import { Store } from 'store';
 
-interface SignUpFormValues {
-  email: string;
-  login: string;
-  firstName: string;
-  secondName: string;
-  phone: string;
-  password: string;
-  verifyPassword: string;
-}
-
-const initialValues: SignUpFormValues = {
+const initialValues: SignUpRequest = {
   email: '',
   login: '',
   firstName: '',
@@ -37,38 +33,63 @@ const validationSchema = object().shape({
   verifyPassword: string().equals([ref('password')], 'Passwords must match').required('Verify password is required'),
 });
 
-export const SignUp: FC = () => (
-  <section className='signup-form-wrapper'>
-    <h1>Create account</h1>
+export const SignUp = withRouter(({ history }) => {
+  const store = useContext(Store);
 
-    <Formik
-      initialValues={initialValues}
-      validationSchema={validationSchema}
-      validateOnChange={false}
-      validateOnBlur={true}
-      onSubmit={(values: SignUpFormValues, { setSubmitting }) => {
-        setTimeout(() => {
-          // eslint-disable-next-line no-console
-          console.log('Signing up, values = ', values);
-          setSubmitting(false);
-        }, 400);
-      }}
-    >
-      {({ isSubmitting }) => (
-        <Form>
-          <FormField type='email' label='Email' name='email' />
-          <FormField label='Username' name='login' />
-          <FormField label='First Name' name='firstName' />
-          <FormField label='Last Name' name='secondName' />
-          <FormField label='Phone Number' name='phone' />
-          <FormField type='password' label='Password' name='password' />
-          <FormField type='password' label='Verify Password' name='verifyPassword' />
+  const send = useCallback(async (
+    values: SignUpRequest,
+    { setSubmitting }: FormikHelpers<SignUpRequest>) => {
+    setSubmitting(true);
 
-          <FormButton text='Save' disabled={isSubmitting} />
-          <FormLink text='Already have an account? Log In' to={AppUrls.SignIn} />
+    try {
+      await api.signUp(values);
+      notification.success('You are successfully registered.');
 
-        </Form>
-      )}
-    </Formik>
-  </section>
-);
+      const user = await api.getUserInfo();
+
+      if (user) {
+        store.setUser(user);
+        store.setLogged(true);
+        notification.success(`You are logged in as ${store.user!.login}`);
+        history.push(AppUrls.Game);
+      } else {
+        history.push(AppUrls.SignIn);
+      }
+    } catch (responseError) {
+      const error = await getErrorFromRequest(responseError);
+      notification.error(error.message);
+    }
+
+    setSubmitting(false);
+  }, []);
+
+  return (
+    <section className='signup-form-wrapper'>
+      <h1>Create account</h1>
+
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        validateOnChange={false}
+        validateOnBlur={true}
+        onSubmit={send}
+      >
+        {({ isSubmitting }) => (
+          <Form>
+            <FormField type='email' label='Email' name='email' />
+            <FormField label='Username' name='login' />
+            <FormField label='First Name' name='firstName' />
+            <FormField label='Last Name' name='secondName' />
+            <FormField label='Phone Number' name='phone' />
+            <FormField type='password' label='Password' name='password' />
+            <FormField type='password' label='Verify Password' name='verifyPassword' />
+
+            <FormButton text='Save' disabled={isSubmitting} />
+            <FormLink text='Already have an account? Log In' to={AppUrls.SignIn} />
+
+          </Form>
+        )}
+      </Formik>
+    </section>
+  );
+});

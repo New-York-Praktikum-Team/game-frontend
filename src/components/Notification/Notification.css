@@ -1,0 +1,9 @@
+#toast-container {
+  top: 10px !important;
+  right: 10px !important;
+}
+
+#toast-container > div {
+  top: 0 !important;
+  right: 0 !important;
+}
