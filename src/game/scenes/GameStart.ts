@@ -2,20 +2,14 @@ import { CanvasHelper, CanvasSize } from 'helpers/CanvasHelper';
 import { Position } from 'game/objects/Position';
 import { AppMode } from 'components/GameCanvas';
 import { Colors } from 'consts/colors';
-
-interface Rectangle {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-}
+import { Rectangle } from 'consts/shapes';
 
 export class StartScene {
   constructor(
-    public context: CanvasRenderingContext2D | null,
-    public canvasRef: HTMLCanvasElement | null,
+    public context: CanvasRenderingContext2D,
+    public canvasRef: HTMLCanvasElement,
     public canvasSize: CanvasSize,
-    public clientRect: ClientRect | null,
+    public clientRect: ClientRect,
   ) { }
 
   public startButtonRectangle: Rectangle = {
@@ -34,56 +28,31 @@ export class StartScene {
     });
   }
 
-  isPositionInsideRect(position: Position, rectangle: Rectangle): boolean {
-    return (
-      position.x > rectangle.x
-      && rectangle.x + rectangle.width > position.x
-      && position.y > rectangle.y
-      && rectangle.y + rectangle.height > position.y
-    );
-  }
-
-  renderStartButton(): void {
-    // set button color
-    this.context!.fillStyle = '#3369F3';
-
-    // draw button background
-    this.context!.fillRect(
-      this.startButtonRectangle.x,
-      this.startButtonRectangle.y,
-      this.startButtonRectangle.width,
-      this.startButtonRectangle.height,
-    );
-
-    // draw button text
-    CanvasHelper.renderText(
-      this.context!,
-      'Play', {
-        x: this.canvasSize.width / 2,
-        y: this.canvasSize.height / 3,
-        align: 'center',
-        font: '42px Arial',
-        color: Colors.white,
-      },
-    );
-  }
-
   renderStartScene(): void {
+    const buttonTopLeft: Position = {
+      x: this.canvasSize.width / 2,
+      y: this.canvasSize.height / 3,
+    };
     // clear prev scene
-    CanvasHelper.clear(this.context!, this.canvasSize, Colors.lightBlue);
+    CanvasHelper.clear(this.context, this.canvasSize, Colors.LightBlue);
 
     // draw the main button
-    this.renderStartButton();
+    CanvasHelper.renderStartButton(
+      this.context,
+      this.startButtonRectangle,
+      buttonTopLeft,
+    );
 
     // supportive text
     CanvasHelper.renderText(
-      this.context!,
-      'To start the game, press the big blue button above', {
+      this.context,
+      'To start the game, press the big blue button above',
+      {
         x: this.canvasSize.width / 2,
         y: this.canvasSize.height / 2,
         align: 'center',
         font: '16px Arial',
-        color: Colors.darkGrey,
+        color: Colors.DarkGrey,
       },
     );
   }
@@ -93,7 +62,10 @@ export class StartScene {
     return (event: MouseEvent) => {
       // detect if start button was clicked
       const mousePosition = this.getMousePosition(event);
-      const isButtonClicked = this.isPositionInsideRect(mousePosition, this.startButtonRectangle);
+      const isButtonClicked = CanvasHelper.isPositionInsideRect(
+        mousePosition,
+        this.startButtonRectangle,
+      );
 
       if (isButtonClicked) {
         let counter = 5;
@@ -103,27 +75,29 @@ export class StartScene {
         let timerId = setTimeout(function tick() {
           const counterText = counter === 0 ? 'GO!' : counter.toString();
 
-          CanvasHelper.clear(context!, canvasSize, Colors.lightBlue);
+          CanvasHelper.clear(context!, canvasSize, Colors.LightBlue);
 
           CanvasHelper.renderText(
-            context!,
-            'Get ready in', {
+            context,
+            'Get ready in',
+            {
               x: canvasSize.width / 2,
               y: canvasSize.height / 3,
               align: 'center',
               font: '32px Arial',
-              color: Colors.darkGrey,
+              color: Colors.DarkGrey,
             },
           );
 
           CanvasHelper.renderText(
-            context!,
-            counterText, {
+            context,
+            counterText,
+            {
               x: canvasSize.width / 2,
               y: canvasSize.height / 2,
               align: 'center',
               font: '72px Arial',
-              color: Colors.darkBlue,
+              color: Colors.DarkBlue,
             },
           );
 
@@ -142,7 +116,7 @@ export class StartScene {
   render(): Promise<AppMode> {
     return new Promise((resolve) => {
       this.renderStartScene();
-      this.canvasRef?.addEventListener('click', this.handleCanvasClick(resolve));
+      this.canvasRef.addEventListener('click', this.handleCanvasClick(resolve));
     });
   }
 }

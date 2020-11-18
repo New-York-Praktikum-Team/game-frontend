@@ -75,10 +75,10 @@ export class GameCanvas extends Component<CanvasProps, CanvasState> {
 
   start(): Promise<AppMode> {
     const startScene = new StartScene(
-      this.state.context,
-      this.canvasRef.current,
+      this.state.context!,
+      this.canvasRef.current!,
       this.state.canvasSize,
-      this.state.clientRect,
+      this.state.clientRect!,
     );
 
     return startScene.render();
