@@ -1,10 +1,10 @@
 import { AppMode } from 'components/GameCanvas';
 import { CanvasHelper, CanvasSize } from 'helpers/CanvasHelper';
-import { Level } from './levels/Level';
-import { Level1 } from './levels/Level1';
-import { Hole } from './objects/Hole';
-import { Nyma } from './objects/Nyma';
-import { Snake } from './objects/Snake';
+import { Level } from 'game/levels/Level';
+import { Level1 } from 'game/levels/Level1';
+import { Hole } from 'game/objects/Hole';
+import { Nyma } from 'game/objects/Nyma';
+import { Snake } from 'game/objects/Snake';
 
 interface GameOptions {
   level?: Level;
