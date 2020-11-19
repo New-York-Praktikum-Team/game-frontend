@@ -1,6 +1,7 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
+const { GenerateSW } = require('workbox-webpack-plugin');
 
 module.exports = {
   entry: './src/index.tsx',
@@ -12,7 +13,7 @@ module.exports = {
     hot: true,
     open: true,
     stats: 'errors-only',
-    port: 3000,
+    port: 3005,
     historyApiFallback: true,
   },
   resolve: {
@@ -59,6 +60,14 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: './www/index.html',
       favicon: './www/favicon.ico',
+    }),
+    new GenerateSW({
+      clientsClaim: true,
+      skipWaiting: true,
+      maximumFileSizeToCacheInBytes: 10 * 1024 * 1024,
+      modifyURLPrefix: {
+        auto: '/',
+      },
     }),
   ],
 };
