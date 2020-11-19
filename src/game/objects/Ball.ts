@@ -3,11 +3,16 @@ import { MovingGameObject } from './MovingGameObject';
 import { Position } from './Position';
 
 export abstract class Ball extends MovingGameObject {
-  constructor(context: CanvasRenderingContext2D, pos: Position, rad: number, public color: string) {
-    super(context, pos, rad);
+  constructor(
+    context: CanvasRenderingContext2D,
+    center: Position,
+    radius: number,
+    public color: string,
+  ) {
+    super(context, center, radius);
   }
 
   draw(): void {
-    CanvasHelper.renderCircle(this.context, this.pos, this.radius, this.color);
+    CanvasHelper.renderCircle(this.context, this.center, this.radius, this.color);
   }
 }

@@ -1,4 +1,4 @@
-import { NymaGame } from 'game/NymaGame';
+import { NymaGame } from 'game/scenes/NymaGame';
 import { StartScene } from 'game/scenes/GameStart';
 import React, { Component, RefObject } from 'react';
 import { CanvasHelper, CanvasSize } from 'helpers/CanvasHelper';

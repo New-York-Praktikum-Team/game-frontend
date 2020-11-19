@@ -4,9 +4,9 @@ import { Ball } from './Ball';
 import { Position } from './Position';
 
 export class FireBall extends Ball {
-  constructor(context: CanvasRenderingContext2D, pos: Position, level: Level) {
-    super(context, pos, level.ballRadius, level.randomColor);
-    this.setPath(new LinearPath(this.pos, { x: this.pos.x + 1, y: this.pos.y }));
+  constructor(context: CanvasRenderingContext2D, center: Position, level: Level) {
+    super(context, center, level.ballRadius, level.randomColor);
+    this.setPath(new LinearPath(this.center, { x: this.center.x + 1, y: this.center.y }));
     this.setVelocity(level.fireBallVelocity);
     this.isMoving = false;
   }
@@ -21,8 +21,11 @@ export class FireBall extends Ball {
     this.angleValue = value;
     this.setPath(
       new LinearPath(
-        this.pos,
-        { x: this.pos.x + Math.cos(this.angleValue), y: this.pos.y + Math.sin(this.angleValue) },
+        this.center,
+        {
+          x: this.center.x + Math.cos(this.angleValue),
+          y: this.center.y + Math.sin(this.angleValue),
+        },
       ),
     );
   }

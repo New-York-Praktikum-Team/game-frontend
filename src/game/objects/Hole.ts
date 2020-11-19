@@ -1,19 +1,19 @@
 import { Level } from 'game/levels/Level';
 import { CanvasHelper } from 'helpers/CanvasHelper';
-import { GameObject } from './GameObject';
+import { RoundGameObject } from './RoundGameObject';
 
-export class Hole extends GameObject {
+export class Hole extends RoundGameObject {
   constructor(context: CanvasRenderingContext2D, level: Level) {
     super(context, level.snakePath.end, level.holeRadius);
   }
 
   draw(): void {
-    CanvasHelper.renderCircle(this.context, this.pos, this.radius);
+    CanvasHelper.renderCircle(this.context, this.center, this.radius);
     CanvasHelper.renderText(
       this.context,
       'Hole', {
-        x: this.pos.x,
-        y: this.pos.y,
+        x: this.center.x,
+        y: this.center.y,
         color: 'white',
         align: 'center',
         font: '16px Arial',
