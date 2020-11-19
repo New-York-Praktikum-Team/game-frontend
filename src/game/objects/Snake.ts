@@ -24,10 +24,9 @@ export class Snake extends GameObject implements MovingObject {
     this.balls.forEach((ball) => ball.clock(time));
   }
 
-  addBallIfNecessary(): void {
+  addBall(): void {
     if (this.shouldAddAnotherBall) {
       const ball = new SnakeBall(this.context, this.level);
-      ball.draw();
       this.balls.push(ball);
     }
   }

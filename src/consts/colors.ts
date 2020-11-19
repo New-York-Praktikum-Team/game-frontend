@@ -3,4 +3,5 @@ export enum Colors {
   DarkBlue = '#3369F3',
   DarkGrey = '#262626',
   White = '#FFFFFF',
+  PaleTurquoise = '#AFEEEE',
 }

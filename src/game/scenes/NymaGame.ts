@@ -5,6 +5,7 @@ import { Level1 } from 'game/levels/Level1';
 import { Hole } from 'game/objects/Hole';
 import { Nyma } from 'game/objects/Nyma';
 import { Snake } from 'game/objects/Snake';
+import { Colors } from 'consts/colors';
 
 interface GameOptions {
   level?: Level;
@@ -49,7 +50,7 @@ export class NymaGame {
   }
 
   clearAndDrawStaticObjects() {
-    CanvasHelper.clear(this.context, this.canvasSize, '#AFEEEE');
+    CanvasHelper.clear(this.context, this.canvasSize, Colors.PaleTurquoise);
     this.nyma!.draw();
     this.hole!.draw();
   }
@@ -61,7 +62,7 @@ export class NymaGame {
 
     this.clearAndDrawStaticObjects();
 
-    this.snake!.addBallIfNecessary();
+    this.snake!.addBall();
     this.snake!.clock(timeDelta);
 
     if (this.snake!.collidesWith(this.hole!)) {
