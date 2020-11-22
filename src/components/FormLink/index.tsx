@@ -7,11 +7,8 @@ interface FormLinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
   to: string;
 }
 
-export const FormLink = (props: FormLinkProps) => {
-  const { text, to, ...rest } = props;
-  return (
+export const FormLink = ({ text, to, ...rest }: FormLinkProps) => (
     <Link className='form-link' to={to} {...rest}>
       {text}
     </Link>
-  );
-};
+);

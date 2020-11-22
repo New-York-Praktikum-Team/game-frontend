@@ -91,13 +91,11 @@ export class GameCanvas extends Component<CanvasProps, CanvasState> {
 
   render() {
     return (
-      <div>
-        <canvas
-          ref={this.canvasRef}
-          width={this.state.canvasSize.width}
-          height={this.state.canvasSize.height}
-        />
-      </div>
+      <canvas
+        ref={this.canvasRef}
+        width={this.state.canvasSize.width}
+        height={this.state.canvasSize.height}
+      />
     );
   }
 }

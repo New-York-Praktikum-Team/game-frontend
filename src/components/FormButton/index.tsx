@@ -5,11 +5,8 @@ interface FormButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   text: string;
 }
 
-export const FormButton = (props: FormButtonProps) => {
-  const { text, ...rest } = props;
-  return (
+export const FormButton = ({ text, ...rest }: FormButtonProps) => (
     <button className='waves-effect waves-light btn' type='submit' {...rest}>
       {text}
     </button>
-  );
-};
+);
