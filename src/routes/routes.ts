@@ -42,7 +42,7 @@ export const ROUTES: AppRoute[] = [
     exact: true,
     path: AppUrls.Game,
     component: Game,
-    isPrivate: true,
+    isPrivate: false,
   },
   {
     exact: true,
