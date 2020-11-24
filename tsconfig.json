@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    "lib": [
+      "dom",
+      "es2020"
+    ],
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "target": "es5",
+    "jsx": "react",
+    "importHelpers": true,
+    "noUnusedLocals": true,
+    "esModuleInterop": true,
+    "strict": true,
+    "allowSyntheticDefaultImports": true,
+    "experimentalDecorators": true,
+    "skipLibCheck": true,
+    "declaration": false,
+    "sourceMap": false,
+    "baseUrl": "./",
+    "outDir": "./dist",
+    "paths": {
+      "*": ["./src/*"],
+    },
+    "typeRoots": ["src/typings.d.ts", "node_modules/@types"]
+  },
+  "include": [
+    "src",
+    "./node_modules/@types"
+  ],
+  "exclude": [
+    "**/*.js"
+  ]
+}
