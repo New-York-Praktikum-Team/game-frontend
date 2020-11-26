@@ -6,6 +6,7 @@ interface StoreContext {
   setLogged(logged: boolean):void;
   user: User | null;
   setUser(user: User): void;
+  geolocation: Position | null;
 }
 
 export const Store = React.createContext<StoreContext>({
@@ -13,4 +14,5 @@ export const Store = React.createContext<StoreContext>({
   user: null,
   setLogged() {},
   setUser() {},
+  geolocation: null,
 });
