@@ -6,15 +6,12 @@ import { PrivateRoute } from 'components/PrivateRoute';
 import { Navigation } from 'components/Navigation';
 import { Store } from 'store';
 import { useAuth } from 'hooks/useAuth';
-import { useGeolocation } from 'hooks/useGeolocation';
 import { OfflineMessage } from 'components/Offline';
 
 export const App: FC = () => {
   const {
     isReady, user, setUser, isLogged, setLogged,
   } = useAuth();
-
-  const { geolocation } = useGeolocation();
 
   if (!isReady) {
     return null;
@@ -23,7 +20,7 @@ export const App: FC = () => {
   return (
     <article className="app">
       <Store.Provider value={{
-        user, setUser, isLogged, setLogged, geolocation,
+        user, setUser, isLogged, setLogged,
       }}>
         <Router>
           <header>

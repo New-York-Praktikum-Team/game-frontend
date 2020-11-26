@@ -4,6 +4,7 @@ import { NavLink } from 'react-router-dom';
 import Flag from 'react-country-flag';
 import { Store } from 'store';
 import './Navigation.css';
+import { useGeolocation } from 'hooks/useGeolocation';
 
 const {
   SignIn, Game, Home, Leaderboard, Profile, SignUp,
@@ -18,7 +19,8 @@ const publicLinks = {
 };
 
 export const Navigation: FC = () => {
-  const { isLogged, geolocation } = useContext(Store);
+  const { isLogged } = useContext(Store);
+  const { geolocation } = useGeolocation();
 
   return (
     <nav className="navigation">

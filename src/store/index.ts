@@ -1,12 +1,11 @@
 import React from 'react';
-import { User, UserGeolocation } from 'interfaces';
+import { User } from 'interfaces';
 
 interface StoreContext {
   isLogged: boolean;
   setLogged(logged: boolean):void;
   user: User | null;
   setUser(user: User): void;
-  geolocation: UserGeolocation | null;
 }
 
 export const Store = React.createContext<StoreContext>({
@@ -14,5 +13,4 @@ export const Store = React.createContext<StoreContext>({
   user: null,
   setLogged() {},
   setUser() {},
-  geolocation: null,
 });
