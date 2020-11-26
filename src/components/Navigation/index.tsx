@@ -1,6 +1,7 @@
-import React, { FC } from 'react';
+import React, { FC, useContext } from 'react';
 import { AppUrls } from 'routes/appUrls';
 import { NavLink } from 'react-router-dom';
+import Flag from 'react-country-flag';
 import { Store } from 'store';
 import './Navigation.css';
 
@@ -16,20 +17,25 @@ const publicLinks = {
   Home, Game, SignIn, SignUp,
 };
 
-export const Navigation: FC = () => (
-  <Store.Consumer>
-    {({ isLogged }) => (
-      <nav className="navigation">
-        <ul>
-           {
-            Object.entries(isLogged ? privateLinks : publicLinks).map(([name, url]) => (
-              <li key={url}>
-                <NavLink exact={true} className="navigation__a" to={url}>{name}</NavLink>
-              </li>
-            ))
-           }
-        </ul>
-      </nav>
-    )}
-  </Store.Consumer>
-);
+export const Navigation: FC = () => {
+  const { isLogged, geolocation } = useContext(Store);
+
+  return (
+    <nav className="navigation">
+      <ul>
+        {Object.entries(isLogged ? privateLinks : publicLinks).map(([name, url]) => (
+          <li key={url}>
+            <NavLink exact={true} className="navigation__a" to={url}>{name}</NavLink>
+          </li>
+        ))}
+      </ul>
+
+      {geolocation
+      && <div className="navigation__country">
+        <span>Country: </span>
+        <Flag countryCode={geolocation.country.countryCode}/>
+        <span className="navigation__country__name">{geolocation.country.countryName}</span>
+      </div>}
+    </nav>
+  );
+};

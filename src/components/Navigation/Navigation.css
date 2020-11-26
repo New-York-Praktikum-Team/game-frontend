@@ -1,3 +1,16 @@
 .navigation__a.active {
   background-color: rgba(0,0,0,0.1);
 }
+
+.navigation__country__flag {
+  width: 20px;
+}
+
+.navigation__country {
+  float: right;
+  padding: 0 20px;
+}
+
+.navigation__country__name {
+  padding-left: 5px;
+}

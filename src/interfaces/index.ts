@@ -1,3 +1,14 @@
+export interface Country {
+  languages: string;
+  distance: string,
+  countryCode: string,
+  countryName: string
+}
+
+export interface UserGeolocation extends Position {
+  country: Country
+}
+
 export interface User {
   id: number;
   firstName: string;
