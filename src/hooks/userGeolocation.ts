@@ -3,11 +3,11 @@ import { useEffect, useState } from 'react';
 export const useGeolocation = () => {
   const [geolocation, setGeolocation] = useState<Position | null>(null);
 
-  const success = (position: Position) => {
+  const success: PositionCallback = (position: Position) => {
     setGeolocation(position);
   };
 
-  const error = (err: PositionError) => {
+  const error: PositionErrorCallback = (err: PositionError) => {
     // eslint-disable-next-line no-console
     console.error(err.message);
   };
