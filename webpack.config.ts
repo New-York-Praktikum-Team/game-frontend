@@ -68,6 +68,8 @@ module.exports = {
       modifyURLPrefix: {
         auto: '/',
       },
+      cleanupOutdatedCaches: true,
+      exclude: [/\.map$/],
       navigateFallback: '/index.html',
     }),
   ],

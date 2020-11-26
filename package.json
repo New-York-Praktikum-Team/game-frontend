@@ -73,9 +73,6 @@
     "react-router-dom": "5.2.0",
     "toastr": "2.1.4",
     "tsconfig-paths-webpack-plugin": "3.3.0",
-    "workbox": "0.0.0",
-    "workbox-precaching": "5.1.4",
-    "workbox-routing": "5.1.4",
     "workbox-webpack-plugin": "5.1.4",
     "yup": "0.29.3"
   },
