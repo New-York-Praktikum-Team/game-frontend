@@ -6,8 +6,8 @@ import { PrivateRoute } from 'components/PrivateRoute';
 import { Navigation } from 'components/Navigation';
 import { Store } from 'store';
 import { useAuth } from 'hooks/useAuth';
+import { useGeolocation } from 'hooks/useGeolocation';
 import { OfflineMessage } from 'components/Offline';
-import { useGeolocation } from 'hooks/userGeolocation';
 
 export const App: FC = () => {
   const {
