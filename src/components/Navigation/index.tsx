@@ -1,8 +1,7 @@
-import React, { FC, useContext } from 'react';
+import React, { FC } from 'react';
 import { AppUrls } from 'routes/appUrls';
 import { NavLink } from 'react-router-dom';
 import Flag from 'react-country-flag';
-import { Store } from 'store';
 import './Navigation.css';
 import { useGeolocation } from 'hooks/useGeolocation';
 
@@ -18,8 +17,7 @@ const publicLinks = {
   Home, Game, SignIn, SignUp,
 };
 
-export const Navigation: FC = () => {
-  const { isLogged } = useContext(Store);
+export const Navigation: FC<{isLogged: boolean}> = ({ isLogged }) => {
   const { geolocation } = useGeolocation();
 
   return (

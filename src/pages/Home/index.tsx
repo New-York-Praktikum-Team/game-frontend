@@ -1,11 +1,13 @@
-import React, { FC, useContext } from 'react';
+import React, { FC } from 'react';
 import { Link } from 'react-router-dom';
 import { AppUrls } from 'routes/appUrls';
-import { Store } from 'store';
+import { RootState } from 'store/reducers';
+import { useSelector } from 'react-redux';
 import './Home.css';
 
 export const Home: FC = () => {
-  const { isLogged } = useContext(Store);
+  const userStatus = useSelector((state: RootState) => state.user.status);
+  const isLogged = userStatus === 'success';
 
   return (
     <section className="home">

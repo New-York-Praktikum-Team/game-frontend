@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useRef } from 'react';
+import React, { useCallback, useRef } from 'react';
 import { Form, Formik, FormikHelpers } from 'formik';
 import { object, string } from 'yup';
 import { withRouter } from 'react-router-dom';
@@ -9,7 +9,8 @@ import { AppUrls } from 'routes/appUrls';
 import { FormField } from 'components/FormField';
 import { FormButton } from 'components/FormButton';
 import { FormLink } from 'components/FormLink';
-import { Store } from 'store';
+import { store } from 'store/store';
+import { loadSuccess, setUser } from 'store/actions/user';
 import './SignIn.css';
 
 interface SignInFormValues {
@@ -28,19 +29,21 @@ const validationSchema = object().shape({
 });
 
 export const SignIn = withRouter(({ history }) => {
-  const store = useContext(Store);
   const formRef = useRef<HTMLFormElement>(null);
 
   const send = useCallback(async (
     values: SignInFormValues,
-    { setSubmitting }: FormikHelpers<SignInFormValues>) => {
+    { setSubmitting }: FormikHelpers<SignInFormValues>,
+  ) => {
     setSubmitting(true);
 
     try {
       await api.signIn(values.login, values.password);
+
       const user = await api.getUserInfo();
-      store.setUser(user);
-      store.setLogged(true);
+      store.dispatch(setUser(user));
+      store.dispatch(loadSuccess());
+
       history.push(AppUrls.Game);
     } catch (responseError) {
       setSubmitting(false);

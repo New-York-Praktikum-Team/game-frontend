@@ -4,27 +4,30 @@ import { ErrorBoundary } from 'components/ErrorBoundary';
 import { ROUTES } from 'routes/routes';
 import { PrivateRoute } from 'components/PrivateRoute';
 import { Navigation } from 'components/Navigation';
-import { Store } from 'store';
-import { useAuth } from 'hooks/useAuth';
 import { OfflineMessage } from 'components/Offline';
+import { useSelector } from 'react-redux';
+import { RootState } from 'store/reducers';
 
 export const App: FC = () => {
-  const {
-    isReady, user, setUser, isLogged, setLogged,
-  } = useAuth();
+  const [isLogged, isLoading] = useSelector((state: RootState) => {
+    const { status } = state.user;
 
-  if (!isReady) {
+    return [
+      status === 'success',
+      status === 'pending',
+    ];
+  });
+
+  if (isLoading) {
+    // TODO?: add loader
     return null;
   }
 
   return (
     <article className="app">
-      <Store.Provider value={{
-        user, setUser, isLogged, setLogged,
-      }}>
         <Router>
           <header>
-            <Navigation />
+            <Navigation isLogged={isLogged}/>
             <OfflineMessage />
           </header>
           <main>
@@ -35,7 +38,6 @@ export const App: FC = () => {
             </ErrorBoundary>
           </main>
         </Router>
-      </Store.Provider>
     </article>
   );
 };
