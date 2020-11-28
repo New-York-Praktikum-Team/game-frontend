@@ -64,17 +64,6 @@ export class GameCanvas extends Component<CanvasProps, CanvasState> {
     return scene;
   };
 
-  lose(): Promise<AppMode> {
-    const losingScene = new LosingScene(
-      this.state.context!,
-      this.canvasRef.current!,
-      this.state.canvasSize,
-      this.state.clientRect!,
-    );
-
-    return losingScene.render();
-  }
-
   render() {
     return (
       <canvas
