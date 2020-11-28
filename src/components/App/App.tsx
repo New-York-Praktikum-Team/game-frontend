@@ -6,6 +6,7 @@ import { PrivateRoute } from 'components/PrivateRoute';
 import { Navigation } from 'components/Navigation';
 import { Store } from 'store';
 import { useAuth } from 'hooks/useAuth';
+import { OfflineMessage } from 'components/Offline';
 
 export const App: FC = () => {
   const {
@@ -24,6 +25,7 @@ export const App: FC = () => {
         <Router>
           <header>
             <Navigation />
+            <OfflineMessage />
           </header>
           <main>
             <ErrorBoundary>

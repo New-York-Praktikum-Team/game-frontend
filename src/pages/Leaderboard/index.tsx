@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { Link } from 'react-router-dom';
 import { AppUrls } from 'routes/appUrls';
-import dollar from 'assets/dollar.png';
+import dollar from 'assets/images/dollar.png';
 import './Leaderboard.css';
 
 interface LeaderValue {

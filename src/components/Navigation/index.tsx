@@ -13,7 +13,7 @@ const privateLinks = {
 };
 
 const publicLinks = {
-  Home, SignIn, SignUp,
+  Home, Game, SignIn, SignUp,
 };
 
 export const Navigation: FC = () => (
