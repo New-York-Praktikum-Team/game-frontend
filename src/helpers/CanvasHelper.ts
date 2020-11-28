@@ -12,6 +12,7 @@ interface TextOptions {
 
 export type CanvasSize = { width: number, height: number };
 export type CanvasButtonOptions = {
+  text?: string;
   backgroundColor?: Colors;
   textColor?: Colors;
   fontSize?: string;
@@ -26,6 +27,7 @@ export class CanvasHelper {
   static renderText(context: CanvasRenderingContext2D, text: string, options?: TextOptions) {
     context.fillStyle = options?.color ?? 'black';
     context.textAlign = options?.align ?? 'left';
+    context.textBaseline = 'middle';
     context.font = options?.font ?? '24px Arial';
     context.fillText(text, options?.x ?? 0, options?.y ?? 0);
   }
@@ -56,10 +58,16 @@ export class CanvasHelper {
     buttonOptions?: CanvasButtonOptions,
   ): void {
     const {
+      text = 'Play',
       backgroundColor = Colors.DarkBlue,
       textColor = Colors.White,
       fontSize = '42px',
     } = buttonOptions || {};
+
+    const textPosition: Position = {
+      x: topLeftPosition.x + buttonRectangle.width / 2,
+      y: topLeftPosition.y + buttonRectangle.height / 2,
+    };
 
     context.fillStyle = backgroundColor;
 
@@ -72,9 +80,9 @@ export class CanvasHelper {
 
     CanvasHelper.renderText(
       context,
-      'Play',
+      text,
       {
-        ...topLeftPosition,
+        ...textPosition,
         align: 'center',
         font: `${fontSize} Arial`,
         color: textColor,

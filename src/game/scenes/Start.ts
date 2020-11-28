@@ -30,8 +30,8 @@ export class StartScene {
 
   renderStartScene(): void {
     const buttonTopLeft: Position = {
-      x: this.canvasSize.width / 2,
-      y: this.canvasSize.height / 3,
+      x: this.startButtonRectangle.x,
+      y: this.startButtonRectangle.y,
     };
     // clear prev scene
     CanvasHelper.clear(this.context, this.canvasSize, Colors.LightBlue);
