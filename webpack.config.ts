@@ -3,7 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const { GenerateSW } = require('workbox-webpack-plugin');
 
-module.exports = (env: undefined, { mode }: { mode: 'production' | 'development' }) => {
+module.exports = (_: undefined, { mode }: { mode: 'production' | 'development' }) => {
   const isDevelopment = mode === 'development';
   const isProduction = mode === 'production';
 
