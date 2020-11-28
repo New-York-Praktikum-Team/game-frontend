@@ -1,51 +1,43 @@
-import { CanvasHelper, CanvasSize } from 'helpers/CanvasHelper';
+import { CanvasHelper } from 'helpers/CanvasHelper';
 import { Position } from 'game/objects/Position';
 import { AppMode } from 'components/GameCanvas';
 import { Colors } from 'consts/colors';
 import { Rectangle } from 'consts/shapes';
+import { SceneBase } from './SceneBase';
 
-export class StartScene {
-  constructor(
-    public context: CanvasRenderingContext2D,
-    public canvasRef: HTMLCanvasElement,
-    public canvasSize: CanvasSize,
-    public clientRect: ClientRect,
-  ) { }
+export class StartScene extends SceneBase {
+  private secondsBeforeStart = 3;
 
-  public startButtonRectangle: Rectangle = {
-    x: 75,
-    y: 100,
+  private tickDuration = 1000;
+
+  private buttonDimensions = {
     width: 350,
     height: 100,
   };
 
-  getMousePosition(event: MouseEvent): Position {
-    const { left = 0, top = 0 } = (this.clientRect || {});
+  private startButtonRectangle: Rectangle = {
+    x: (this.canvasSize.width - this.buttonDimensions.width) / 2,
+    y: 100,
+    width: this.buttonDimensions.width,
+    height: this.buttonDimensions.height,
+  };
 
-    return ({
-      x: event.clientX - left,
-      y: event.clientY - top,
-    });
-  }
+  private buttonTopLeft: Position = {
+    x: this.startButtonRectangle.x,
+    y: this.startButtonRectangle.y,
+  };
 
-  renderStartScene(): void {
-    const buttonTopLeft: Position = {
-      x: this.startButtonRectangle.x,
-      y: this.startButtonRectangle.y,
-    };
-    // clear prev scene
-    CanvasHelper.clear(this.context, this.canvasSize, Colors.LightBlue);
+  renderScene(): void {
+    CanvasHelper.clear(this.context!, this.canvasSize, Colors.LightBlue);
 
-    // draw the main button
-    CanvasHelper.renderStartButton(
-      this.context,
+    CanvasHelper.renderButton(
+      this.context!,
       this.startButtonRectangle,
-      buttonTopLeft,
+      this.buttonTopLeft,
     );
 
-    // supportive text
     CanvasHelper.renderText(
-      this.context,
+      this.context!,
       'To start the game, press the big blue button above',
       {
         x: this.canvasSize.width / 2,
@@ -57,66 +49,65 @@ export class StartScene {
     );
   }
 
-  // function that creates event listener callback
-  handleCanvasClick(onButtonClick: (appMode: AppMode) => void): (event: MouseEvent) => void {
-    return (event: MouseEvent) => {
-      // detect if start button was clicked
-      const mousePosition = this.getMousePosition(event);
-      const isButtonClicked = CanvasHelper.isPositionInsideRect(
-        mousePosition,
-        this.startButtonRectangle,
+  onStartButtonClick(nextScene: (appMode: AppMode) => void): void {
+    const {
+      context, canvasSize, secondsBeforeStart, tickDuration,
+    } = this;
+    let counter = secondsBeforeStart;
+
+    // draw countdown before the game starts
+    let timerId = setTimeout(function tick() {
+      const counterText = counter === 0 ? 'GO!' : counter.toString();
+
+      CanvasHelper.clear(context!, canvasSize, Colors.LightBlue);
+
+      CanvasHelper.renderText(
+        context!,
+        'Get ready in',
+        {
+          x: canvasSize.width / 2,
+          y: canvasSize.height / 3,
+          align: 'center',
+          font: '32px Arial',
+          color: Colors.DarkGrey,
+        },
       );
 
-      if (isButtonClicked) {
-        let counter = 5;
-        const { context, canvasSize } = this;
+      CanvasHelper.renderText(
+        context!,
+        counterText,
+        {
+          x: canvasSize.width / 2,
+          y: canvasSize.height / 2,
+          align: 'center',
+          font: '72px Arial',
+          color: Colors.DarkBlue,
+        },
+      );
 
-        // draw countdown before the game starts
-        let timerId = setTimeout(function tick() {
-          const counterText = counter === 0 ? 'GO!' : counter.toString();
+      counter -= 1;
+      timerId = setTimeout(tick, tickDuration);
+    }, 0);
 
-          CanvasHelper.clear(context!, canvasSize, Colors.LightBlue);
-
-          CanvasHelper.renderText(
-            context,
-            'Get ready in',
-            {
-              x: canvasSize.width / 2,
-              y: canvasSize.height / 3,
-              align: 'center',
-              font: '32px Arial',
-              color: Colors.DarkGrey,
-            },
-          );
-
-          CanvasHelper.renderText(
-            context,
-            counterText,
-            {
-              x: canvasSize.width / 2,
-              y: canvasSize.height / 2,
-              align: 'center',
-              font: '72px Arial',
-              color: Colors.DarkBlue,
-            },
-          );
-
-          counter -= 1;
-          timerId = setTimeout(tick, 1000);
-        }, 0);
-
-        setTimeout(() => {
-          clearInterval(timerId);
-          onButtonClick(AppMode.Game);
-        }, 6000);
-      }
-    };
+    setTimeout(() => {
+      clearInterval(timerId);
+      nextScene(AppMode.Game);
+    }, (secondsBeforeStart + 1) * tickDuration);
   }
 
+  handleCanvasClick = (nextScene: (appMode: AppMode) => void) => (event: MouseEvent) => {
+    const isButtonClicked = CanvasHelper.isClickedInsideRect(
+      event,
+      this.clientRect,
+      this.startButtonRectangle,
+    );
+
+    if (isButtonClicked) {
+      this.onStartButtonClick(nextScene);
+    }
+  };
+
   render(): Promise<AppMode> {
-    return new Promise((resolve) => {
-      this.renderStartScene();
-      this.canvasRef.addEventListener('click', this.handleCanvasClick(resolve));
-    });
+    return super.render(this.handleCanvasClick);
   }
 }
