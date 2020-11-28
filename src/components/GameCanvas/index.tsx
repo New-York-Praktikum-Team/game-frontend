@@ -1,7 +1,8 @@
 import { NymaGame } from 'game/scenes/NymaGame';
-import { StartScene } from 'game/scenes/GameStart';
+import { StartScene } from 'game/scenes/Start';
 import React, { Component, RefObject } from 'react';
-import { CanvasHelper, CanvasSize } from 'helpers/CanvasHelper';
+import { CanvasSize } from 'helpers/CanvasHelper';
+import { LosingScene } from 'game/scenes/Losing';
 
 export enum AppMode {
   Main, Game, Losing, Winning,
@@ -50,16 +51,9 @@ export class GameCanvas extends Component<CanvasProps, CanvasState> {
         break;
       }
       case AppMode.Losing: {
-        CanvasHelper.renderText(
-          this.state.context!,
-          'You LOST!', {
-            x: this.state.canvasSize.width / 2,
-            y: 0.95 * this.state.canvasSize.height,
-            color: 'darkblue',
-            align: 'center',
-            font: '60px Arial',
-          },
-        );
+        this.lose().then((appMode) => {
+          this.setState({ appMode });
+        });
         break;
       }
       case AppMode.Winning: {
@@ -87,6 +81,17 @@ export class GameCanvas extends Component<CanvasProps, CanvasState> {
   play(): Promise<AppMode> {
     const game = new NymaGame(this.state.context!, { canvasSize: this.state.canvasSize });
     return game.play();
+  }
+
+  lose(): Promise<AppMode> {
+    const losingScene = new LosingScene(
+      this.state.context!,
+      this.canvasRef.current!,
+      this.state.canvasSize,
+      this.state.clientRect!,
+    );
+
+    return losingScene.render();
   }
 
   render() {
