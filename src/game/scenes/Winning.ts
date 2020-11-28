@@ -5,7 +5,7 @@ import { Colors } from 'consts/colors';
 import { Rectangle } from 'consts/shapes';
 import { SceneBase } from './SceneBase';
 
-export class LosingScene extends SceneBase {
+export class WinningScene extends SceneBase {
   private buttonDimensions = {
     width: 250,
     height: 50,
@@ -13,7 +13,7 @@ export class LosingScene extends SceneBase {
 
   private restartButtonRectangle: Rectangle = {
     x: (this.canvasSize.width - this.buttonDimensions.width) / 2,
-    y: this.canvasSize.height - this.buttonDimensions.height - 30,
+    y: this.canvasSize.height / 2,
     width: this.buttonDimensions.width,
     height: this.buttonDimensions.height,
   };
@@ -23,26 +23,17 @@ export class LosingScene extends SceneBase {
     y: this.restartButtonRectangle.y,
   };
 
-  renderParanja(): void {
-    this.context!.fillStyle = 'rgba(255, 255, 255, 0.7)';
-    this.context!.fillRect(
-      0, 0,
-      this.canvasSize.width,
-      this.canvasSize.height,
-    );
-  }
-
   renderScene(): void {
-    this.renderParanja();
+    CanvasHelper.clear(this.context!, this.canvasSize, Colors.LightBlue);
 
     CanvasHelper.renderText(
       this.context!,
-      'You LOST! 🤬',
+      'You WIN! 🎉',
       {
         x: this.canvasSize.width / 2,
-        y: 50,
+        y: this.canvasSize.height / 3,
         align: 'center',
-        font: '32px Arial',
+        font: '42px Arial',
         color: Colors.DarkGrey,
       },
     );
