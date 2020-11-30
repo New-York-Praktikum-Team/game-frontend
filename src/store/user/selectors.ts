@@ -7,3 +7,5 @@ export const isLogged = (state: RootState): boolean => {
 };
 
 export const isLoading = (state: RootState): boolean => state.user.isLoading;
+
+export const userLogin = (state: RootState): string | undefined => state.user.data?.login;

@@ -2,13 +2,10 @@ import { User } from 'interfaces';
 import { BaseActionType } from 'store/types';
 import { ItemActionType, UserActions } from 'store/user/actions';
 
-// type LoadStatus = 'success' | 'pending' | 'failed';
-
 type UserReducer = {
   data: User | null;
   isLoading: boolean;
   error?: string;
-  // status: LoadStatus;
 };
 
 const defaultReducer: UserReducer = {

@@ -1,18 +1,19 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import { Form, Formik, FormikHelpers } from 'formik';
 import { object, ref, string } from 'yup';
 import { withRouter } from 'react-router-dom';
-import { getErrorFromRequest } from 'modules/getErrorFromRequest';
+import { useSelector } from 'react-redux';
 import { notification } from 'components/Notification';
-import * as api from 'modules/api';
 import { SignUpRequest } from 'interfaces';
 import { AppUrls } from 'routes/appUrls';
 import { FormField } from 'components/FormField';
 import { FormButton } from 'components/FormButton';
 import { FormLink } from 'components/FormLink';
 import { store } from 'store/store';
-import { fetchUserSuccess } from 'store/user/actions';
+import { authError, isAuthentificated } from 'store/auth/selectors';
+import { isLogged, userLogin } from 'store/user/selectors';
 import './SignUp.css';
+import { signUpRequest } from 'store/auth/thunks';
 
 const initialValues: SignUpRequest = {
   email: '',
@@ -35,32 +36,45 @@ const validationSchema = object().shape({
 });
 
 export const SignUp = withRouter(({ history }) => {
+  const formRef = useRef<HTMLFormElement>(null);
+
+  // pick values from store
+  const isUserLogged = useSelector(isLogged);
+  const login = useSelector(userLogin);
+  const isSuccessfullyRegistered = useSelector(isAuthentificated);
+  const signUpError = useSelector(authError);
+
   const send = useCallback(async (
     values: SignUpRequest,
     { setSubmitting }: FormikHelpers<SignUpRequest>,
   ) => {
     setSubmitting(true);
 
-    try {
-      await api.signUp(values);
+    store.dispatch(signUpRequest(values));
+
+    setSubmitting(false);
+  }, [formRef]);
+
+  // if we got an error, show it
+  useEffect(() => {
+    if (signUpError) {
+      notification.error(signUpError.message);
+    }
+  }, [signUpError]);
+
+  // if successfully registered
+  useEffect(() => {
+    if (isSuccessfullyRegistered) {
       notification.success('You are successfully registered.');
 
-      const user = await api.getUserInfo();
-
-      if (user) {
-        store.dispatch(fetchUserSuccess(user));
-
-        notification.success(`You are logged in as ${user.login}`);
+      if (isUserLogged) {
+        notification.success(`You are logged in as ${login}`);
         history.push(AppUrls.Game);
-      } else {
-        history.push(AppUrls.SignIn);
       }
-    } catch (responseError) {
-      setSubmitting(false);
-      const error = await getErrorFromRequest(responseError);
-      notification.error(error.message);
+
+      history.push(AppUrls.SignIn);
     }
-  }, []);
+  }, [isUserLogged, isSuccessfullyRegistered]);
 
   return (
     <section className='signup-form-wrapper'>
