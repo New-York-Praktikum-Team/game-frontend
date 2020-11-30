@@ -56,11 +56,10 @@ export const SignUp = withRouter(({ history }) => {
         history.push(AppUrls.SignIn);
       }
     } catch (responseError) {
+      setSubmitting(false);
       const error = await getErrorFromRequest(responseError);
       notification.error(error.message);
     }
-
-    setSubmitting(false);
   }, []);
 
   return (
