@@ -43,14 +43,13 @@ export const SignIn = withRouter(({ history }) => {
       store.setLogged(true);
       history.push(AppUrls.Game);
     } catch (responseError) {
+      setSubmitting(false);
       if (formRef.current) {
         formRef.current.password.focus();
       }
       const error = await getErrorFromRequest(responseError);
       notification.error(error.message);
     }
-
-    setSubmitting(false);
   }, [formRef]);
 
   return (

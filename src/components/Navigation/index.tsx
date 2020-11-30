@@ -33,10 +33,10 @@ export const Navigation: FC = () => {
       </ul>
 
       {geolocation
-      && <div className="navigation__country">
+      && <div className="country">
         <span>Country: </span>
         <Flag countryCode={geolocation.country.countryCode}/>
-        <span className="navigation__country__name">{geolocation.country.countryName}</span>
+        <span className="country__name">{geolocation.country.countryName}</span>
       </div>}
     </nav>
   );
