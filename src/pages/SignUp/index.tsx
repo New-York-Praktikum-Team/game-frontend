@@ -11,7 +11,7 @@ import { FormField } from 'components/FormField';
 import { FormButton } from 'components/FormButton';
 import { FormLink } from 'components/FormLink';
 import { store } from 'store/store';
-import { loadSuccess, setUser } from 'store/actions/user';
+import { fetchUserSuccess } from 'store/user/actions';
 import './SignUp.css';
 
 const initialValues: SignUpRequest = {
@@ -48,8 +48,7 @@ export const SignUp = withRouter(({ history }) => {
       const user = await api.getUserInfo();
 
       if (user) {
-        store.dispatch(setUser(user));
-        store.dispatch(loadSuccess());
+        store.dispatch(fetchUserSuccess(user));
 
         notification.success(`You are logged in as ${user.login}`);
         history.push(AppUrls.Game);

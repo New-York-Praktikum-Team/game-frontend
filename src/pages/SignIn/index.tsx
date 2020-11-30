@@ -10,7 +10,7 @@ import { FormField } from 'components/FormField';
 import { FormButton } from 'components/FormButton';
 import { FormLink } from 'components/FormLink';
 import { store } from 'store/store';
-import { loadSuccess, setUser } from 'store/actions/user';
+import { fetchUserSuccess } from 'store/user/actions';
 import './SignIn.css';
 
 interface SignInFormValues {
@@ -41,8 +41,9 @@ export const SignIn = withRouter(({ history }) => {
       await api.signIn(values.login, values.password);
 
       const user = await api.getUserInfo();
-      store.dispatch(setUser(user));
-      store.dispatch(loadSuccess());
+      store.dispatch(fetchUserSuccess(user));
+
+      notification.success(`You are logged in as ${user.login}`);
 
       history.push(AppUrls.Game);
     } catch (responseError) {
