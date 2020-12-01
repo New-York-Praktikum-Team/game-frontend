@@ -1,8 +1,9 @@
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, {
+  FC, useCallback, useEffect, useRef,
+} from 'react';
 import { Form, Formik, FormikHelpers } from 'formik';
 import { object, ref, string } from 'yup';
-import { withRouter } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { notification } from 'components/Notification';
 import { SignUpRequest } from 'interfaces';
 import { AppUrls } from 'routes/appUrls';
@@ -10,10 +11,9 @@ import { FormField } from 'components/FormField';
 import { FormButton } from 'components/FormButton';
 import { FormLink } from 'components/FormLink';
 import { store } from 'store/store';
-import { authError, isAuthentificated } from 'store/auth/selectors';
-import { isLogged, userLogin } from 'store/user/selectors';
-import './SignUp.css';
 import { signUpRequest } from 'store/auth/thunks';
+import { useEnhance } from './useEnhance';
+import './SignUp.css';
 
 const initialValues: SignUpRequest = {
   email: '',
@@ -35,14 +35,13 @@ const validationSchema = object().shape({
   verifyPassword: string().equals([ref('password')], 'Passwords must match').required('Verify password is required'),
 });
 
-export const SignUp = withRouter(({ history }) => {
+export const SignUp: FC = () => {
   const formRef = useRef<HTMLFormElement>(null);
+  const history = useHistory();
 
-  // pick values from store
-  const isUserLogged = useSelector(isLogged);
-  const login = useSelector(userLogin);
-  const isSuccessfullyRegistered = useSelector(isAuthentificated);
-  const signUpError = useSelector(authError);
+  const {
+    isUserLogged, login, isSuccessfullyRegistered, signUpError,
+  } = useEnhance();
 
   const send = useCallback(async (
     values: SignUpRequest,
@@ -105,4 +104,4 @@ export const SignUp = withRouter(({ history }) => {
       </Formik>
     </section>
   );
-});
+};

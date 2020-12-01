@@ -1,8 +1,9 @@
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, {
+  FC, useCallback, useEffect, useRef,
+} from 'react';
 import { Form, Formik, FormikHelpers } from 'formik';
 import { object, string } from 'yup';
-import { withRouter } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { notification } from 'components/Notification';
 import { FormField } from 'components/FormField';
 import { FormButton } from 'components/FormButton';
@@ -11,8 +12,7 @@ import { AppUrls } from 'routes/appUrls';
 import { SignInRequest } from 'interfaces';
 import { store } from 'store/store';
 import { loginRequest } from 'store/auth/thunks';
-import { authError } from 'store/auth/selectors';
-import { isLogged, userLogin } from 'store/user/selectors';
+import { useEnhance } from './useEnhance';
 import './SignIn.css';
 
 const initialValues: SignInRequest = {
@@ -25,13 +25,11 @@ const validationSchema = object().shape({
   password: string().required('Password is required'),
 });
 
-export const SignIn = withRouter(({ history }) => {
+export const SignIn: FC = () => {
   const formRef = useRef<HTMLFormElement>(null);
+  const history = useHistory();
 
-  // pick values from store
-  const isUserLogged = useSelector(isLogged);
-  const login = useSelector(userLogin);
-  const signInError = useSelector(authError);
+  const { isUserLogged, login, signInError } = useEnhance();
 
   const onSubmitForm = useCallback(async (
     values: SignInRequest,
@@ -82,4 +80,4 @@ export const SignIn = withRouter(({ history }) => {
       </Formik>
     </section>
   );
-});
+};
