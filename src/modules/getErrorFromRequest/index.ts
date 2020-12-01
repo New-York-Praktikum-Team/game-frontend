@@ -1,7 +1,4 @@
-interface ApiError {
-  code: number | null;
-  message: string;
-}
+import { ApiError } from 'interfaces';
 
 interface HTTPError {
   response: Response;

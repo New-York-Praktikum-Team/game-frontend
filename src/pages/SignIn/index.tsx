@@ -1,23 +1,21 @@
-import React, { useCallback, useContext, useRef } from 'react';
+import React, {
+  FC, useCallback, useEffect, useRef,
+} from 'react';
 import { Form, Formik, FormikHelpers } from 'formik';
 import { object, string } from 'yup';
-import { withRouter } from 'react-router-dom';
-import { getErrorFromRequest } from 'modules/getErrorFromRequest';
-import * as api from 'modules/api';
+import { useHistory } from 'react-router-dom';
 import { notification } from 'components/Notification';
-import { AppUrls } from 'routes/appUrls';
 import { FormField } from 'components/FormField';
 import { FormButton } from 'components/FormButton';
 import { FormLink } from 'components/FormLink';
-import { Store } from 'store';
+import { AppUrls } from 'routes/appUrls';
+import { SignInRequest } from 'interfaces';
+import { store } from 'store/store';
+import { loginRequest } from 'store/auth/thunks';
+import { useEnhance } from './useEnhance';
 import './SignIn.css';
 
-interface SignInFormValues {
-  login: string;
-  password: string;
-}
-
-const initialValues: SignInFormValues = {
+const initialValues: SignInRequest = {
   login: '',
   password: '',
 };
@@ -27,30 +25,38 @@ const validationSchema = object().shape({
   password: string().required('Password is required'),
 });
 
-export const SignIn = withRouter(({ history }) => {
-  const store = useContext(Store);
+export const SignIn: FC = () => {
   const formRef = useRef<HTMLFormElement>(null);
+  const history = useHistory();
 
-  const send = useCallback(async (
-    values: SignInFormValues,
-    { setSubmitting }: FormikHelpers<SignInFormValues>) => {
+  const { isUserLogged, login, signInError } = useEnhance();
+
+  const onSubmitForm = useCallback(async (
+    values: SignInRequest,
+    { setSubmitting }: FormikHelpers<SignInRequest>,
+  ) => {
     setSubmitting(true);
 
-    try {
-      await api.signIn(values.login, values.password);
-      const user = await api.getUserInfo();
-      store.setUser(user);
-      store.setLogged(true);
-      history.push(AppUrls.Game);
-    } catch (responseError) {
-      setSubmitting(false);
-      if (formRef.current) {
-        formRef.current.password.focus();
-      }
-      const error = await getErrorFromRequest(responseError);
-      notification.error(error.message);
-    }
+    // async logic packed into thunk
+    store.dispatch(loginRequest(values));
+
+    setSubmitting(false);
   }, [formRef]);
+
+  // if we got an error, show it
+  useEffect(() => {
+    if (signInError) {
+      notification.error(signInError.message);
+    }
+  }, [signInError]);
+
+  // if successfully logged, show login and redirect to game
+  useEffect(() => {
+    if (isUserLogged) {
+      notification.success(`You are logged in as ${login}`);
+      history.push(AppUrls.Game);
+    }
+  }, [isUserLogged]);
 
   return (
     <section className='signin-form-wrapper'>
@@ -61,7 +67,7 @@ export const SignIn = withRouter(({ history }) => {
         validationSchema={validationSchema}
         validateOnChange={false}
         validateOnBlur={true}
-        onSubmit={send}
+        onSubmit={onSubmitForm}
       >
         {({ isSubmitting }) => (
           <Form ref={formRef}>
@@ -74,4 +80,4 @@ export const SignIn = withRouter(({ history }) => {
       </Formik>
     </section>
   );
-});
+};

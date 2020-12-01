@@ -1,17 +1,19 @@
-import React, { useCallback, useContext } from 'react';
+import React, {
+  FC, useCallback, useEffect, useRef,
+} from 'react';
 import { Form, Formik, FormikHelpers } from 'formik';
 import { object, ref, string } from 'yup';
-import { withRouter } from 'react-router-dom';
-import { getErrorFromRequest } from 'modules/getErrorFromRequest';
+import { useHistory } from 'react-router-dom';
 import { notification } from 'components/Notification';
-import * as api from 'modules/api';
 import { SignUpRequest } from 'interfaces';
 import { AppUrls } from 'routes/appUrls';
 import { FormField } from 'components/FormField';
 import { FormButton } from 'components/FormButton';
 import { FormLink } from 'components/FormLink';
+import { store } from 'store/store';
+import { signUpRequest } from 'store/auth/thunks';
+import { useEnhance } from './useEnhance';
 import './SignUp.css';
-import { Store } from 'store';
 
 const initialValues: SignUpRequest = {
   email: '',
@@ -33,34 +35,45 @@ const validationSchema = object().shape({
   verifyPassword: string().equals([ref('password')], 'Passwords must match').required('Verify password is required'),
 });
 
-export const SignUp = withRouter(({ history }) => {
-  const store = useContext(Store);
+export const SignUp: FC = () => {
+  const formRef = useRef<HTMLFormElement>(null);
+  const history = useHistory();
+
+  const {
+    isUserLogged, login, isSuccessfullyRegistered, signUpError,
+  } = useEnhance();
 
   const send = useCallback(async (
     values: SignUpRequest,
-    { setSubmitting }: FormikHelpers<SignUpRequest>) => {
+    { setSubmitting }: FormikHelpers<SignUpRequest>,
+  ) => {
     setSubmitting(true);
 
-    try {
-      await api.signUp(values);
+    store.dispatch(signUpRequest(values));
+
+    setSubmitting(false);
+  }, [formRef]);
+
+  // if we got an error, show it
+  useEffect(() => {
+    if (signUpError) {
+      notification.error(signUpError.message);
+    }
+  }, [signUpError]);
+
+  // if successfully registered
+  useEffect(() => {
+    if (isSuccessfullyRegistered) {
       notification.success('You are successfully registered.');
 
-      const user = await api.getUserInfo();
-
-      if (user) {
-        store.setUser(user);
-        store.setLogged(true);
-        notification.success(`You are logged in as ${user.login}`);
+      if (isUserLogged) {
+        notification.success(`You are logged in as ${login}`);
         history.push(AppUrls.Game);
-      } else {
-        history.push(AppUrls.SignIn);
       }
-    } catch (responseError) {
-      setSubmitting(false);
-      const error = await getErrorFromRequest(responseError);
-      notification.error(error.message);
+
+      history.push(AppUrls.SignIn);
     }
-  }, []);
+  }, [isUserLogged, isSuccessfullyRegistered]);
 
   return (
     <section className='signup-form-wrapper'>
@@ -91,4 +104,4 @@ export const SignUp = withRouter(({ history }) => {
       </Formik>
     </section>
   );
-});
+};
