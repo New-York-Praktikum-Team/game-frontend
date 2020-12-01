@@ -1,11 +1,12 @@
 import { CanvasHelper } from 'helpers/CanvasHelper';
-import { Position } from 'game/objects/Position';
 import { AppMode } from 'components/GameCanvas';
 import { Colors } from 'consts/colors';
 import { Rectangle } from 'consts/shapes';
 import { SceneBase } from './SceneBase';
 
 export class WinningScene extends SceneBase {
+  private countingDown = false;
+
   private buttonDimensions = {
     width: 250,
     height: 50,
@@ -16,11 +17,6 @@ export class WinningScene extends SceneBase {
     y: this.canvasSize.height / 2,
     width: this.buttonDimensions.width,
     height: this.buttonDimensions.height,
-  };
-
-  private buttonTopLeft: Position = {
-    x: this.restartButtonRectangle.x,
-    y: this.restartButtonRectangle.y,
   };
 
   renderScene(): void {
@@ -41,7 +37,6 @@ export class WinningScene extends SceneBase {
     CanvasHelper.renderButton(
       this.context!,
       this.restartButtonRectangle,
-      this.buttonTopLeft,
       { text: 'Play again', fontSize: '24px' },
     );
   }
@@ -51,10 +46,11 @@ export class WinningScene extends SceneBase {
       event,
       this.clientRect,
       this.restartButtonRectangle,
-    );
+    ) && !this.countingDown;
 
     if (isButtonClicked) {
-      nextScene(AppMode.Main);
+      this.countingDown = true;
+      super.renderCountdown(nextScene);
     }
   };
 

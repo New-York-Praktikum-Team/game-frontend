@@ -1,11 +1,12 @@
 import { CanvasHelper } from 'helpers/CanvasHelper';
-import { Position } from 'game/objects/Position';
 import { AppMode } from 'components/GameCanvas';
 import { Colors } from 'consts/colors';
 import { Rectangle } from 'consts/shapes';
 import { SceneBase } from './SceneBase';
 
 export class LosingScene extends SceneBase {
+  private countingDown = false;
+
   private buttonDimensions = {
     width: 250,
     height: 50,
@@ -18,9 +19,11 @@ export class LosingScene extends SceneBase {
     height: this.buttonDimensions.height,
   };
 
-  private buttonTopLeft: Position = {
-    x: this.restartButtonRectangle.x,
-    y: this.restartButtonRectangle.y,
+  private menuButtonRectangle: Rectangle = {
+    x: (this.canvasSize.width - this.buttonDimensions.width) / 2,
+    y: this.canvasSize.height - this.buttonDimensions.height * 2 - 30 * 2,
+    width: this.buttonDimensions.width,
+    height: this.buttonDimensions.height,
   };
 
   renderParanja(): void {
@@ -49,20 +52,36 @@ export class LosingScene extends SceneBase {
 
     CanvasHelper.renderButton(
       this.context!,
+      this.menuButtonRectangle,
+      { text: 'Go to Main Menu', fontSize: '24px' },
+    );
+
+    CanvasHelper.renderButton(
+      this.context!,
       this.restartButtonRectangle,
-      this.buttonTopLeft,
       { text: 'Play again', fontSize: '24px' },
     );
   }
 
   handleCanvasClick = (nextScene: (appMode: AppMode) => void) => (event: MouseEvent) => {
-    const isButtonClicked = CanvasHelper.isClickedInsideRect(
+    const isRestartButtonClicked = CanvasHelper.isClickedInsideRect(
       event,
       this.clientRect,
       this.restartButtonRectangle,
-    );
+    ) && !this.countingDown;
 
-    if (isButtonClicked) {
+    const isMenuButtonClicked = CanvasHelper.isClickedInsideRect(
+      event,
+      this.clientRect,
+      this.menuButtonRectangle,
+    ) && !this.countingDown;
+
+    if (isRestartButtonClicked) {
+      this.countingDown = true;
+      super.renderCountdown(nextScene);
+    }
+
+    if (isMenuButtonClicked) {
       nextScene(AppMode.Main);
     }
   };
