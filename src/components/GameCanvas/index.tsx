@@ -4,14 +4,13 @@ import { NymaGame } from 'game/scenes/NymaGame';
 import { StartScene } from 'game/scenes/Start';
 import { LosingScene } from 'game/scenes/Losing';
 import { WinningScene } from 'game/scenes/Winning';
+import { SceneBaseDerived } from 'game/scenes/SceneBase';
 
 export enum AppMode {
   Main, Game, Losing, Winning,
 }
 
 type CanvasProps = {};
-
-type Scene = typeof StartScene | typeof LosingScene | typeof WinningScene;
 
 interface CanvasState {
   appMode: AppMode;
@@ -55,7 +54,7 @@ export class GameCanvas extends Component<CanvasProps, CanvasState> {
     }
   };
 
-  renderScene = (SceneConstructor: Scene) => () => {
+  renderScene = <T extends SceneBaseDerived>(SceneConstructor: T) => () => {
     const scene = new SceneConstructor(
       this.canvasRef.current!,
       this.state.canvasSize,

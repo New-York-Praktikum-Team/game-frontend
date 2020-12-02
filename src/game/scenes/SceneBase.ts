@@ -9,6 +9,9 @@ export type EventListenerFabric = (
   event: MouseEvent
 ) => void;
 
+type SceneBaseClass = typeof SceneBase;
+export interface SceneBaseDerived extends SceneBaseClass { }
+
 export abstract class SceneBase {
   private secondsBeforeStart = 3;
 
@@ -18,8 +21,6 @@ export abstract class SceneBase {
 
   context: CanvasRenderingContext2D;
 
-  protected abstract renderScene(): void;
-
   constructor(
     public canvasRef: HTMLCanvasElement,
     public canvasSize: CanvasSize,
@@ -28,7 +29,7 @@ export abstract class SceneBase {
     this.context = canvasRef.getContext('2d')!;
   }
 
-  renderCountdown(nextScene: (appMode: AppMode) => void): void {
+  protected renderCountdown(nextScene: (appMode: AppMode) => void): void {
     const {
       context, canvasSize, secondsBeforeStart, tickDuration,
     } = this;
@@ -38,10 +39,10 @@ export abstract class SceneBase {
     let timerId = setTimeout(function tick() {
       const counterText = counter === 0 ? 'GO!' : counter.toString();
 
-      CanvasHelper.clear(context!, canvasSize, Colors.LightBlue);
+      CanvasHelper.clear(context, canvasSize, Colors.LightBlue);
 
       CanvasHelper.renderText(
-        context!,
+        context,
         'Get ready in',
         {
           x: canvasSize.width / 2,
@@ -53,7 +54,7 @@ export abstract class SceneBase {
       );
 
       CanvasHelper.renderText(
-        context!,
+        context,
         counterText,
         {
           x: canvasSize.width / 2,
@@ -74,10 +75,14 @@ export abstract class SceneBase {
     }, (secondsBeforeStart + 1) * tickDuration);
   }
 
-  render(handleCanvasClick: EventListenerFabric): Promise<AppMode> {
+  protected abstract renderScene(): void;
+
+  protected abstract handleCanvasClick: EventListenerFabric;
+
+  render(): Promise<AppMode> {
     return new Promise((resolve) => {
       this.renderScene();
-      this.canvasRef.addEventListener('click', handleCanvasClick(resolve));
+      this.canvasRef.addEventListener('click', this.handleCanvasClick(resolve));
     });
   }
 }

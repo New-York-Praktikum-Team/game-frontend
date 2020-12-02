@@ -20,16 +20,16 @@ export class StartScene extends SceneBase {
   };
 
   renderScene(): void {
-    CanvasHelper.clear(this.context!, this.canvasSize, Colors.LightBlue);
+    CanvasHelper.clear(this.context, this.canvasSize, Colors.LightBlue);
 
     CanvasHelper.renderButton(
-      this.context!,
+      this.context,
       this.startButtonRectangle,
       { text: 'Play' },
     );
 
     CanvasHelper.renderText(
-      this.context!,
+      this.context,
       'To start the game, press the big blue button above',
       {
         x: this.canvasSize.width / 2,
@@ -53,8 +53,4 @@ export class StartScene extends SceneBase {
       super.renderCountdown(nextScene);
     }
   };
-
-  render(): Promise<AppMode> {
-    return super.render(this.handleCanvasClick);
-  }
 }

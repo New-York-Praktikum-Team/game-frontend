@@ -20,10 +20,10 @@ export class WinningScene extends SceneBase {
   };
 
   renderScene(): void {
-    CanvasHelper.clear(this.context!, this.canvasSize, Colors.LightBlue);
+    CanvasHelper.clear(this.context, this.canvasSize, Colors.LightBlue);
 
     CanvasHelper.renderText(
-      this.context!,
+      this.context,
       'You WIN! 🎉',
       {
         x: this.canvasSize.width / 2,
@@ -35,7 +35,7 @@ export class WinningScene extends SceneBase {
     );
 
     CanvasHelper.renderButton(
-      this.context!,
+      this.context,
       this.restartButtonRectangle,
       { text: 'Play again', fontSize: '24px' },
     );
@@ -53,8 +53,4 @@ export class WinningScene extends SceneBase {
       super.renderCountdown(nextScene);
     }
   };
-
-  render(): Promise<AppMode> {
-    return super.render(this.handleCanvasClick);
-  }
 }

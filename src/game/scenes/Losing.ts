@@ -27,8 +27,8 @@ export class LosingScene extends SceneBase {
   };
 
   renderParanja(): void {
-    this.context!.fillStyle = 'rgba(255, 255, 255, 0.7)';
-    this.context!.fillRect(
+    this.context.fillStyle = 'rgba(255, 255, 255, 0.7)';
+    this.context.fillRect(
       0, 0,
       this.canvasSize.width,
       this.canvasSize.height,
@@ -39,7 +39,7 @@ export class LosingScene extends SceneBase {
     this.renderParanja();
 
     CanvasHelper.renderText(
-      this.context!,
+      this.context,
       'You LOST! 🤬',
       {
         x: this.canvasSize.width / 2,
@@ -51,13 +51,13 @@ export class LosingScene extends SceneBase {
     );
 
     CanvasHelper.renderButton(
-      this.context!,
+      this.context,
       this.menuButtonRectangle,
       { text: 'Go to Main Menu', fontSize: '24px' },
     );
 
     CanvasHelper.renderButton(
-      this.context!,
+      this.context,
       this.restartButtonRectangle,
       { text: 'Play again', fontSize: '24px' },
     );
@@ -85,8 +85,4 @@ export class LosingScene extends SceneBase {
       nextScene(AppMode.Main);
     }
   };
-
-  render(): Promise<AppMode> {
-    return super.render(this.handleCanvasClick);
-  }
 }
