@@ -79,6 +79,7 @@ export class Nyma extends RoundGameObject {
 
     this.currentBall = this.nextBall;
     this.currentBall.center = this.center;
+    this.currentBall.angle = this.angle;
 
     this.nextBall = new FireBall(
       this.context,
