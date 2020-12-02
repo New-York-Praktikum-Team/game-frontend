@@ -6,21 +6,19 @@ import { Hole } from 'game/objects/Hole';
 import { Nyma } from 'game/objects/Nyma';
 import { Snake } from 'game/objects/Snake';
 import { Colors } from 'consts/colors';
+import { SceneBase } from './SceneBase';
 
 interface GameOptions {
   level?: Level;
-  canvasSize: CanvasSize;
 }
 
-export class NymaGame {
-  constructor(public context: CanvasRenderingContext2D, options: GameOptions) {
-    this.level = options.level ?? new Level1();
-    this.canvasSize = options.canvasSize;
+export class NymaGame extends SceneBase {
+  constructor(canvasRef: HTMLCanvasElement, canvasSize: CanvasSize, options?: GameOptions) {
+    super(canvasRef, canvasSize);
+    this.level = options?.level ?? new Level1();
   }
 
   level: Level;
-
-  canvasSize: CanvasSize;
 
   nyma?: Nyma;
 
@@ -32,7 +30,7 @@ export class NymaGame {
 
   resolveCallback: Function = () => { };
 
-  play(): Promise<AppMode> {
+  render(): Promise<AppMode> {
     return new Promise((resolve) => {
       this.resolveCallback = resolve;
       this.startGame();

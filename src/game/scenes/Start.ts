@@ -2,9 +2,9 @@ import { CanvasHelper } from 'helpers/CanvasHelper';
 import { AppMode } from 'components/GameCanvas';
 import { Colors } from 'consts/colors';
 import { Rectangle } from 'consts/shapes';
-import { SceneBase } from './SceneBase';
+import { SceneBaseButtonActions } from './SceneBase';
 
-export class StartScene extends SceneBase {
+export class StartScene extends SceneBaseButtonActions {
   private countingDown = false;
 
   private buttonDimensions = {

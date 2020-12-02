@@ -45,7 +45,7 @@ export class GameCanvas extends Component<CanvasProps, CanvasState> {
 
   getSceneByAppMode = (appMode: AppMode) => {
     switch (appMode) {
-      case AppMode.Game: return this.play;
+      case AppMode.Game: return this.renderScene(NymaGame);
       case AppMode.Losing: return this.renderScene(LosingScene);
       case AppMode.Winning: return this.renderScene(WinningScene);
 
@@ -54,18 +54,13 @@ export class GameCanvas extends Component<CanvasProps, CanvasState> {
     }
   };
 
-  renderScene = <T extends SceneBaseDerived>(SceneConstructor: T) => () => {
+  renderScene = (SceneConstructor: SceneBaseDerived) => () => {
     const scene = new SceneConstructor(
       this.canvasRef.current!,
       this.state.canvasSize,
     );
 
     return scene.render();
-  };
-
-  play = () => {
-    const game = new NymaGame(this.state.context!, { canvasSize: this.state.canvasSize });
-    return game.play();
   };
 
   render() {
