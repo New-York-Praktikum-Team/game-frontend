@@ -6,6 +6,7 @@ import { Hole } from 'game/objects/Hole';
 import { Nyma } from 'game/objects/Nyma';
 import { Snake } from 'game/objects/Snake';
 import { Colors } from 'consts/colors';
+import { Rectangle } from 'consts/shapes';
 import { SceneBase } from './SceneBase';
 
 interface GameOptions {
@@ -44,6 +45,10 @@ export class NymaGame extends SceneBase {
     this.lastTime = performance.now();
 
     this.clearAndDrawStaticObjects();
+
+    this.canvasRef.addEventListener('click', this.handleClick);
+    this.canvasRef.addEventListener('mousemove', this.handleMouseMove);
+
     requestAnimationFrame(() => { this.updateCanvas(); });
   }
 
@@ -51,6 +56,56 @@ export class NymaGame extends SceneBase {
     CanvasHelper.clear(this.context, this.canvasSize, Colors.PaleTurquoise);
     this.nyma!.draw();
     this.hole!.draw();
+  }
+
+  private canvasRectangle: Rectangle = {
+    x: 0,
+    y: 0,
+    width: this.canvasSize.width,
+    height: this.canvasSize.height,
+  };
+
+  handleMouseMove = (event: MouseEvent) => {
+    const position = CanvasHelper.getMousePosition(event, this.clientRect);
+    if (CanvasHelper.isPositionInsideRect(position, this.canvasRectangle)) {
+      this.nyma!.setDirection(position);
+    }
+  };
+
+  handleClick = (event: MouseEvent) => {
+    const isMouseInsideCanvas = CanvasHelper.isMousePositionInsideRect(
+      event,
+      this.clientRect,
+      this.canvasRectangle,
+    );
+
+    if (isMouseInsideCanvas) {
+      this.nyma!.shoot();
+    }
+  };
+
+  endGame = () => {
+    this.canvasRef.removeEventListener('click', this.handleClick);
+    this.canvasRef.removeEventListener('mousemove', this.handleMouseMove);
+  };
+
+  needToShowBang = false;
+
+  bangPosition = { x: 0, y: 0 };
+
+  showBang() {
+    if (this.needToShowBang) {
+      CanvasHelper.renderText(
+        this.context,
+        'BANG!', {
+          x: this.bangPosition.x,
+          y: this.bangPosition.y,
+          color: 'black',
+          align: 'center',
+          font: '24px Arial',
+        },
+      );
+    }
   }
 
   updateCanvas(): void {
@@ -62,8 +117,23 @@ export class NymaGame extends SceneBase {
 
     this.snake!.addBall();
     this.snake!.clock(timeDelta);
+    this.nyma!.fireBall?.clock(timeDelta);
+
+    this.showBang();
+
+    if (this.nyma!.fireBall) {
+      if (!CanvasHelper.isPositionInsideRect(this.nyma!.fireBall.center, this.canvasRectangle)) {
+        this.nyma!.fireBall = null;
+      } else if (this.snake!.collidesWith(this.nyma!.fireBall)) {
+        this.needToShowBang = true;
+        this.bangPosition = this.nyma!.fireBall.center;
+        setTimeout(() => { this.needToShowBang = false; }, 1000);
+        this.nyma!.fireBall = null;
+      }
+    }
 
     if (this.snake!.collidesWith(this.hole!)) {
+      this.endGame();
       this.resolveCallback(AppMode.Losing);
       return;
     }

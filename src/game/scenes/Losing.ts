@@ -64,13 +64,13 @@ export class LosingScene extends SceneBaseButtonActions {
   }
 
   handleCanvasClick = (nextScene: (appMode: AppMode) => void) => (event: MouseEvent) => {
-    const isRestartButtonClicked = CanvasHelper.isClickedInsideRect(
+    const isRestartButtonClicked = CanvasHelper.isMousePositionInsideRect(
       event,
       this.clientRect,
       this.restartButtonRectangle,
     ) && !this.countingDown;
 
-    const isMenuButtonClicked = CanvasHelper.isClickedInsideRect(
+    const isMenuButtonClicked = CanvasHelper.isMousePositionInsideRect(
       event,
       this.clientRect,
       this.menuButtonRectangle,

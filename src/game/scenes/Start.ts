@@ -42,7 +42,7 @@ export class StartScene extends SceneBaseButtonActions {
   }
 
   handleCanvasClick = (nextScene: (appMode: AppMode) => void) => (event: MouseEvent) => {
-    const isButtonClicked = CanvasHelper.isClickedInsideRect(
+    const isButtonClicked = CanvasHelper.isMousePositionInsideRect(
       event,
       this.clientRect,
       this.startButtonRectangle,
