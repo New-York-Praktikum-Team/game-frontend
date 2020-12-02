@@ -1,4 +1,4 @@
-import { transformSignUp, transformUser } from 'modules/transform';
+import { transformSignUp, transformUser, transformUserUpdate } from 'modules/transform';
 import { HTTPTransport } from 'modules/HTTPTransport';
 
 import {
@@ -14,6 +14,11 @@ export const signUp = (user: SignUpRequest): Promise<SignUpResponse> => {
 
 export const getUserInfo = async (): Promise<User> => {
   const response = await HTTPTransport.get('auth/user').json<UserDTO>();
+  return transformUser(response);
+};
+
+export const changeUserProfile = async (user: User): Promise<User> => {
+  const response = await HTTPTransport.put('user/profile', { json: transformUserUpdate(user) }).json<UserDTO>();
   return transformUser(response);
 };
 
