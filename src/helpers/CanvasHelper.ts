@@ -42,6 +42,19 @@ export class CanvasHelper {
     context.closePath();
   }
 
+  static renderRectangle(
+    context: CanvasRenderingContext2D,
+    corner: Position,
+    width: number, height: number,
+    color?: string,
+  ) {
+    context.beginPath();
+    context.rect(corner.x, corner.y, width, height);
+    context.fillStyle = color ?? 'black';
+    context.fill();
+    context.closePath();
+  }
+
   static getMousePosition = (event: MouseEvent, clientRect: ClientRect) => {
     const { left, top } = clientRect;
 
