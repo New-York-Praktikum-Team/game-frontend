@@ -2,21 +2,18 @@ import { CanvasHelper, CanvasSize } from 'helpers/CanvasHelper';
 import { AppMode } from 'components/GameCanvas';
 import { Colors } from 'consts/colors';
 
-export type NextSceneResolveFunction = (value?: AppMode | PromiseLike<AppMode>) => void;
-export type EventListenerFabric = (
+type NextSceneResolveFunction = (value?: AppMode | PromiseLike<AppMode>) => void;
+type EventListenerFabric = (
   nextScene: NextSceneResolveFunction
 ) => (
   event: MouseEvent
 ) => void;
 
 type SceneBaseClass = typeof SceneBase;
+
 export interface SceneBaseDerived extends SceneBaseClass { }
 
 export abstract class SceneBase {
-  private secondsBeforeStart = 3;
-
-  private tickDuration = 1000;
-
   clientRect: ClientRect;
 
   context: CanvasRenderingContext2D;
@@ -28,6 +25,14 @@ export abstract class SceneBase {
     this.clientRect = canvasRef.getBoundingClientRect();
     this.context = canvasRef.getContext('2d')!;
   }
+
+  abstract render(): Promise<AppMode>;
+}
+
+export abstract class SceneBaseButtonActions extends SceneBase {
+  private secondsBeforeStart = 3;
+
+  private tickDuration = 1000;
 
   protected renderCountdown(nextScene: (appMode: AppMode) => void): void {
     const {
