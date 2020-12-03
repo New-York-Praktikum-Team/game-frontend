@@ -21,7 +21,7 @@ export async function fetchUser(dispatch: Dispatch<ItemActionType | BaseActionTy
   }
 }
 
-export const fetchUserUpdateRequest = (user: User) => (
+export const updateUserProfile = (user: User) => (
   async () => {
     try {
       await api.changeUserProfile(user);
@@ -29,6 +29,17 @@ export const fetchUserUpdateRequest = (user: User) => (
     } catch (responseError) {
       const error = await getErrorFromRequest(responseError);
       notification.error(error.message);
+    }
+  }
+);
+
+export const changeUserPassword = (oldPassword: string, newPassword: string) => (
+  async () => {
+    try {
+      await api.changeUserPassword(oldPassword, newPassword);
+      notification.success('Password updated successfully');
+    } catch (responseError) {
+      notification.error(await responseError.response.text());
     }
   }
 );

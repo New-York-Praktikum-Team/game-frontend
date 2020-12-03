@@ -22,4 +22,14 @@ export const changeUserProfile = async (user: User): Promise<User> => {
   return transformUser(response);
 };
 
+export const changeUserPassword = async (
+  oldPassword: string,
+  newPassword: string,
+): Promise<string> => HTTPTransport.put('user/password', {
+  json: {
+    oldPassword,
+    newPassword,
+  },
+}).text();
+
 export const logout = (): Promise<string> => HTTPTransport.post('auth/logout').text();

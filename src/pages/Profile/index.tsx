@@ -1,19 +1,21 @@
-import React, { FC, useCallback } from 'react';
-import { Form, Formik, FormikHelpers } from 'formik';
-import { object, ref, string } from 'yup';
+import React, { FC, useCallback, useRef } from 'react';
+import {
+  Form, Formik, FormikHelpers,
+} from 'formik';
+import { object, string } from 'yup';
 import { AppUrls } from 'routes/appUrls';
 import { FormField } from 'components/FormField';
 import { FormButton } from 'components/FormButton';
 import { FormLink } from 'components/FormLink';
 import { User } from 'interfaces';
 import { store } from 'store/store';
-import { fetchUser, fetchUserUpdateRequest } from 'store/user/thunks';
+import { changeUserPassword, fetchUser, updateUserProfile } from 'store/user/thunks';
 import { useEnhance } from './useEnhance';
 import './Profile.css';
 
 interface PasswordFormFields {
-  password: string,
-  verifyPassword: string
+  oldPassword: string,
+  newPassword: string
 }
 
 const validationSchema = object().shape({
@@ -26,11 +28,13 @@ const validationSchema = object().shape({
 });
 
 const validationPasswordSchema = object().shape({
-  password: string().min(4, 'Must be longer than 4 characters').required('Password is required'),
-  verifyPassword: string().equals([ref('password')], 'Passwords must match').required('Verify password is required'),
+  oldPassword: string().min(4, 'Must be longer than 4 characters').required('Password is required'),
+  newPassword: string().min(4, 'Must be longer than 4 characters').required('Password is required'),
 });
 
 export const Profile: FC = () => {
+  const profileFormRef = useRef<HTMLFormElement>(null);
+  const passwordFormRef = useRef<HTMLFormElement>(null);
   const { profile } = useEnhance();
 
   if (!profile) return null;
@@ -45,18 +49,19 @@ export const Profile: FC = () => {
     { setSubmitting }: FormikHelpers<User>,
   ) => {
     setSubmitting(true);
-    await store.dispatch(fetchUserUpdateRequest(values));
+    await store.dispatch(updateUserProfile(values));
     await store.dispatch(fetchUser);
     setSubmitting(false);
-  }, []);
+  }, [profileFormRef]);
 
   const changePassword = useCallback(async (
-    values: PasswordFormFields,
+    { oldPassword, newPassword }: PasswordFormFields,
     { setSubmitting }: FormikHelpers<PasswordFormFields>,
   ) => {
     setSubmitting(true);
+    await store.dispatch(changeUserPassword(oldPassword, newPassword));
     setSubmitting(false);
-  }, []);
+  }, [passwordFormRef]);
 
   return (
     <section className='profile-form-wrapper'>
@@ -67,6 +72,7 @@ export const Profile: FC = () => {
           <fieldset>
             <legend>Personal data</legend>
             <Formik
+
               initialValues={formFields}
               validationSchema={validationSchema}
               validateOnChange={false}
@@ -74,7 +80,7 @@ export const Profile: FC = () => {
               onSubmit={updateProfile}
             >
               {({ isSubmitting }) => (
-                <Form>
+                <Form ref={profileFormRef}>
                   <FormField type='email' label='Email' name='email' />
                   <FormField label='Username' name='login' />
                   <FormField label='First Name' name='firstName' />
@@ -116,16 +122,16 @@ export const Profile: FC = () => {
           <fieldset>
             <legend>Change password</legend>
             <Formik
-              initialValues={{ password: '', verifyPassword: '' }}
+              initialValues={{ oldPassword: '', newPassword: '' }}
               validationSchema={validationPasswordSchema}
               validateOnChange={false}
               validateOnBlur={true}
               onSubmit={changePassword}
             >
               {({ isSubmitting }) => (
-                <Form>
-                  <FormField type='password' label='Password' name='password' />
-                  <FormField type='password' label='Verify Password' name='verifyPassword' />
+                <Form ref={passwordFormRef}>
+                  <FormField type='password' label='Password' name='oldPassword' />
+                  <FormField type='password' label='Verify Password' name='newPassword' />
                   <FormButton text='Save' disabled={isSubmitting} />
                 </Form>
               )}
