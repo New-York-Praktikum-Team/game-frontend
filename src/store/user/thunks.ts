@@ -2,13 +2,14 @@ import * as api from 'modules/api';
 import { Dispatch } from 'react';
 import { BaseActionType } from 'store/types';
 import { User } from 'interfaces';
-import { store } from 'store/store';
 import { getErrorFromRequest } from 'modules/getErrorFromRequest';
+
+import { notification } from 'components/Notification';
 import {
   ItemActionType,
   UserActions,
   fetchUserError,
-  fetchUserSuccess, fetchUserUpdate, fetchUserUpdateError, fetchUserUpdateSuccess,
+  fetchUserSuccess,
 } from './actions';
 
 export async function fetchUser(dispatch: Dispatch<ItemActionType | BaseActionType<UserActions>>) {
@@ -20,15 +21,14 @@ export async function fetchUser(dispatch: Dispatch<ItemActionType | BaseActionTy
   }
 }
 
-export const userUpdateRequest = (user: User) => (
-  async (dispatch: Dispatch<ItemActionType | BaseActionType<UserActions>>) => {
+export const fetchUserUpdateRequest = (user: User) => (
+  async () => {
     try {
       await api.changeUserProfile(user);
-      await store.dispatch(fetchUserUpdate);
-      dispatch(fetchUserUpdateSuccess());
+      notification.success('Profile updated successfully');
     } catch (responseError) {
       const error = await getErrorFromRequest(responseError);
-      dispatch(fetchUserUpdateError(error));
+      notification.error(error.message);
     }
   }
 );
