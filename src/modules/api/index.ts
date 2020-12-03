@@ -22,6 +22,12 @@ export const changeUserProfile = async (user: User): Promise<User> => {
   return transformUser(response);
 };
 
+export const changeUserAvatar = async (file: File): Promise<User> => {
+  const form = new FormData();
+  form.append('avatar', file);
+  return HTTPTransport.put('user/profile/avatar', { body: form }).json<User>();
+};
+
 export const changeUserPassword = async (
   oldPassword: string,
   newPassword: string,

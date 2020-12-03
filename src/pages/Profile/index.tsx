@@ -9,7 +9,9 @@ import { FormButton } from 'components/FormButton';
 import { FormLink } from 'components/FormLink';
 import { User } from 'interfaces';
 import { store } from 'store/store';
-import { changeUserPassword, fetchUser, updateUserProfile } from 'store/user/thunks';
+import {
+  changeUserAvatar, changeUserPassword, fetchUser, updateUserProfile,
+} from 'store/user/thunks';
 import { useEnhance } from './useEnhance';
 import './Profile.css';
 
@@ -35,6 +37,7 @@ const validationPasswordSchema = object().shape({
 export const Profile: FC = () => {
   const profileFormRef = useRef<HTMLFormElement>(null);
   const passwordFormRef = useRef<HTMLFormElement>(null);
+
   const { profile } = useEnhance();
 
   if (!profile) return null;
@@ -62,6 +65,15 @@ export const Profile: FC = () => {
     await store.dispatch(changeUserPassword(oldPassword, newPassword));
     setSubmitting(false);
   }, [passwordFormRef]);
+
+  const updateAvatar = useCallback(async (event: React.SyntheticEvent<HTMLInputElement>) => {
+    const element = event.target as HTMLInputElement;
+
+    if (element && element.files && element.files[0]) {
+      await store.dispatch(changeUserAvatar(element.files[0]));
+      await store.dispatch(fetchUser);
+    }
+  }, []);
 
   return (
     <section className='profile-form-wrapper'>
@@ -99,7 +111,7 @@ export const Profile: FC = () => {
           <fieldset className="profile-fieldset">
             <legend>Avatar</legend>
             <div className='avatar-wrapper'>
-              <div className='avatar' style={{ backgroundImage: profile.avatar ? `url(${profile.avatar})` : undefined }}>
+              <div className='avatar' style={{ backgroundImage: profile.avatar ? `url(https://ya-praktikum.tech/${profile.avatar})` : undefined }}>
                 <label htmlFor="input-avatar" className='change-avatar'>Change</label>
                 <input
                   style={{ display: 'none' }}
@@ -107,10 +119,7 @@ export const Profile: FC = () => {
                   type='file'
                   name='avatar'
                   accept='image/*'
-                  onChange={
-                    // eslint-disable-next-line no-console
-                    (e) => { console.log('Changing avatar to ', e.target.value); }
-                  }
+                  onChange={(e) => updateAvatar(e)}
                 />
               </div>
             </div>

@@ -33,6 +33,17 @@ export const updateUserProfile = (user: User) => (
   }
 );
 
+export const changeUserAvatar = (file: File) => (
+  async () => {
+    try {
+      await api.changeUserAvatar(file);
+      notification.success('Avatar updated successfully');
+    } catch (responseError) {
+      notification.error(await responseError.response.text());
+    }
+  }
+);
+
 export const changeUserPassword = (oldPassword: string, newPassword: string) => (
   async () => {
     try {
