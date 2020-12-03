@@ -69,10 +69,9 @@ export const Profile: FC = () => {
 
       <div className="row">
         <div className="col s4">
-          <fieldset>
+          <fieldset className="profile-fieldset">
             <legend>Personal data</legend>
             <Formik
-
               initialValues={formFields}
               validationSchema={validationSchema}
               validateOnChange={false}
@@ -97,7 +96,7 @@ export const Profile: FC = () => {
           </fieldset>
         </div>
         <div className="col s4">
-          <fieldset>
+          <fieldset className="profile-fieldset">
             <legend>Avatar</legend>
             <div className='avatar-wrapper'>
               <div className='avatar' style={{ backgroundImage: profile.avatar ? `url(${profile.avatar})` : undefined }}>
@@ -116,10 +115,8 @@ export const Profile: FC = () => {
               </div>
             </div>
           </fieldset>
-        </div>
 
-        <div className="col s4">
-          <fieldset>
+          <fieldset className="profile-fieldset">
             <legend>Change password</legend>
             <Formik
               initialValues={{ oldPassword: '', newPassword: '' }}
@@ -138,6 +135,7 @@ export const Profile: FC = () => {
             </Formik>
           </fieldset>
         </div>
+
       </div>
     </section>
   );

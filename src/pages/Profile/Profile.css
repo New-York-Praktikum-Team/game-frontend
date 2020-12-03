@@ -3,6 +3,10 @@
   margin-bottom: 50px;
 }
 
+.profile-fieldset {
+  margin-bottom: 20px;
+}
+
 .avatar-wrapper {
   display: flex;
   flex-direction: column;
