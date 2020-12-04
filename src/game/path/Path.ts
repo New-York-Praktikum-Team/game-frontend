@@ -19,7 +19,7 @@ export class Path {
       if (
         !found
         && section.containsPosition(current)
-        // current is between section path and end
+        // current is between section start and end
         && current.x <= Math.max(section.start.x, section.end.x)
         && current.x >= Math.min(section.start.x, section.end.x)
         && current.y <= Math.max(section.start.y, section.end.y)
