@@ -1,7 +1,7 @@
-import { LinearPath } from 'game/path/LinearPath';
 import { Path } from 'game/path/Path';
 import { Position } from 'game/objects/Position';
 import { Helpers } from 'helpers/Helpers';
+import { LinearSection } from 'game/path/LinearSection';
 import { Level } from './Level';
 
 enum Color {
@@ -13,10 +13,11 @@ enum Color {
 
 export class Level1 extends Level {
   get snakePath(): Path {
-    const start = { x: 0, y: 0 };
-    const end = { x: 450, y: 200 };
+    const point1 = { x: 0, y: 0 };
+    const point2 = { x: 450, y: 200 };
+    const point3 = { x: 200, y: 400 };
 
-    return new LinearPath(start, end);
+    return new Path([new LinearSection(point1, point2), new LinearSection(point2, point3)]);
   }
 
   get nymaPosition(): Position {
