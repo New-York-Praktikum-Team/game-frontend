@@ -12,23 +12,32 @@ export class Path {
   end: Position;
 
   next(current: Position, distanceDelta: number): Position {
+    let found = false;
     let result: Position;
 
     this.sections.forEach((section, index) => {
-      if (section.containsPosition(current)) {
-        if (
-          section.distance(current, section.end) < distanceDelta
-          && index !== this.sections.length - 1
-        ) {
-          const newDistanceDelta = distanceDelta - section.distance(current, section.end);
-          const newSection = this.sections[index + 1];
-          result = newSection.next(newSection.start, newDistanceDelta);
+      if (
+        !found
+        && section.containsPosition(current)
+        // current is between section path and end
+        && current.x <= Math.max(section.start.x, section.end.x)
+        && current.x >= Math.min(section.start.x, section.end.x)
+        && current.y <= Math.max(section.start.y, section.end.y)
+        && current.y >= Math.min(section.start.y, section.end.y)
+        && index !== this.sections.length - 1
+      ) {
+        if (section.distance(current, section.end) < distanceDelta) {
+          const nextSection = this.sections[index + 1];
+          result = nextSection.next(nextSection.start, distanceDelta);
+          found = true;
         } else {
           result = section.next(current, distanceDelta);
+          found = true;
         }
+      } else if (!found && index === this.sections.length - 1) {
+        result = section.next(current, distanceDelta);
       }
     });
-
     return result!;
   }
 }
