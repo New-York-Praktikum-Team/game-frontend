@@ -1,8 +1,11 @@
+import { User } from 'interfaces';
 import { useSelector } from 'react-redux';
-import { user } from 'store/user/selectors';
+import { userSelector } from 'store/user/selectors';
 
 export const useEnhance = () => {
-  const profile = useSelector(user);
+  const profile: User | null = useSelector(userSelector);
 
-  return { profile };
+  const backgroundImage = profile?.avatar ? `url('https://ya-praktikum.tech/${profile.avatar}')` : undefined;
+
+  return { profile, backgroundImage };
 };

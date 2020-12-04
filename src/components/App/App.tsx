@@ -8,11 +8,11 @@ import { OfflineMessage } from 'components/Offline';
 import { ROUTES } from 'routes/routes';
 import { store } from 'store/store';
 import { fetchUser } from 'store/user/thunks';
-import { isLoading, isLogged } from 'store/user/selectors';
+import { loggedSelector, userLoadingSelector } from 'store/user/selectors';
 
 export const App: FC = () => {
-  const isUserLogged = useSelector(isLogged);
-  const isUserLoading = useSelector(isLoading);
+  const isUserLogged = useSelector(loggedSelector);
+  const isUserLoading = useSelector(userLoadingSelector);
 
   useEffect(() => {
     store.dispatch(fetchUser);

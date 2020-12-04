@@ -1,14 +1,22 @@
 import { RootState } from 'store/rootReducer';
-import { User } from 'interfaces';
+import { createSelector } from 'reselect';
 
-export const isLogged = (state: RootState): boolean => {
-  const { isLoading, data } = state.user;
+export const loggedSelector = createSelector(
+  ({ user: { isLoading, data } }: RootState) => ({ isLoading, data }),
+  ({ isLoading, data }) => (!isLoading && (data !== null)),
+);
 
-  return !isLoading && (data !== null);
-};
+export const userLoadingSelector = createSelector(
+  (state: RootState) => state.user.isLoading,
+  (isLoading) => isLoading,
+);
 
-export const isLoading = (state: RootState): boolean => state.user.isLoading;
+export const userLoginSelector = createSelector(
+  (state: RootState) => state.user.data?.login,
+  (login) => login,
+);
 
-export const userLogin = (state: RootState): string | undefined => state.user.data?.login;
-
-export const user = (state: RootState): User | null => state.user.data;
+export const userSelector = createSelector(
+  (state: RootState) => state.user.data,
+  (userData) => userData,
+);
