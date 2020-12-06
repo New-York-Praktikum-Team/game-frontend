@@ -2,28 +2,28 @@ import { CanvasHelper } from 'helpers/CanvasHelper';
 import { AppMode } from 'components/GameCanvas';
 import { Colors } from 'consts/colors';
 import { Rectangle } from 'consts/shapes';
-import { SceneBaseButtonActions } from './SceneBase';
+import { SceneButtonActions } from './Scene';
 
-export class LosingScene extends SceneBaseButtonActions {
+export class LosingScene extends SceneButtonActions {
   private countingDown = false;
 
-  private buttonDimensions = {
+  private buttonSize = {
     width: 250,
     height: 50,
   };
 
   private restartButtonRectangle: Rectangle = {
-    x: (this.canvasSize.width - this.buttonDimensions.width) / 2,
-    y: this.canvasSize.height - this.buttonDimensions.height - 30,
-    width: this.buttonDimensions.width,
-    height: this.buttonDimensions.height,
+    x: (this.canvasSize.width - this.buttonSize.width) / 2,
+    y: this.canvasSize.height - this.buttonSize.height - 30,
+    width: this.buttonSize.width,
+    height: this.buttonSize.height,
   };
 
   private menuButtonRectangle: Rectangle = {
-    x: (this.canvasSize.width - this.buttonDimensions.width) / 2,
-    y: this.canvasSize.height - this.buttonDimensions.height * 2 - 30 * 2,
-    width: this.buttonDimensions.width,
-    height: this.buttonDimensions.height,
+    x: (this.canvasSize.width - this.buttonSize.width) / 2,
+    y: this.canvasSize.height - this.buttonSize.height * 2 - 30 * 2,
+    width: this.buttonSize.width,
+    height: this.buttonSize.height,
   };
 
   renderParanja(): void {

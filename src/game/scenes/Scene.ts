@@ -9,11 +9,11 @@ type EventListenerFabric = (
   event: MouseEvent
 ) => void;
 
-type SceneBaseClass = typeof SceneBase;
+type SceneClass = typeof Scene;
 
-export interface SceneBaseDerived extends SceneBaseClass { }
+export interface SceneDerived extends SceneClass { }
 
-export abstract class SceneBase {
+export abstract class Scene {
   clientRect: ClientRect;
 
   context: CanvasRenderingContext2D;
@@ -27,9 +27,11 @@ export abstract class SceneBase {
   }
 
   abstract render(): Promise<AppMode>;
+
+  abstract destroy(): void;
 }
 
-export abstract class SceneBaseButtonActions extends SceneBase {
+export abstract class SceneButtonActions extends Scene {
   private secondsBeforeStart = 3;
 
   private tickDuration = 1000;
@@ -84,10 +86,17 @@ export abstract class SceneBaseButtonActions extends SceneBase {
 
   protected abstract handleCanvasClick: EventListenerFabric;
 
+  private eventClickListener?: (event: MouseEvent) => void;
+
   render(): Promise<AppMode> {
     return new Promise((resolve) => {
       this.renderScene();
-      this.canvasRef.addEventListener('click', this.handleCanvasClick(resolve));
+      this.eventClickListener = this.handleCanvasClick(resolve);
+      this.canvasRef.addEventListener('click', this.eventClickListener);
     });
+  }
+
+  destroy(): void {
+    this.canvasRef.removeEventListener('click', this.eventClickListener!);
   }
 }

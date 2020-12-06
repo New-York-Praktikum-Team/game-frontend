@@ -7,16 +7,19 @@ import { Nyma } from 'game/objects/Nyma';
 import { Snake } from 'game/objects/Snake';
 import { Colors } from 'consts/colors';
 import { Rectangle } from 'consts/shapes';
-import { SceneBase } from './SceneBase';
+import { Scene } from './Scene';
 
 interface GameOptions {
   level?: Level;
 }
 
-export class NymaGame extends SceneBase {
+export class NymaGame extends Scene {
   constructor(canvasRef: HTMLCanvasElement, canvasSize: CanvasSize, options?: GameOptions) {
     super(canvasRef, canvasSize);
     this.level = options?.level ?? new Level1();
+
+    this.canvasRef.addEventListener('click', this.handleClick);
+    this.canvasRef.addEventListener('mousemove', this.handleMouseMove);
   }
 
   level: Level;
@@ -38,6 +41,11 @@ export class NymaGame extends SceneBase {
     });
   }
 
+  destroy(): void {
+    this.canvasRef.removeEventListener('click', this.handleClick);
+    this.canvasRef.removeEventListener('mousemove', this.handleMouseMove);
+  }
+
   startGame(): void {
     this.nyma = new Nyma(this.context, this.level);
     this.hole = new Hole(this.context, this.level);
@@ -45,9 +53,6 @@ export class NymaGame extends SceneBase {
     this.lastTime = performance.now();
 
     this.clearAndDrawStaticObjects();
-
-    this.canvasRef.addEventListener('click', this.handleClick);
-    this.canvasRef.addEventListener('mousemove', this.handleMouseMove);
 
     requestAnimationFrame(() => { this.updateCanvas(); });
   }
@@ -82,11 +87,6 @@ export class NymaGame extends SceneBase {
     if (isMouseInsideCanvas) {
       this.nyma!.shoot();
     }
-  };
-
-  endGame = () => {
-    this.canvasRef.removeEventListener('click', this.handleClick);
-    this.canvasRef.removeEventListener('mousemove', this.handleMouseMove);
   };
 
   needToShowBang = false;
@@ -133,7 +133,6 @@ export class NymaGame extends SceneBase {
     }
 
     if (this.snake!.collidesWith(this.hole!)) {
-      this.endGame();
       this.resolveCallback(AppMode.Losing);
       return;
     }

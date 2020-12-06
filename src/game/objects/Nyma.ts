@@ -59,7 +59,7 @@ export class Nyma extends RoundGameObject {
       return;
     }
 
-    const tg = (deltaY) / (deltaX);
+    const tg = deltaY / deltaX;
     if (deltaX > 0) {
       this.rotate(Math.atan(tg));
     } else {
