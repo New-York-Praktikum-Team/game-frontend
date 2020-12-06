@@ -12,6 +12,8 @@ export enum AppMode {
 
 type CanvasProps = {};
 
+type Scene = typeof StartScene | typeof LosingScene | typeof WinningScene;
+
 interface CanvasState {
   appMode: AppMode;
   context: CanvasRenderingContext2D | null;

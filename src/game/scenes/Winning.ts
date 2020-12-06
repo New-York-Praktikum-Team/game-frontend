@@ -2,6 +2,7 @@ import { CanvasHelper } from 'helpers/CanvasHelper';
 import { AppMode } from 'components/GameCanvas';
 import { Colors } from 'consts/colors';
 import { Rectangle } from 'consts/shapes';
+
 import { SceneButtonActions } from './Scene';
 
 export class WinningScene extends SceneButtonActions {

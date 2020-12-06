@@ -1,3 +1,14 @@
+export interface Country {
+  languages: string;
+  distance: string,
+  countryCode: string,
+  countryName: string
+}
+
+export interface UserGeolocation extends Position {
+  country: Country
+}
+
 export interface User {
   id: number;
   firstName: string;
@@ -39,6 +50,16 @@ export interface SignUpRequest {
   verifyPassword: string;
 }
 
+export interface SignInRequest {
+  login: string;
+  password: string;
+}
+
 export interface SignUpResponse {
   id: number;
+}
+
+export interface ApiError {
+  code: number | null;
+  message: string;
 }

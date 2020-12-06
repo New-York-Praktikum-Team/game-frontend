@@ -1,3 +1,20 @@
+.navigation {
+  display: flex;
+  justify-content: space-between;
+}
+
 .navigation__a.active {
   background-color: rgba(0,0,0,0.1);
+}
+
+.country {
+  padding: 0 20px;
+}
+
+.country__flag {
+  width: 20px;
+}
+
+.country__name {
+  padding-left: 5px;
 }
