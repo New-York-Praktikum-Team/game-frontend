@@ -18,22 +18,6 @@ export type CanvasButtonOptions = {
   fontSize?: string;
 };
 
-const getMousePosition = (event: MouseEvent, clientRect: ClientRect) => {
-  const { left, top } = clientRect;
-
-  return ({
-    x: event.clientX - left,
-    y: event.clientY - top,
-  }) as Position;
-};
-
-const isPositionInsideRect = (position: Position, rectangle: Rectangle) => (
-  position.x > rectangle.x
-    && rectangle.x + rectangle.width > position.x
-    && position.y > rectangle.y
-    && rectangle.y + rectangle.height > position.y
-);
-
 export class CanvasHelper {
   static clear(context: CanvasRenderingContext2D, canvasSize: CanvasSize, color: string) {
     context.fillStyle = color;
