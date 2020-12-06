@@ -10,7 +10,7 @@ import { FormLink } from 'components/FormLink';
 import { User } from 'interfaces';
 import { store } from 'store/store';
 import {
-  changeUserAvatar, changeUserPassword, fetchUser, updateUserProfile,
+  changeUserAvatar, changeUserPassword, updateUserProfile,
 } from 'store/user/thunks';
 import { useEnhance } from './useEnhance';
 import './Profile.css';
@@ -53,7 +53,6 @@ export const Profile: FC = () => {
   ) => {
     setSubmitting(true);
     await store.dispatch(updateUserProfile(values));
-    await store.dispatch(fetchUser);
     setSubmitting(false);
   }, [profileFormRef]);
 
@@ -71,7 +70,6 @@ export const Profile: FC = () => {
 
     if (element && element.files && element.files[0]) {
       await store.dispatch(changeUserAvatar(element.files[0]));
-      await store.dispatch(fetchUser);
     }
   }, []);
 

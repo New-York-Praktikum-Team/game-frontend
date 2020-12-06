@@ -5,6 +5,7 @@ import { User } from 'interfaces';
 import { getErrorFromRequest } from 'modules/getErrorFromRequest';
 
 import { notification } from 'components/Notification';
+import { store } from 'store/store';
 import {
   ItemActionType,
   UserActions,
@@ -26,6 +27,7 @@ export const updateUserProfile = (user: User) => (
     try {
       await api.changeUserProfile(user);
       notification.success('Profile updated successfully');
+      await store.dispatch(fetchUser);
     } catch (responseError) {
       const error = await getErrorFromRequest(responseError);
       notification.error(error.message);
@@ -38,6 +40,7 @@ export const changeUserAvatar = (file: File) => (
     try {
       await api.changeUserAvatar(file);
       notification.success('Avatar updated successfully');
+      await store.dispatch(fetchUser);
     } catch (responseError) {
       notification.error(await responseError.response.text());
     }
