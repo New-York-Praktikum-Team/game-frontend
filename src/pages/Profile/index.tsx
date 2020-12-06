@@ -136,8 +136,8 @@ export const Profile: FC = () => {
             >
               {({ isSubmitting }) => (
                 <Form ref={passwordFormRef}>
-                  <FormField type='password' label='Password' name='oldPassword' />
-                  <FormField type='password' label='Verify Password' name='newPassword' />
+                  <FormField type='password' label='Old password' name='oldPassword' />
+                  <FormField type='password' label='New Password' name='newPassword' />
                   <FormButton text='Save' disabled={isSubmitting} />
                 </Form>
               )}
