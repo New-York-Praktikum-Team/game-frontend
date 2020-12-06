@@ -18,22 +18,6 @@ export type CanvasButtonOptions = {
   fontSize?: string;
 };
 
-const getMousePosition = (event: MouseEvent, clientRect: ClientRect) => {
-  const { left, top } = clientRect;
-
-  return ({
-    x: event.clientX - left,
-    y: event.clientY - top,
-  }) as Position;
-};
-
-const isPositionInsideRect = (position: Position, rectangle: Rectangle) => (
-  position.x > rectangle.x
-    && rectangle.x + rectangle.width > position.x
-    && position.y > rectangle.y
-    && rectangle.y + rectangle.height > position.y
-);
-
 export class CanvasHelper {
   static clear(context: CanvasRenderingContext2D, canvasSize: CanvasSize, color: string) {
     context.fillStyle = color;
@@ -58,13 +42,42 @@ export class CanvasHelper {
     context.closePath();
   }
 
-  static isClickedInsideRect(
+  static renderRectangle(
+    context: CanvasRenderingContext2D,
+    corner: Position,
+    width: number, height: number,
+    color?: string,
+  ) {
+    context.beginPath();
+    context.rect(corner.x, corner.y, width, height);
+    context.fillStyle = color ?? 'black';
+    context.fill();
+    context.closePath();
+  }
+
+  static getMousePosition = (event: MouseEvent, clientRect: ClientRect) => {
+    const { left, top } = clientRect;
+
+    return ({
+      x: event.clientX - left,
+      y: event.clientY - top,
+    }) as Position;
+  };
+
+  static isPositionInsideRect = (position: Position, rectangle: Rectangle) => (
+    position.x > rectangle.x
+      && rectangle.x + rectangle.width > position.x
+      && position.y > rectangle.y
+      && rectangle.y + rectangle.height > position.y
+  );
+
+  static isMousePositionInsideRect(
     event: MouseEvent,
     clientRect: ClientRect,
     targetRect: Rectangle,
   ): boolean {
-    const mousePosition = getMousePosition(event, clientRect);
-    return isPositionInsideRect(mousePosition, targetRect);
+    const mousePosition = CanvasHelper.getMousePosition(event, clientRect);
+    return CanvasHelper.isPositionInsideRect(mousePosition, targetRect);
   }
 
   static renderButton(

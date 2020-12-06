@@ -2,34 +2,34 @@ import { CanvasHelper } from 'helpers/CanvasHelper';
 import { AppMode } from 'components/GameCanvas';
 import { Colors } from 'consts/colors';
 import { Rectangle } from 'consts/shapes';
-import { SceneBase } from './SceneBase';
+import { SceneButtonActions } from './Scene';
 
-export class StartScene extends SceneBase {
+export class StartScene extends SceneButtonActions {
   private countingDown = false;
 
-  private buttonDimensions = {
+  private buttonSize = {
     width: 350,
     height: 100,
   };
 
   private startButtonRectangle: Rectangle = {
-    x: (this.canvasSize.width - this.buttonDimensions.width) / 2,
+    x: (this.canvasSize.width - this.buttonSize.width) / 2,
     y: 100,
-    width: this.buttonDimensions.width,
-    height: this.buttonDimensions.height,
+    width: this.buttonSize.width,
+    height: this.buttonSize.height,
   };
 
   renderScene(): void {
-    CanvasHelper.clear(this.context!, this.canvasSize, Colors.LightBlue);
+    CanvasHelper.clear(this.context, this.canvasSize, Colors.LightBlue);
 
     CanvasHelper.renderButton(
-      this.context!,
+      this.context,
       this.startButtonRectangle,
       { text: 'Play' },
     );
 
     CanvasHelper.renderText(
-      this.context!,
+      this.context,
       'To start the game, press the big blue button above',
       {
         x: this.canvasSize.width / 2,
@@ -42,7 +42,7 @@ export class StartScene extends SceneBase {
   }
 
   handleCanvasClick = (nextScene: (appMode: AppMode) => void) => (event: MouseEvent) => {
-    const isButtonClicked = CanvasHelper.isClickedInsideRect(
+    const isButtonClicked = CanvasHelper.isMousePositionInsideRect(
       event,
       this.clientRect,
       this.startButtonRectangle,
@@ -53,8 +53,4 @@ export class StartScene extends SceneBase {
       super.renderCountdown(nextScene);
     }
   };
-
-  render(): Promise<AppMode> {
-    return super.render(this.handleCanvasClick);
-  }
 }

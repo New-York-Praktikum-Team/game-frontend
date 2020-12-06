@@ -2,23 +2,21 @@ import { CanvasHelper, CanvasSize } from 'helpers/CanvasHelper';
 import { AppMode } from 'components/GameCanvas';
 import { Colors } from 'consts/colors';
 
-export type NextSceneResolveFunction = (value?: AppMode | PromiseLike<AppMode>) => void;
-export type EventListenerFabric = (
+type NextSceneResolveFunction = (value?: AppMode | PromiseLike<AppMode>) => void;
+type EventListenerFabric = (
   nextScene: NextSceneResolveFunction
 ) => (
   event: MouseEvent
 ) => void;
 
-export abstract class SceneBase {
-  private secondsBeforeStart = 3;
+type SceneClass = typeof Scene;
 
-  private tickDuration = 1000;
+export interface SceneDerived extends SceneClass { }
 
+export abstract class Scene {
   clientRect: ClientRect;
 
   context: CanvasRenderingContext2D;
-
-  protected abstract renderScene(): void;
 
   constructor(
     public canvasRef: HTMLCanvasElement,
@@ -28,7 +26,17 @@ export abstract class SceneBase {
     this.context = canvasRef.getContext('2d')!;
   }
 
-  renderCountdown(nextScene: (appMode: AppMode) => void): void {
+  abstract render(): Promise<AppMode>;
+
+  abstract destroy(): void;
+}
+
+export abstract class SceneButtonActions extends Scene {
+  private secondsBeforeStart = 3;
+
+  private tickDuration = 1000;
+
+  protected renderCountdown(nextScene: (appMode: AppMode) => void): void {
     const {
       context, canvasSize, secondsBeforeStart, tickDuration,
     } = this;
@@ -38,10 +46,10 @@ export abstract class SceneBase {
     let timerId = setTimeout(function tick() {
       const counterText = counter === 0 ? 'GO!' : counter.toString();
 
-      CanvasHelper.clear(context!, canvasSize, Colors.LightBlue);
+      CanvasHelper.clear(context, canvasSize, Colors.LightBlue);
 
       CanvasHelper.renderText(
-        context!,
+        context,
         'Get ready in',
         {
           x: canvasSize.width / 2,
@@ -53,7 +61,7 @@ export abstract class SceneBase {
       );
 
       CanvasHelper.renderText(
-        context!,
+        context,
         counterText,
         {
           x: canvasSize.width / 2,
@@ -74,10 +82,21 @@ export abstract class SceneBase {
     }, (secondsBeforeStart + 1) * tickDuration);
   }
 
-  render(handleCanvasClick: EventListenerFabric): Promise<AppMode> {
+  protected abstract renderScene(): void;
+
+  protected abstract handleCanvasClick: EventListenerFabric;
+
+  private eventClickListener?: (event: MouseEvent) => void;
+
+  render(): Promise<AppMode> {
     return new Promise((resolve) => {
       this.renderScene();
-      this.canvasRef.addEventListener('click', handleCanvasClick(resolve));
+      this.eventClickListener = this.handleCanvasClick(resolve);
+      this.canvasRef.addEventListener('click', this.eventClickListener);
     });
+  }
+
+  destroy(): void {
+    this.canvasRef.removeEventListener('click', this.eventClickListener!);
   }
 }

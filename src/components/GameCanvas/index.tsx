@@ -4,14 +4,13 @@ import { NymaGame } from 'game/scenes/NymaGame';
 import { StartScene } from 'game/scenes/Start';
 import { LosingScene } from 'game/scenes/Losing';
 import { WinningScene } from 'game/scenes/Winning';
+import { SceneDerived } from 'game/scenes/Scene';
 
 export enum AppMode {
   Main, Game, Losing, Winning,
 }
 
 type CanvasProps = {};
-
-type Scene = typeof StartScene | typeof LosingScene | typeof WinningScene;
 
 interface CanvasState {
   appMode: AppMode;
@@ -37,36 +36,32 @@ export class GameCanvas extends Component<CanvasProps, CanvasState> {
   }
 
   componentDidUpdate() {
-    const renderScene = this.getSceneByAppMode(this.state.appMode);
+    const scene = this.getSceneByAppMode(this.state.appMode);
 
-    renderScene().then((appMode) => {
+    scene.render().then((appMode) => {
+      scene.destroy();
       this.setState({ appMode });
     });
   }
 
   getSceneByAppMode = (appMode: AppMode) => {
     switch (appMode) {
-      case AppMode.Game: return this.play;
-      case AppMode.Losing: return this.renderScene(LosingScene);
-      case AppMode.Winning: return this.renderScene(WinningScene);
+      case AppMode.Game: return this.sceneToRender(NymaGame);
+      case AppMode.Losing: return this.sceneToRender(LosingScene);
+      case AppMode.Winning: return this.sceneToRender(WinningScene);
 
       case AppMode.Main:
-      default: return this.renderScene(StartScene);
+      default: return this.sceneToRender(StartScene);
     }
   };
 
-  renderScene = (SceneConstructor: Scene) => () => {
+  sceneToRender = (SceneConstructor: SceneDerived) => {
     const scene = new SceneConstructor(
       this.canvasRef.current!,
       this.state.canvasSize,
     );
 
-    return scene.render();
-  };
-
-  play = () => {
-    const game = new NymaGame(this.state.context!, { canvasSize: this.state.canvasSize });
-    return game.play();
+    return scene;
   };
 
   render() {

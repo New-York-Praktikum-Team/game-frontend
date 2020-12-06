@@ -2,33 +2,33 @@ import { CanvasHelper } from 'helpers/CanvasHelper';
 import { AppMode } from 'components/GameCanvas';
 import { Colors } from 'consts/colors';
 import { Rectangle } from 'consts/shapes';
-import { SceneBase } from './SceneBase';
+import { SceneButtonActions } from './Scene';
 
-export class LosingScene extends SceneBase {
+export class LosingScene extends SceneButtonActions {
   private countingDown = false;
 
-  private buttonDimensions = {
+  private buttonSize = {
     width: 250,
     height: 50,
   };
 
   private restartButtonRectangle: Rectangle = {
-    x: (this.canvasSize.width - this.buttonDimensions.width) / 2,
-    y: this.canvasSize.height - this.buttonDimensions.height - 30,
-    width: this.buttonDimensions.width,
-    height: this.buttonDimensions.height,
+    x: (this.canvasSize.width - this.buttonSize.width) / 2,
+    y: this.canvasSize.height - this.buttonSize.height - 30,
+    width: this.buttonSize.width,
+    height: this.buttonSize.height,
   };
 
   private menuButtonRectangle: Rectangle = {
-    x: (this.canvasSize.width - this.buttonDimensions.width) / 2,
-    y: this.canvasSize.height - this.buttonDimensions.height * 2 - 30 * 2,
-    width: this.buttonDimensions.width,
-    height: this.buttonDimensions.height,
+    x: (this.canvasSize.width - this.buttonSize.width) / 2,
+    y: this.canvasSize.height - this.buttonSize.height * 2 - 30 * 2,
+    width: this.buttonSize.width,
+    height: this.buttonSize.height,
   };
 
   renderParanja(): void {
-    this.context!.fillStyle = 'rgba(255, 255, 255, 0.7)';
-    this.context!.fillRect(
+    this.context.fillStyle = 'rgba(255, 255, 255, 0.7)';
+    this.context.fillRect(
       0, 0,
       this.canvasSize.width,
       this.canvasSize.height,
@@ -39,7 +39,7 @@ export class LosingScene extends SceneBase {
     this.renderParanja();
 
     CanvasHelper.renderText(
-      this.context!,
+      this.context,
       'You LOST! 🤬',
       {
         x: this.canvasSize.width / 2,
@@ -51,26 +51,26 @@ export class LosingScene extends SceneBase {
     );
 
     CanvasHelper.renderButton(
-      this.context!,
+      this.context,
       this.menuButtonRectangle,
       { text: 'Go to Main Menu', fontSize: '24px' },
     );
 
     CanvasHelper.renderButton(
-      this.context!,
+      this.context,
       this.restartButtonRectangle,
       { text: 'Play again', fontSize: '24px' },
     );
   }
 
   handleCanvasClick = (nextScene: (appMode: AppMode) => void) => (event: MouseEvent) => {
-    const isRestartButtonClicked = CanvasHelper.isClickedInsideRect(
+    const isRestartButtonClicked = CanvasHelper.isMousePositionInsideRect(
       event,
       this.clientRect,
       this.restartButtonRectangle,
     ) && !this.countingDown;
 
-    const isMenuButtonClicked = CanvasHelper.isClickedInsideRect(
+    const isMenuButtonClicked = CanvasHelper.isMousePositionInsideRect(
       event,
       this.clientRect,
       this.menuButtonRectangle,
@@ -85,8 +85,4 @@ export class LosingScene extends SceneBase {
       nextScene(AppMode.Main);
     }
   };
-
-  render(): Promise<AppMode> {
-    return super.render(this.handleCanvasClick);
-  }
 }
