@@ -1,12 +1,12 @@
 import { useSelector } from 'react-redux';
-import { authError, isAuthentificated } from 'store/auth/selectors';
-import { isLogged, userLogin } from 'store/user/selectors';
+import { authErrorSelector, authentificationSelector } from 'store/auth/selectors';
+import { loggedSelector, userLoginSelector } from 'store/user/selectors';
 
 export const useEnhance = () => {
-  const isUserLogged = useSelector(isLogged);
-  const login = useSelector(userLogin);
-  const isSuccessfullyRegistered = useSelector(isAuthentificated);
-  const signUpError = useSelector(authError);
+  const isUserLogged = useSelector(loggedSelector);
+  const login = useSelector(userLoginSelector);
+  const isSuccessfullyRegistered = useSelector(authentificationSelector);
+  const signUpError = useSelector(authErrorSelector);
 
   return {
     isUserLogged, login, isSuccessfullyRegistered, signUpError,

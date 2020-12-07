@@ -2,11 +2,11 @@ import React, { FC } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { AppUrls } from 'routes/appUrls';
-import { isLogged } from 'store/user/selectors';
+import { loggedSelector } from 'store/user/selectors';
 import './Home.css';
 
 export const Home: FC = () => {
-  const isLoggedIn = useSelector(isLogged);
+  const isLoggedIn = useSelector(loggedSelector);
 
   return (
     <section className="home">

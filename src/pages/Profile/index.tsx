@@ -38,7 +38,7 @@ export const Profile: FC = () => {
   const profileFormRef = useRef<HTMLFormElement>(null);
   const passwordFormRef = useRef<HTMLFormElement>(null);
 
-  const { profile } = useEnhance();
+  const { profile, backgroundImage } = useEnhance();
 
   if (!profile) return null;
 
@@ -105,11 +105,12 @@ export const Profile: FC = () => {
 
           </fieldset>
         </div>
+
         <div className="col s4">
           <fieldset className="profile-fieldset">
             <legend>Avatar</legend>
             <div className='avatar-wrapper'>
-              <div className='avatar' style={{ backgroundImage: profile.avatar ? `url(https://ya-praktikum.tech/${profile.avatar})` : undefined }}>
+              <div className='avatar' style={{ backgroundImage }}>
                 <label htmlFor="input-avatar" className='change-avatar'>Change</label>
                 <input
                   style={{ display: 'none' }}
@@ -117,7 +118,7 @@ export const Profile: FC = () => {
                   type='file'
                   name='avatar'
                   accept='image/*'
-                  onChange={(e) => updateAvatar(e)}
+                  onChange={updateAvatar}
                 />
               </div>
             </div>
