@@ -10,7 +10,6 @@ export enum UserActions {
 export interface ItemActionType extends BaseActionType<UserActions> {
   item: User | null;
 }
-
 export function fetchUserSuccess(user: User): ItemActionType {
   return { type: UserActions.FETCH_USER_SUCCESS, item: user };
 }

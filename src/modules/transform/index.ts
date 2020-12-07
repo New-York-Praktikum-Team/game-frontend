@@ -1,5 +1,5 @@
 import {
-  SignUpRequest, SignUpRequestDTO, User, UserDTO,
+  SignUpRequest, SignUpRequestDTO, User, UserDTO, UserUpdateRequestDTO,
 } from 'interfaces';
 
 export const transformUser = (user: UserDTO): User => ({
@@ -19,5 +19,14 @@ export const transformSignUp = (user: SignUpRequest): SignUpRequestDTO => ({
   password: user.password,
   first_name: user.firstName,
   second_name: user.secondName,
+  phone: user.phone,
+});
+
+export const transformUserUpdate = (user: User): UserUpdateRequestDTO => ({
+  email: user.email,
+  login: user.login,
+  first_name: user.firstName,
+  second_name: user.secondName,
+  display_name: user.displayName || '',
   phone: user.phone,
 });

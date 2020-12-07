@@ -1,11 +1,14 @@
 .profile-form-wrapper {
-  max-width: 500px;
   margin-left: 50px;
   margin-bottom: 50px;
 }
 
+.profile-fieldset {
+  margin-bottom: 20px;
+}
+
 .avatar-wrapper {
-  display: flex; 
+  display: flex;
   flex-direction: column;
   align-items: center;
 }
@@ -19,6 +22,8 @@
   overflow: hidden;
   background-color: gray;
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  background-size: contain;
+  background-image: url("../../assets/images/avatar.png");
 }
 
 .change-avatar {
@@ -34,4 +39,8 @@
   color: #ffffff;
   background-color: rgba(0, 0, 0, 0.5);
   cursor: pointer;
+}
+
+.form-link {
+  font-size: 15px;
 }
