@@ -13,7 +13,7 @@ export const userSelector = createSelector(
 
 export const userLoginSelector = createSelector(
   userSelector,
-  (userData) => userData!.login,
+  (userData) => userData?.login || '',
 );
 
 export const loggedSelector = createSelector(
