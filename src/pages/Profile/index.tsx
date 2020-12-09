@@ -34,6 +34,10 @@ const validationPasswordSchema = object().shape({
   newPassword: string().min(4, 'Must be longer than 4 characters').required('Password is required'),
 });
 
+const logout = () => {
+
+};
+
 export const Profile: FC = () => {
   const profileFormRef = useRef<HTMLFormElement>(null);
   const passwordFormRef = useRef<HTMLFormElement>(null);
@@ -143,7 +147,16 @@ export const Profile: FC = () => {
             </Formik>
           </fieldset>
         </div>
-
+        <div className="col s4">
+          <fieldset className="profile-fieldset">
+            <legend>Exit</legend>
+            <div>
+              <span>To exit the profile, use the button below</span>
+            </div>
+            <hr/>
+            <button className="btn" onClick={logout}>Logout</button>
+          </fieldset>
+        </div>
       </div>
     </section>
   );
