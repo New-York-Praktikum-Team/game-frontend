@@ -10,7 +10,7 @@ import { FormLink } from 'components/FormLink';
 import { User } from 'interfaces';
 import { store } from 'store/store';
 import {
-  changeUserAvatar, changeUserPassword, updateUserProfile,
+  changeUserAvatar, changeUserPassword, updateUserProfile, userLogout,
 } from 'store/user/thunks';
 import { useEnhance } from './useEnhance';
 import './Profile.css';
@@ -34,8 +34,8 @@ const validationPasswordSchema = object().shape({
   newPassword: string().min(4, 'Must be longer than 4 characters').required('Password is required'),
 });
 
-const logout = () => {
-
+const logout = async (): Promise<void> => {
+  await store.dispatch(userLogout);
 };
 
 export const Profile: FC = () => {
