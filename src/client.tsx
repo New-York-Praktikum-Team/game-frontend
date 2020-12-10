@@ -3,15 +3,18 @@ import ReactDOM from 'react-dom';
 import { App } from 'components/App';
 import { Provider } from 'react-redux';
 import * as serviceWorker from 'modules/serviceWorker';
+import { BrowserRouter as Router } from 'react-router-dom';
 import { store } from './store/store';
 
 import 'materialize-css/dist/css/materialize.min.css';
 import 'materialize-css/dist/js/materialize.min';
 
-ReactDOM.render(
+ReactDOM.hydrate(
   <StrictMode>
     <Provider store={store}>
-      <App />
+      <Router>
+        <App />
+      </Router>
     </Provider>
   </StrictMode>,
   document.getElementById('root'),
