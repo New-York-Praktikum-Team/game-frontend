@@ -2,13 +2,13 @@
   "name": "nyma",
   "version": "1.0.0",
   "description": "A fun and mischievous game",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
     "start": "NODE_ENV=development npm-run-all --print-label --parallel start:webpack start:server",
     "start:webpack": "webpack --mode=development --watch",
     "start:server": "nodemon -r esm index.ts --watch dist/server.js",
-    "start:prod": "webpack --mode=production && node ./dist/server.js",
-    "build": "NODE_ENV=production NODE_PATH=. npm run clean && webpack --mode production",
+    "start:prod": "webpack --mode=production && node -r esm index.ts",
+    "build": "npm run clean && webpack --mode production",
     "clean": "rimraf dist",
     "test": "echo \"Error: Tests is not implemented\" && exit 1",
     "lint": "eslint --fix ./src --config ./.eslintrc --ext .js,.ts,.tsx"
