@@ -1,6 +1,4 @@
 import React, { FC } from 'react';
-import { Link } from 'react-router-dom';
-import { AppUrls } from 'routes/appUrls';
 import dollar from 'assets/images/dollar.png';
 import './Leaderboard.css';
 
@@ -11,28 +9,44 @@ interface LeaderValue {
 }
 
 const leaderData: LeaderValue[] = [
-  { id: '23', displayName: 'Vasya Pupkin', points: '1000' },
-  { id: '528', displayName: 'Masha Masha', points: '850' },
-  { id: '134', displayName: 'Lenka Penka', points: '333' },
+  { id: '23', displayName: 'Alex Naumov', points: '1000' },
+  { id: '528', displayName: 'Masha Rasputina', points: '850' },
+  { id: '134', displayName: 'Lenka Prokofieva', points: '333' },
 ];
 
 export const Leaderboard: FC = () => (
   <section className='leaderboard-wrapper'>
     <h1>Leaderboard</h1>
 
-    {leaderData.length
-      ? <div className='leader-table'>
-        {leaderData.map((leader, index) => (
-          <div className='row' key={index}>
-            <div className='col'>{index + 1}</div>
-            <div className='col'>{leader.displayName}</div>
-            <div className='col'><img className='image' src={dollar} alt='dollar' />&nbsp;{leader.points}</div>
-          </div>
-        ))}
-      </div>
-      : <p>Be the first leader</p>
-    }
-
-    <Link to={AppUrls.Game}>Play Nyma!</Link>
+    <table className="table table-leaderboard">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Score</th>
+        </tr>
+      </thead>
+      <tbody>
+      {leaderData.length
+        ? leaderData.map((leader) => (
+          <tr key={leader.id}>
+            <td>
+              <span>{leader.displayName}</span>
+            </td>
+            <td>
+              <img className='table-leaderboard__image' src={dollar} alt='dollar' />
+              <span>{leader.points}</span>
+            </td>
+          </tr>
+        ))
+        : (
+          <tr>
+            <td colSpan={2}>
+              <span>The rating has not been formed yet</span>
+            </td>
+          </tr>
+        )
+      }
+      </tbody>
+    </table>
   </section>
 );
