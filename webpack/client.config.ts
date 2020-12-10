@@ -11,7 +11,7 @@ const clientConfig = (_: undefined, { mode }: { mode: 'production' | 'developmen
     new CopyPlugin({
       patterns: [
         {
-          from: path.resolve(path.join('www', 'favicon.ico')),
+          from: path.resolve(path.join('src', 'assets', 'icons', 'favicon.ico')),
           to: path.resolve('dist'),
         },
       ],

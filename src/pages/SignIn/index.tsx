@@ -12,6 +12,7 @@ import { AppUrls } from 'routes/appUrls';
 import { SignInRequest } from 'interfaces';
 import { store } from 'store/store';
 import { loginRequest } from 'store/auth/thunks';
+import { PageMeta } from 'components/PageMeta/PageMeta';
 import { useEnhance } from './useEnhance';
 import './SignIn.css';
 
@@ -60,6 +61,8 @@ export const SignIn: FC = () => {
 
   return (
     <section className='signin-form-wrapper'>
+      <PageMeta title="Sign in" description="Regular player login" />
+
       <h1>Log in</h1>
 
       <Formik

@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import { Link } from 'react-router-dom';
 import { AppUrls } from 'routes/appUrls';
 import dollar from 'assets/images/dollar.png';
+import { PageMeta } from 'components/PageMeta/PageMeta';
 import './Leaderboard.css';
 
 interface LeaderValue {
@@ -18,6 +19,8 @@ const leaderData: LeaderValue[] = [
 
 export const Leaderboard: FC = () => (
   <section className='leaderboard-wrapper'>
+    <PageMeta title="Leaderboard" description="The best players are displayed on this page"/>
+
     <h1>Leaderboard</h1>
 
     {leaderData.length

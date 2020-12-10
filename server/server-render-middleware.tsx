@@ -3,11 +3,12 @@ import { Provider as ReduxProvider } from 'react-redux';
 import { renderToString } from 'react-dom/server';
 import { Request, Response } from 'express';
 import { StaticRouter } from 'react-router-dom';
-import { StaticRouterContext } from 'react-router';
+import { Helmet, HelmetData } from 'react-helmet';
 import { App } from '../src/components/App';
 import { store } from '../src/store/store';
+import { AppUrls } from '../src/routes/appUrls';
 
-function getHtml(reactHtml: string, reduxState = {}) {
+function getHtml(reactHtml: string, reduxState = {}, helmetData: HelmetData) {
   return `
     <!DOCTYPE html>
     <html lang="en">
@@ -16,7 +17,8 @@ function getHtml(reactHtml: string, reduxState = {}) {
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="shortcut icon" type="image/png" href="favicon.ico">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
-        <title>Numa Game</title>
+        ${helmetData.title.toString()}
+        ${helmetData.meta.toString()}
     </head>
     <body>
         <div id="root">${reactHtml}</div>
@@ -29,24 +31,21 @@ function getHtml(reactHtml: string, reduxState = {}) {
     `;
 }
 
-export default (req: Request, res: Response) => {
-  const location: string = req.url;
-  const context: StaticRouterContext = {};
+export default (request: Request, response: Response) => {
+  const location: string = request.url;
 
   const jsx = (
     <ReduxProvider store={store}>
-      <StaticRouter context={context} location={location}>
-        <App />
+      <StaticRouter location={location}>
+        <App/>
       </StaticRouter>
     </ReduxProvider>
   );
 
   const reactHtml = renderToString(jsx);
+  const helmetData = Helmet.renderStatic();
 
-  if (context.url) {
-    res.redirect(context.url);
-    return;
-  }
+  const pageIsAvailable = (Object.values(AppUrls) as string[]).includes(request.path);
 
-  res.status(context.statusCode || 200).send(getHtml(reactHtml, {}));
+  response.status(pageIsAvailable ? 200 : 404).send(getHtml(reactHtml, {}, helmetData));
 };
