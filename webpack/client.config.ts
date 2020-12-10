@@ -1,12 +1,22 @@
 const path = require('path');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const { GenerateSW } = require('workbox-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 
 const clientConfig = (_: undefined, { mode }: { mode: 'production' | 'development' }) => {
   const isDevelopment = mode === 'development';
   const isProduction = mode === 'production';
 
-  let plugins: unknown[] = [];
+  let plugins: unknown[] = [
+    new CopyPlugin({
+      patterns: [
+        {
+          from: path.resolve(path.join('www', 'favicon.ico')),
+          to: path.resolve('dist'),
+        },
+      ],
+    }),
+  ];
 
   if (isProduction) {
     plugins = [
