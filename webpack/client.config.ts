@@ -2,12 +2,14 @@ const path = require('path');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const { GenerateSW } = require('workbox-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const clientConfig = (_: undefined, { mode }: { mode: 'production' | 'development' }) => {
   const isDevelopment = mode === 'development';
   const isProduction = mode === 'production';
 
   let plugins: unknown[] = [
+    new MiniCssExtractPlugin(),
     new CopyPlugin({
       patterns: [
         {
@@ -56,18 +58,13 @@ const clientConfig = (_: undefined, { mode }: { mode: 'production' | 'developmen
         },
         {
           test: /\.css$/,
-          use: ['style-loader', 'css-loader', {
-            loader: 'postcss-loader',
+          use: [{
+            loader: MiniCssExtractPlugin.loader,
             options: {
-              postcssOptions: {
-                plugins: [
-                  [
-                    'postcss-preset-env',
-                  ],
-                ],
-              },
+              publicPath: '/',
             },
           },
+          'css-loader',
           ],
         },
         {
