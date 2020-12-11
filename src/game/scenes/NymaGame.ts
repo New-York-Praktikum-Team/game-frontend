@@ -131,6 +131,19 @@ export class NymaGame extends Scene {
     }
   };
 
+  showScore = () => {
+    CanvasHelper.renderText(
+      this.context,
+      `SCORE: ${this.score}`, {
+        x: this.canvasSize.width - 15,
+        y: 20,
+        color: 'black',
+        align: 'right',
+        font: '14px Arial',
+      },
+    );
+  };
+
   updateCanvas(): void {
     const time = performance.now();
     const timeDelta = time - this.lastTime;
@@ -143,6 +156,7 @@ export class NymaGame extends Scene {
     this.nyma!.fireBall?.clock(timeDelta);
 
     this.showBang();
+    this.showScore();
 
     if (this.nyma!.fireBall) {
       if (!CanvasHelper.isPositionInsideRect(this.nyma!.fireBall.center, this.canvasRectangle)) {
