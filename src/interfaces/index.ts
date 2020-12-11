@@ -1,3 +1,5 @@
+type RatingFieldName = 'numaScore';
+
 export interface Country {
   languages: string;
   distance: string,
@@ -71,4 +73,25 @@ export interface SignUpResponse {
 export interface ApiError {
   code: number | null;
   message: string;
+}
+
+export interface GetLeaderboardRequest {
+  ratingFieldName: RatingFieldName;
+  cursor: number;
+  limit: number;
+}
+
+export interface GetLeaderboardResponseItem {
+  data: Leader
+}
+
+export interface SetLeaderboardItemRequest {
+  data: Leader
+  ratingFieldName: RatingFieldName;
+}
+
+export interface Leader {
+  id: number;
+  name: string;
+  numaScore: number;
 }

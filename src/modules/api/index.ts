@@ -2,6 +2,8 @@ import { transformSignUp, transformUser, transformUserUpdate } from 'modules/tra
 import { HTTPTransport } from 'modules/HTTPTransport';
 
 import {
+  GetLeaderboardRequest,
+  GetLeaderboardResponseItem, SetLeaderboardItemRequest,
   SignUpRequest, SignUpRequestDTO, SignUpResponse, User, UserDTO,
 } from 'interfaces';
 
@@ -39,3 +41,11 @@ export const changeUserPassword = async (
 }).text();
 
 export const logout = (): Promise<string> => HTTPTransport.post('auth/logout').text();
+
+export const getLeaderboard = async (
+  payload: GetLeaderboardRequest,
+): Promise<GetLeaderboardResponseItem[]> => HTTPTransport.post('leaderboard/all', { json: payload }).json<GetLeaderboardResponseItem[]>();
+
+export const setLeaderboardItem = async (
+  payload: SetLeaderboardItemRequest,
+): Promise<string> => HTTPTransport.post('leaderboard', { json: payload }).text();

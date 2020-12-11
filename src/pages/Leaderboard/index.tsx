@@ -1,52 +1,51 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import dollar from 'assets/images/dollar.png';
+import { store } from 'store/store';
+import { fetchLeaderboard } from 'store/leaderboard/thunks';
+import { useEnhance } from './useEnhance';
 import './Leaderboard.css';
 
-interface LeaderValue {
-  id: string;
-  displayName: string;
-  points: string;
-}
+export const Leaderboard: FC = () => {
+  const { leaderboard } = useEnhance();
 
-const leaderData: LeaderValue[] = [
-  { id: '23', displayName: 'Alex Naumov', points: '1000' },
-  { id: '528', displayName: 'Masha Rasputina', points: '850' },
-  { id: '134', displayName: 'Lenka Prokofieva', points: '333' },
-];
+  useEffect(() => {
+    store.dispatch(fetchLeaderboard);
+  }, []);
 
-export const Leaderboard: FC = () => (
-  <section className='leaderboard-wrapper'>
-    <h1>Leaderboard</h1>
+  return (
+    <section className='leaderboard-wrapper'>
+      <h1>Leaderboard</h1>
 
-    <table className="table table-leaderboard">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Score</th>
-        </tr>
-      </thead>
-      <tbody>
-      {leaderData.length
-        ? leaderData.map((leader) => (
-          <tr key={leader.id}>
-            <td>
-              <span>{leader.displayName}</span>
-            </td>
-            <td>
-              <img className='table-leaderboard__image' src={dollar} alt='dollar' />
-              <span>{leader.points}</span>
-            </td>
-          </tr>
-        ))
-        : (
+      <table className="table table-leaderboard">
+        <thead>
           <tr>
-            <td colSpan={2}>
-              <span>The rating has not been formed yet</span>
-            </td>
+            <th>Name</th>
+            <th>Score</th>
           </tr>
-        )
-      }
-      </tbody>
-    </table>
-  </section>
-);
+        </thead>
+        <tbody>
+        {leaderboard.length
+          ? leaderboard.map(({ data: { name = 'Anonymous', numaScore = 0 } }, index) => (
+            <tr key={index}>
+              <td>
+                <span>{name}</span>
+              </td>
+              <td>
+                <img className='table-leaderboard__image' src={dollar} alt='dollar' />
+                <span>{numaScore}</span>
+              </td>
+            </tr>
+          ))
+          : (
+            <tr>
+              <td colSpan={2}>
+                <span>The rating has not been formed yet</span>
+              </td>
+            </tr>
+          )
+        }
+        </tbody>
+      </table>
+    </section>
+  );
+};
