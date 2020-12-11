@@ -113,20 +113,22 @@ export class NymaGame extends Scene {
 
   score: number;
 
-  scoring = (score: number): void => {
+  scoring = (score: number = 5): void => {
     this.score += score;
   };
 
   sendPlayerScoreToLeaderboard = async (): Promise<void> => {
     const user = store.getState().user.data;
 
-    await api.setLeaderboardItem({
-      ratingFieldName: 'numaScore',
-      data: {
-        name: user ? user.displayName || user.login : 'Anonymous',
-        numaScore: this.score,
-      },
-    });
+    if (user) {
+      await api.setLeaderboardItem({
+        ratingFieldName: 'numaScore',
+        data: {
+          name: user.displayName || user.login,
+          numaScore: this.score,
+        },
+      });
+    }
   };
 
   updateCanvas(): void {
