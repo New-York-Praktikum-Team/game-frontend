@@ -91,7 +91,6 @@ export interface SetLeaderboardItemRequest {
 }
 
 export interface Leader {
-  id: number;
   name: string;
   numaScore: number;
 }
