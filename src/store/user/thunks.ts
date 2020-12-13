@@ -11,6 +11,7 @@ import {
   UserActions,
   fetchUserError,
   fetchUserSuccess,
+  userLogoutRequest,
 } from './actions';
 
 export async function fetchUser(dispatch: Dispatch<ItemActionType | BaseActionType<UserActions>>) {
@@ -57,3 +58,13 @@ export const changeUserPassword = (oldPassword: string, newPassword: string) => 
     }
   }
 );
+
+export async function userLogout(dispatch: Dispatch<ItemActionType | BaseActionType<UserActions>>) {
+  try {
+    await api.logout();
+    dispatch(userLogoutRequest());
+  } catch (responseError) {
+    const error = await getErrorFromRequest(responseError);
+    notification.error(error.message);
+  }
+}
