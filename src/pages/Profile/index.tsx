@@ -34,10 +34,6 @@ const validationPasswordSchema = object().shape({
   newPassword: string().min(4, 'Must be longer than 4 characters').required('Password is required'),
 });
 
-const logout = async (): Promise<void> => {
-  await store.dispatch(userLogout);
-};
-
 export const Profile: FC = () => {
   const profileFormRef = useRef<HTMLFormElement>(null);
   const passwordFormRef = useRef<HTMLFormElement>(null);
@@ -75,6 +71,10 @@ export const Profile: FC = () => {
     if (element && element.files && element.files[0]) {
       await store.dispatch(changeUserAvatar(element.files[0]));
     }
+  }, []);
+
+  const logout = useCallback(async (): Promise<void> => {
+    await store.dispatch(userLogout);
   }, []);
 
   return (
