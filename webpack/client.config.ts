@@ -5,7 +5,6 @@ const CopyPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const clientConfig = (_: undefined, { mode }: { mode: 'production' | 'development' }) => {
-  const isDevelopment = mode === 'development';
   const isProduction = mode === 'production';
 
   let plugins: unknown[] = [
@@ -44,7 +43,7 @@ const clientConfig = (_: undefined, { mode }: { mode: 'production' | 'developmen
       path: path.resolve('dist'),
       filename: 'bundle.js',
     },
-    devtool: isDevelopment ? 'source-map' : false,
+    devtool: isProduction ? false : 'source-map',
     resolve: {
       extensions: ['*', '.js', '.jsx', '.tsx', '.ts'],
       plugins: [new TsconfigPathsPlugin()],
