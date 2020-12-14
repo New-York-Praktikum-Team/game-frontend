@@ -18,17 +18,21 @@ export class NymaGame extends Scene {
     super(canvasRef, canvasSize);
     this.level = options?.level ?? new Level1();
 
+    this.nyma = new Nyma(this.context, this.level);
+    this.hole = new Hole(this.context, this.level);
+    this.snake = new Snake(this.context, this.level);
+
     this.canvasRef.addEventListener('click', this.handleClick);
     this.canvasRef.addEventListener('mousemove', this.handleMouseMove);
   }
 
   level: Level;
 
-  nyma?: Nyma;
+  nyma: Nyma;
 
-  hole?: Hole;
+  hole: Hole;
 
-  snake?: Snake;
+  snake: Snake;
 
   lastTime: number = 0;
 
@@ -47,9 +51,6 @@ export class NymaGame extends Scene {
   }
 
   startGame(): void {
-    this.nyma = new Nyma(this.context, this.level);
-    this.hole = new Hole(this.context, this.level);
-    this.snake = new Snake(this.context, this.level);
     this.lastTime = performance.now();
 
     this.clearAndDrawStaticObjects();
@@ -59,8 +60,8 @@ export class NymaGame extends Scene {
 
   clearAndDrawStaticObjects() {
     CanvasHelper.clear(this.context, this.canvasSize, Colors.PaleTurquoise);
-    this.nyma!.draw();
-    this.hole!.draw();
+    this.nyma.draw();
+    this.hole.draw();
   }
 
   private canvasRectangle: Rectangle = {
@@ -73,7 +74,7 @@ export class NymaGame extends Scene {
   handleMouseMove = (event: MouseEvent) => {
     const position = CanvasHelper.getMousePosition(event, this.clientRect);
     if (CanvasHelper.isPositionInsideRect(position, this.canvasRectangle)) {
-      this.nyma!.setDirection(position);
+      this.nyma.setDirection(position);
     }
   };
 
@@ -85,13 +86,13 @@ export class NymaGame extends Scene {
     );
 
     if (isMouseInsideCanvas) {
-      this.nyma!.shoot();
+      this.nyma.shoot();
     }
   };
 
-  needToShowBang = false;
+  private needToShowBang = false;
 
-  bangPosition = { x: 0, y: 0 };
+  private bangPosition = { x: 0, y: 0 };
 
   showBang() {
     if (this.needToShowBang) {
@@ -115,24 +116,24 @@ export class NymaGame extends Scene {
 
     this.clearAndDrawStaticObjects();
 
-    this.snake!.addBall();
-    this.snake!.clock(timeDelta);
-    this.nyma!.fireBall?.clock(timeDelta);
+    this.snake.addBall();
+    this.snake.clock(timeDelta);
+    this.nyma.fireBall?.clock(timeDelta);
 
     this.showBang();
 
-    if (this.nyma!.fireBall) {
-      if (!CanvasHelper.isPositionInsideRect(this.nyma!.fireBall.center, this.canvasRectangle)) {
-        this.nyma!.fireBall = null;
-      } else if (this.snake!.collidesWith(this.nyma!.fireBall)) {
+    if (this.nyma.fireBall) {
+      if (!CanvasHelper.isPositionInsideRect(this.nyma.fireBall.center, this.canvasRectangle)) {
+        this.nyma.fireBall = null;
+      } else if (this.snake.collidesWith(this.nyma.fireBall)) {
         this.needToShowBang = true;
-        this.bangPosition = this.nyma!.fireBall.center;
+        this.bangPosition = this.nyma.fireBall.center;
         setTimeout(() => { this.needToShowBang = false; }, 1000);
-        this.nyma!.fireBall = null;
+        this.nyma.fireBall = null;
       }
     }
 
-    if (this.snake!.collidesWith(this.hole!)) {
+    if (this.snake.collidesWith(this.hole)) {
       this.resolveCallback(AppMode.Losing);
       return;
     }
