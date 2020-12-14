@@ -1,5 +1,7 @@
 import { AppMode } from 'components/GameCanvas';
-import { CanvasHelper, CanvasSize } from 'helpers/CanvasHelper';
+import {
+  CanvasSize, clear, getMousePosition, isMousePositionInsideRect, isPositionInsideRect, renderText,
+} from 'helpers/CanvasHelper';
 import { Level } from 'game/levels/Level';
 import { Level1 } from 'game/levels/Level1';
 import { Hole } from 'game/objects/Hole';
@@ -59,7 +61,7 @@ export class NymaGame extends Scene {
   }
 
   clearAndDrawStaticObjects() {
-    CanvasHelper.clear(this.context, this.canvasSize, Colors.PaleTurquoise);
+    clear(this.context, this.canvasSize, Colors.PaleTurquoise);
     this.nyma.draw();
     this.hole.draw();
   }
@@ -72,14 +74,14 @@ export class NymaGame extends Scene {
   };
 
   handleMouseMove = (event: MouseEvent) => {
-    const position = CanvasHelper.getMousePosition(event, this.clientRect);
-    if (CanvasHelper.isPositionInsideRect(position, this.canvasRectangle)) {
+    const position = getMousePosition(event, this.clientRect);
+    if (isPositionInsideRect(position, this.canvasRectangle)) {
       this.nyma.setDirection(position);
     }
   };
 
   handleClick = (event: MouseEvent) => {
-    const isMouseInsideCanvas = CanvasHelper.isMousePositionInsideRect(
+    const isMouseInsideCanvas = isMousePositionInsideRect(
       event,
       this.clientRect,
       this.canvasRectangle,
@@ -96,7 +98,7 @@ export class NymaGame extends Scene {
 
   showBang() {
     if (this.needToShowBang) {
-      CanvasHelper.renderText(
+      renderText(
         this.context,
         'BANG!', {
           x: this.bangPosition.x,
@@ -123,7 +125,7 @@ export class NymaGame extends Scene {
     this.showBang();
 
     if (this.nyma.fireBall) {
-      if (!CanvasHelper.isPositionInsideRect(this.nyma.fireBall.center, this.canvasRectangle)) {
+      if (!isPositionInsideRect(this.nyma.fireBall.center, this.canvasRectangle)) {
         this.nyma.fireBall = null;
       } else if (this.snake.collidesWith(this.nyma.fireBall)) {
         this.needToShowBang = true;

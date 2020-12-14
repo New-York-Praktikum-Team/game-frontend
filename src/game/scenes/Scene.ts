@@ -1,4 +1,4 @@
-import { CanvasHelper, CanvasSize } from 'helpers/CanvasHelper';
+import { CanvasSize, clear, renderText } from 'helpers/CanvasHelper';
 import { AppMode } from 'components/GameCanvas';
 import { Colors } from 'consts/colors';
 
@@ -46,9 +46,9 @@ export abstract class SceneButtonActions extends Scene {
     let timerId = setTimeout(function tick() {
       const counterText = counter === 0 ? 'GO!' : counter.toString();
 
-      CanvasHelper.clear(context, canvasSize, Colors.LightBlue);
+      clear(context, canvasSize, Colors.LightBlue);
 
-      CanvasHelper.renderText(
+      renderText(
         context,
         'Get ready in',
         {
@@ -60,7 +60,7 @@ export abstract class SceneButtonActions extends Scene {
         },
       );
 
-      CanvasHelper.renderText(
+      renderText(
         context,
         counterText,
         {
