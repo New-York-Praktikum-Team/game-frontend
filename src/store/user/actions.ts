@@ -5,6 +5,7 @@ export enum UserActions {
   FETCH_USER_REQUEST = '@@user/FETCH_USER_REQUEST',
   FETCH_USER_SUCCESS = '@@user/FETCH_USER_SUCCESS',
   FETCH_USER_ERROR = '@@user/FETCH_USER_ERROR',
+  USER_LOGOUT = '@@user/USER_LOGOUT',
 }
 
 export interface ItemActionType extends BaseActionType<UserActions> {
@@ -18,4 +19,7 @@ export function fetchUserError(): BaseActionType<UserActions> {
 }
 export function fetchUserRequest(): BaseActionType<UserActions> {
   return { type: UserActions.FETCH_USER_REQUEST };
+}
+export function userLogoutRequest(): BaseActionType<UserActions> {
+  return { type: UserActions.USER_LOGOUT };
 }
