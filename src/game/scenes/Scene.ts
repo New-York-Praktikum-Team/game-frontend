@@ -3,7 +3,7 @@ import { AppMode } from 'components/GameCanvas';
 import { Colors } from 'consts/colors';
 
 type NextSceneResolveFunction = (value?: AppMode | PromiseLike<AppMode>) => void;
-type EventListenerFabric = (
+type EventListenerFaсtory = (
   nextScene: NextSceneResolveFunction
 ) => (
   event: MouseEvent
@@ -40,11 +40,17 @@ export abstract class SceneButtonActions extends Scene {
     const {
       context, canvasSize, secondsBeforeStart, tickDuration,
     } = this;
-    let counter = secondsBeforeStart;
+    let counter = secondsBeforeStart + 1; // add additional second to display "GO!"
 
     // draw countdown before the game starts
     let timerId = setTimeout(function tick() {
-      const counterText = counter === 0 ? 'GO!' : counter.toString();
+      if (counter === 0) {
+        clearInterval(timerId);
+        nextScene(AppMode.Game);
+        return;
+      }
+
+      const counterText = counter === 1 ? 'GO!' : (counter - 1).toString(); // substract additional second
 
       clear(context, canvasSize, Colors.LightBlue);
 
@@ -75,16 +81,11 @@ export abstract class SceneButtonActions extends Scene {
       counter -= 1;
       timerId = setTimeout(tick, tickDuration);
     }, 0);
-
-    setTimeout(() => {
-      clearInterval(timerId);
-      nextScene(AppMode.Game);
-    }, (secondsBeforeStart + 1) * tickDuration);
   }
 
   protected abstract renderScene(): void;
 
-  protected abstract handleCanvasClick: EventListenerFabric;
+  protected abstract handleCanvasClick: EventListenerFaсtory;
 
   private eventClickListener?: (event: MouseEvent) => void;
 
