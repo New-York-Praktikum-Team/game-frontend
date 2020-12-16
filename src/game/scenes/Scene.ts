@@ -2,6 +2,10 @@ import { CanvasSize, clear, renderText } from 'helpers/CanvasHelper';
 import { AppMode } from 'components/GameCanvas';
 import { Colors } from 'consts/colors';
 
+const secondsBeforeStart = 3;
+
+const tickDuration = 1000;
+
 type NextSceneResolveFunction = (value?: AppMode | PromiseLike<AppMode>) => void;
 type EventListenerFaсtory = (
   nextScene: NextSceneResolveFunction
@@ -32,14 +36,8 @@ export abstract class Scene {
 }
 
 export abstract class SceneButtonActions extends Scene {
-  private secondsBeforeStart = 3;
-
-  private tickDuration = 1000;
-
   protected renderCountdown(nextScene: (appMode: AppMode) => void): void {
-    const {
-      context, canvasSize, secondsBeforeStart, tickDuration,
-    } = this;
+    const { context, canvasSize } = this;
     let counter = secondsBeforeStart + 1; // add additional second to display "GO!"
 
     // draw countdown before the game starts

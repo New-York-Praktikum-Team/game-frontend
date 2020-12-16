@@ -4,22 +4,21 @@ import {
 import { AppMode } from 'components/GameCanvas';
 import { Colors } from 'consts/colors';
 import { Rectangle } from 'consts/shapes';
-
 import { SceneButtonActions } from './Scene';
+
+const buttonSize = {
+  width: 250,
+  height: 50,
+};
 
 export class WinningScene extends SceneButtonActions {
   private countingDown = false;
 
-  private buttonSize = {
-    width: 250,
-    height: 50,
-  };
-
   private restartButtonRectangle: Rectangle = {
-    x: (this.canvasSize.width - this.buttonSize.width) / 2,
+    x: (this.canvasSize.width - buttonSize.width) / 2,
     y: this.canvasSize.height / 2,
-    width: this.buttonSize.width,
-    height: this.buttonSize.height,
+    width: buttonSize.width,
+    height: buttonSize.height,
   };
 
   renderScene(): void {
