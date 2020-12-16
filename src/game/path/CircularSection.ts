@@ -2,7 +2,13 @@ import { Position } from 'game/objects/Position';
 import { Section } from './Section';
 
 export class CircularSection implements Section {
-  constructor(public start: Position, public end: Position, private radius: number) {
+  constructor(
+    public start: Position,
+    public end: Position,
+    private radius: number,
+    private clockWise = true,
+    typeOne = true,
+  ) {
     const d = Math.sqrt((start.x - end.x) ** 2 + (start.y - end.y) ** 2);
 
     if (radius < 0.5 * d) {
@@ -10,12 +16,24 @@ export class CircularSection implements Section {
       this.center = { x: (start.x + end.x) / 2, y: (start.y + end.y) / 2 };
     } else {
       const alpha = Math.atan((end.x - start.x) / Math.abs(end.y - start.y));
+
       const beta = Math.asin(d / (2 * radius));
-      this.center = {
-        x: start.x - radius * Math.cos(alpha + beta),
-        y: start.y - radius * Math.sin(alpha + beta),
-      };
+
+      if (typeOne) {
+        this.center = {
+          x: start.x - radius * Math.cos(alpha + beta),
+          y: start.y - radius * Math.sin(alpha + beta),
+        };
+      } else {
+        this.center = {
+          x: end.x + radius * Math.cos(alpha + beta),
+          y: end.y + radius * Math.sin(alpha + beta),
+        };
+      }
     }
+
+    // eslint-disable-next-line no-console
+    console.log('center: ', this.center);
   }
 
   private center: Position;
@@ -39,12 +57,15 @@ export class CircularSection implements Section {
       return current;
     }
 
-    const currentPhi = Math.acos((current.x - this.center.x) / this.radius);
+    let currentPhi = Math.acos((current.x - this.center.x) / this.radius);
+    if (current.y < this.center.y) {
+      currentPhi = -currentPhi;
+    }
 
     const circleLength = 2 * Math.PI * this.radius;
     const deltaPhi = (2 * Math.PI * distanceDelta) / circleLength;
 
-    const sign = this.start.y < this.end.y ? 1 : -1;
+    const sign = this.clockWise ? 1 : -1;
     const nextPhi = currentPhi + sign * deltaPhi;
 
     const x = this.center.x + this.radius * Math.cos(nextPhi);

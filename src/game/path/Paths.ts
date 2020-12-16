@@ -36,11 +36,11 @@ export const treePath = new TreePath();
 
 class RoundPath extends Path {
   constructor() {
-    const p1 = { x: 100, y: 400 };
-    const p2 = { x: 400, y: 100 };
-    const r = 300;
+    const p1 = { x: 300, y: 500 };
+    const p2 = { x: 500, y: 300 };
+    const r = 200;
 
-    const sections = [new CircularSection(p1, p2, r)];
+    const sections = [new CircularSection(p2, p1, r, false, true)];
     super(sections);
   }
 }
