@@ -3,7 +3,7 @@ import { Position } from 'game/objects/Position';
 
 export abstract class Level {
   get ballRadius(): number {
-    return 10;
+    return 18;
   }
 
   get nymaRadius(): number {
@@ -21,7 +21,7 @@ export abstract class Level {
 
   // pixels per second
   get fireBallVelocity(): number {
-    return 350;
+    return 500;
   }
 
   get ballDistance(): number {

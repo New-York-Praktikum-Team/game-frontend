@@ -8,7 +8,7 @@ enum Color {
   Red = 'red',
   Blue = 'blue',
   Yellow = 'yellow',
-  Green = 'forestgreen',
+  Green = 'green',
 }
 
 export class Level1 extends Level {
