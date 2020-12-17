@@ -7,8 +7,7 @@ import { Nyma } from 'game/objects/Nyma';
 import { Snake } from 'game/objects/Snake';
 import { Colors } from 'consts/colors';
 import { Rectangle } from 'consts/shapes';
-import * as api from 'modules/api';
-import { store } from 'store/store';
+import { setLeaderboard } from 'store/leaderboard/thunks';
 import { Scene } from './Scene';
 
 interface GameOptions {
@@ -117,20 +116,6 @@ export class NymaGame extends Scene {
     this.score += score;
   };
 
-  sendPlayerScoreToLeaderboard = async (): Promise<void> => {
-    const user = store.getState().user.data;
-
-    if (user) {
-      await api.setLeaderboardItem({
-        ratingFieldName: 'nymaScore',
-        data: {
-          name: user.displayName || user.login,
-          nymaScore: this.score,
-        },
-      });
-    }
-  };
-
   showScore = () => {
     CanvasHelper.renderText(
       this.context,
@@ -172,8 +157,8 @@ export class NymaGame extends Scene {
     }
 
     if (this.snake!.collidesWith(this.hole!)) {
-      this.sendPlayerScoreToLeaderboard();
       this.resolveCallback(AppMode.Losing);
+      setLeaderboard(this.score);
       return;
     }
 
