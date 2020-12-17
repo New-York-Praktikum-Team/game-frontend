@@ -10,7 +10,7 @@ export async function fetchLeaderboard(
   dispatch: Dispatch<ItemActionType | BaseActionType<LeaderboardActions>>,
 ) {
   try {
-    const leaderboard = await api.getLeaderboard({ ratingFieldName: 'numaScore', cursor: 0, limit: 1000 });
+    const leaderboard = await api.getLeaderboard({ ratingFieldName: 'nymaScore', cursor: 0, limit: 1000 });
     dispatch(fetchLeaderboardAction(leaderboard));
   } catch (responseError) {
     const error = await getErrorFromRequest(responseError);

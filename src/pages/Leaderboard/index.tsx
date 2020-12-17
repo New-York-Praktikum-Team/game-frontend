@@ -13,7 +13,7 @@ export const Leaderboard: FC = () => {
   }, []);
 
   return (
-    <section className='leaderboard-wrapper'>
+    <section className="leaderboard-wrapper">
       <h1>Leaderboard</h1>
 
       <table className="table table-leaderboard">
@@ -25,14 +25,14 @@ export const Leaderboard: FC = () => {
         </thead>
         <tbody>
         {leaderboard.length
-          ? leaderboard.map(({ data: { name = 'Anonymous', numaScore = 0 } }, index) => (
+          ? leaderboard.map(({ data: { name = 'Anonymous', nymaScore = 0 } }, index) => (
             <tr key={index}>
               <td>
                 <span>{name}</span>
               </td>
               <td>
-                <img className='table-leaderboard__image' src={dollar} alt='dollar' />
-                <span>{numaScore}</span>
+                <img className="table-leaderboard__image" src={dollar} alt="dollar" />
+                <span>{nymaScore}</span>
               </td>
             </tr>
           ))

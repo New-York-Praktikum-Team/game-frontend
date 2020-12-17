@@ -122,10 +122,10 @@ export class NymaGame extends Scene {
 
     if (user) {
       await api.setLeaderboardItem({
-        ratingFieldName: 'numaScore',
+        ratingFieldName: 'nymaScore',
         data: {
           name: user.displayName || user.login,
-          numaScore: this.score,
+          nymaScore: this.score,
         },
       });
     }

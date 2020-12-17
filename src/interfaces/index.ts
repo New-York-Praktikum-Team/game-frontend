@@ -1,4 +1,4 @@
-type RatingFieldName = 'numaScore';
+type RatingFieldName = 'nymaScore';
 
 export interface Country {
   languages: string;
@@ -92,5 +92,5 @@ export interface SetLeaderboardItemRequest {
 
 export interface Leader {
   name: string;
-  numaScore: number;
+  nymaScore: number;
 }
