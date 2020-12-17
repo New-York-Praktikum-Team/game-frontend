@@ -1,4 +1,5 @@
 .leaderboard-wrapper {
+  width: 500px;
   margin-left: 50px;
   margin-bottom: 50px;
 }
@@ -7,6 +8,12 @@
   font-size: 1.5rem;
 }
 
-.image {
+.table-leaderboard__image {
   width: 24px;
+  margin-right: 5px;
+  vertical-align: bottom;
+}
+
+.table-leaderboard td {
+  vertical-align: middle;
 }

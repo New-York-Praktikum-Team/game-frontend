@@ -9,6 +9,7 @@ import { Nyma } from 'game/objects/Nyma';
 import { Snake } from 'game/objects/Snake';
 import { Colors } from 'consts/colors';
 import { Rectangle } from 'consts/shapes';
+import { setLeaderboard } from 'store/leaderboard/thunks';
 import { Scene } from './Scene';
 
 interface GameOptions {
@@ -19,6 +20,7 @@ export class NymaGame extends Scene {
   constructor(canvasRef: HTMLCanvasElement, canvasSize: CanvasSize, options?: GameOptions) {
     super(canvasRef, canvasSize);
     this.level = options?.level ?? new Level1();
+    this.score = 0;
 
     this.nyma = new Nyma(this.context, this.level);
     this.hole = new Hole(this.context, this.level);
@@ -111,6 +113,25 @@ export class NymaGame extends Scene {
     }
   }
 
+  score: number;
+
+  scoring = (score: number = 5): void => {
+    this.score += score;
+  };
+
+  showScore = () => {
+    renderText(
+      this.context,
+      `SCORE: ${this.score}`, {
+        x: this.canvasSize.width - 15,
+        y: 20,
+        color: 'black',
+        align: 'right',
+        font: '14px Arial',
+      },
+    );
+  };
+
   updateCanvas(): void {
     const time = performance.now();
     const timeDelta = time - this.lastTime;
@@ -123,11 +144,13 @@ export class NymaGame extends Scene {
     this.nyma.fireBall?.clock(timeDelta);
 
     this.showBang();
+    this.showScore();
 
     if (this.nyma.fireBall) {
       if (!isPositionInsideRect(this.nyma.fireBall.center, this.canvasRectangle)) {
         this.nyma.fireBall = null;
       } else if (this.snake.collidesWith(this.nyma.fireBall)) {
+        this.scoring(5);
         this.needToShowBang = true;
         this.bangPosition = this.nyma.fireBall.center;
         setTimeout(() => { this.needToShowBang = false; }, 1000);
@@ -137,6 +160,7 @@ export class NymaGame extends Scene {
 
     if (this.snake.collidesWith(this.hole)) {
       this.resolveCallback(AppMode.Losing);
+      setLeaderboard(this.score);
       return;
     }
 

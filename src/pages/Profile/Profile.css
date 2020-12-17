@@ -22,7 +22,8 @@
   overflow: hidden;
   background-color: gray;
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-  background-size: contain;
+  background-size: cover;
+  background-position: center;
   background-image: url("../../assets/images/avatar.png");
 }
 

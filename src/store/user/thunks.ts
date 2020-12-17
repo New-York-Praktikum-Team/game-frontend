@@ -10,12 +10,14 @@ import {
   ItemActionType,
   UserActions,
   fetchUserError,
+  fetchUserRequest,
   fetchUserSuccess,
   userLogoutRequest,
 } from './actions';
 
 export async function fetchUser(dispatch: Dispatch<ItemActionType | BaseActionType<UserActions>>) {
   try {
+    dispatch(fetchUserRequest());
     const item = await api.getUserInfo();
     dispatch(fetchUserSuccess(item));
   } catch (err) {
