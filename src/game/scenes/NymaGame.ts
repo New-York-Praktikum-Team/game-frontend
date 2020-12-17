@@ -120,7 +120,7 @@ export class NymaGame extends Scene {
   };
 
   showScore = () => {
-    CanvasHelper.renderText(
+    renderText(
       this.context,
       `SCORE: ${this.score}`, {
         x: this.canvasSize.width - 15,
