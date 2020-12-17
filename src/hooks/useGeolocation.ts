@@ -1,8 +1,7 @@
-import {
-  Dispatch, SetStateAction, useEffect, useState,
-} from 'react';
+import type { Dispatch, SetStateAction } from 'react';
+import type { Country, UserGeolocation } from 'interfaces';
+import { useEffect, useState } from 'react';
 import ky from 'ky';
-import { Country, UserGeolocation } from 'interfaces';
 
 const success = async (
   position: Position,

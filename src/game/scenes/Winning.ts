@@ -1,29 +1,30 @@
-import { CanvasHelper } from 'helpers/CanvasHelper';
+import {
+  clear, isMousePositionInsideRect, renderButton, renderText,
+} from 'helpers/CanvasHelper';
 import { AppMode } from 'components/GameCanvas';
 import { Colors } from 'consts/colors';
 import { Rectangle } from 'consts/shapes';
-
 import { SceneButtonActions } from './Scene';
+
+const buttonSize = {
+  width: 250,
+  height: 50,
+};
 
 export class WinningScene extends SceneButtonActions {
   private countingDown = false;
 
-  private buttonSize = {
-    width: 250,
-    height: 50,
-  };
-
   private restartButtonRectangle: Rectangle = {
-    x: (this.canvasSize.width - this.buttonSize.width) / 2,
+    x: (this.canvasSize.width - buttonSize.width) / 2,
     y: this.canvasSize.height / 2,
-    width: this.buttonSize.width,
-    height: this.buttonSize.height,
+    width: buttonSize.width,
+    height: buttonSize.height,
   };
 
   renderScene(): void {
-    CanvasHelper.clear(this.context, this.canvasSize, Colors.LightBlue);
+    clear(this.context, this.canvasSize, Colors.LightBlue);
 
-    CanvasHelper.renderText(
+    renderText(
       this.context,
       'You WIN! 🎉',
       {
@@ -35,7 +36,7 @@ export class WinningScene extends SceneButtonActions {
       },
     );
 
-    CanvasHelper.renderButton(
+    renderButton(
       this.context,
       this.restartButtonRectangle,
       { text: 'Play again', fontSize: '24px' },
@@ -43,7 +44,7 @@ export class WinningScene extends SceneButtonActions {
   }
 
   handleCanvasClick = (nextScene: (appMode: AppMode) => void) => (event: MouseEvent) => {
-    const isButtonClicked = CanvasHelper.isMousePositionInsideRect(
+    const isButtonClicked = isMousePositionInsideRect(
       event,
       this.clientRect,
       this.restartButtonRectangle,

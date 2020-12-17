@@ -1,4 +1,4 @@
-import { CanvasHelper } from 'helpers/CanvasHelper';
+import { renderCircle } from 'helpers/CanvasHelper';
 import { MovingGameObject } from './MovingGameObject';
 import { Position } from './Position';
 
@@ -13,6 +13,6 @@ export abstract class Ball extends MovingGameObject {
   }
 
   draw(): void {
-    CanvasHelper.renderCircle(this.context, this.center, this.radius, this.color);
+    renderCircle(this.context, this.center, this.radius, this.color);
   }
 }

@@ -10,7 +10,7 @@ import { FormLink } from 'components/FormLink';
 import { User } from 'interfaces';
 import { store } from 'store/store';
 import {
-  changeUserAvatar, changeUserPassword, updateUserProfile,
+  changeUserAvatar, changeUserPassword, updateUserProfile, userLogout,
 } from 'store/user/thunks';
 import { PageMeta } from 'components/PageMeta/PageMeta';
 import { useEnhance } from './useEnhance';
@@ -72,6 +72,10 @@ export const Profile: FC = () => {
     if (element && element.files && element.files[0]) {
       await store.dispatch(changeUserAvatar(element.files[0]));
     }
+  }, []);
+
+  const logout = useCallback(async (): Promise<void> => {
+    await store.dispatch(userLogout);
   }, []);
 
   return (
@@ -146,7 +150,16 @@ export const Profile: FC = () => {
             </Formik>
           </fieldset>
         </div>
-
+        <div className="col s4">
+          <fieldset className="profile-fieldset">
+            <legend>Exit</legend>
+            <div>
+              <span>To exit the profile, use the button below</span>
+            </div>
+            <hr/>
+            <button className="btn" onClick={logout}>Logout</button>
+          </fieldset>
+        </div>
       </div>
     </section>
   );

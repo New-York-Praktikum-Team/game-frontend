@@ -1,9 +1,13 @@
-import { CanvasHelper, CanvasSize } from 'helpers/CanvasHelper';
+import { CanvasSize, clear, renderText } from 'helpers/CanvasHelper';
 import { AppMode } from 'components/GameCanvas';
 import { Colors } from 'consts/colors';
 
+const secondsBeforeStart = 3;
+
+const tickDuration = 1000;
+
 type NextSceneResolveFunction = (value?: AppMode | PromiseLike<AppMode>) => void;
-type EventListenerFabric = (
+type EventListenerFaсtory = (
   nextScene: NextSceneResolveFunction
 ) => (
   event: MouseEvent
@@ -32,23 +36,23 @@ export abstract class Scene {
 }
 
 export abstract class SceneButtonActions extends Scene {
-  private secondsBeforeStart = 3;
-
-  private tickDuration = 1000;
-
   protected renderCountdown(nextScene: (appMode: AppMode) => void): void {
-    const {
-      context, canvasSize, secondsBeforeStart, tickDuration,
-    } = this;
-    let counter = secondsBeforeStart;
+    const { context, canvasSize } = this;
+    let counter = secondsBeforeStart + 1; // add additional second to display "GO!"
 
     // draw countdown before the game starts
     let timerId = setTimeout(function tick() {
-      const counterText = counter === 0 ? 'GO!' : counter.toString();
+      if (counter === 0) {
+        clearInterval(timerId);
+        nextScene(AppMode.Game);
+        return;
+      }
 
-      CanvasHelper.clear(context, canvasSize, Colors.LightBlue);
+      const counterText = counter === 1 ? 'GO!' : (counter - 1).toString(); // substract additional second
 
-      CanvasHelper.renderText(
+      clear(context, canvasSize, Colors.LightBlue);
+
+      renderText(
         context,
         'Get ready in',
         {
@@ -60,7 +64,7 @@ export abstract class SceneButtonActions extends Scene {
         },
       );
 
-      CanvasHelper.renderText(
+      renderText(
         context,
         counterText,
         {
@@ -75,16 +79,11 @@ export abstract class SceneButtonActions extends Scene {
       counter -= 1;
       timerId = setTimeout(tick, tickDuration);
     }, 0);
-
-    setTimeout(() => {
-      clearInterval(timerId);
-      nextScene(AppMode.Game);
-    }, (secondsBeforeStart + 1) * tickDuration);
   }
 
   protected abstract renderScene(): void;
 
-  protected abstract handleCanvasClick: EventListenerFabric;
+  protected abstract handleCanvasClick: EventListenerFaсtory;
 
   private eventClickListener?: (event: MouseEvent) => void;
 

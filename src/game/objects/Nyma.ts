@@ -1,5 +1,5 @@
 import { Level } from 'game/levels/Level';
-import { CanvasHelper } from 'helpers/CanvasHelper';
+import { renderCircle, renderRectangle, renderText } from 'helpers/CanvasHelper';
 import { Position } from 'game/objects/Position';
 import { FireBall } from './FireBall';
 import { RoundGameObject } from './RoundGameObject';
@@ -28,8 +28,8 @@ export class Nyma extends RoundGameObject {
     this.context.translate(this.center.x, this.center.y);
     this.context.rotate(this.angle);
 
-    CanvasHelper.renderCircle(this.context, { x: 0, y: 0 }, this.radius, 'DarkViolet');
-    CanvasHelper.renderText(
+    renderCircle(this.context, { x: 0, y: 0 }, this.radius, 'DarkViolet');
+    renderText(
       this.context,
       'Nyma', {
         x: 0,
@@ -39,7 +39,7 @@ export class Nyma extends RoundGameObject {
         font: '16px Arial',
       },
     );
-    CanvasHelper.renderRectangle(this.context, { x: 30, y: -10 }, 70, 20, 'DarkViolet');
+    renderRectangle(this.context, { x: 30, y: -10 }, 70, 20, 'DarkViolet');
 
     this.currentBall.drawRelativeToPosition(this.center);
     this.nextBall.drawRelativeToPosition(this.center);
