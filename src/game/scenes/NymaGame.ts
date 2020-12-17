@@ -1,5 +1,7 @@
 import { AppMode } from 'components/GameCanvas';
-import { CanvasHelper, CanvasSize } from 'helpers/CanvasHelper';
+import {
+  CanvasSize, clear, getMousePosition, isMousePositionInsideRect, isPositionInsideRect, renderText,
+} from 'helpers/CanvasHelper';
 import { Level } from 'game/levels/Level';
 import { Level1 } from 'game/levels/Level1';
 import { Hole } from 'game/objects/Hole';
@@ -20,17 +22,21 @@ export class NymaGame extends Scene {
     this.level = options?.level ?? new Level1();
     this.score = 0;
 
+    this.nyma = new Nyma(this.context, this.level);
+    this.hole = new Hole(this.context, this.level);
+    this.snake = new Snake(this.context, this.level);
+
     this.canvasRef.addEventListener('click', this.handleClick);
     this.canvasRef.addEventListener('mousemove', this.handleMouseMove);
   }
 
   level: Level;
 
-  nyma?: Nyma;
+  nyma: Nyma;
 
-  hole?: Hole;
+  hole: Hole;
 
-  snake?: Snake;
+  snake: Snake;
 
   lastTime: number = 0;
 
@@ -49,9 +55,6 @@ export class NymaGame extends Scene {
   }
 
   startGame(): void {
-    this.nyma = new Nyma(this.context, this.level);
-    this.hole = new Hole(this.context, this.level);
-    this.snake = new Snake(this.context, this.level);
     this.lastTime = performance.now();
 
     this.clearAndDrawStaticObjects();
@@ -60,9 +63,9 @@ export class NymaGame extends Scene {
   }
 
   clearAndDrawStaticObjects() {
-    CanvasHelper.clear(this.context, this.canvasSize, Colors.PaleTurquoise);
-    this.nyma!.draw();
-    this.hole!.draw();
+    clear(this.context, this.canvasSize, Colors.PaleTurquoise);
+    this.nyma.draw();
+    this.hole.draw();
   }
 
   private canvasRectangle: Rectangle = {
@@ -73,31 +76,31 @@ export class NymaGame extends Scene {
   };
 
   handleMouseMove = (event: MouseEvent) => {
-    const position = CanvasHelper.getMousePosition(event, this.clientRect);
-    if (CanvasHelper.isPositionInsideRect(position, this.canvasRectangle)) {
-      this.nyma!.setDirection(position);
+    const position = getMousePosition(event, this.clientRect);
+    if (isPositionInsideRect(position, this.canvasRectangle)) {
+      this.nyma.setDirection(position);
     }
   };
 
   handleClick = (event: MouseEvent) => {
-    const isMouseInsideCanvas = CanvasHelper.isMousePositionInsideRect(
+    const isMouseInsideCanvas = isMousePositionInsideRect(
       event,
       this.clientRect,
       this.canvasRectangle,
     );
 
     if (isMouseInsideCanvas) {
-      this.nyma!.shoot();
+      this.nyma.shoot();
     }
   };
 
-  needToShowBang = false;
+  private needToShowBang = false;
 
-  bangPosition = { x: 0, y: 0 };
+  private bangPosition = { x: 0, y: 0 };
 
   showBang() {
     if (this.needToShowBang) {
-      CanvasHelper.renderText(
+      renderText(
         this.context,
         'BANG!', {
           x: this.bangPosition.x,
@@ -136,27 +139,26 @@ export class NymaGame extends Scene {
 
     this.clearAndDrawStaticObjects();
 
-    this.snake!.addBall();
-    this.snake!.clock(timeDelta);
-    this.nyma!.fireBall?.clock(timeDelta);
+    this.snake.addBall();
+    this.snake.clock(timeDelta);
+    this.nyma.fireBall?.clock(timeDelta);
 
     this.showBang();
     this.showScore();
 
-    if (this.nyma!.fireBall) {
-      if (!CanvasHelper.isPositionInsideRect(this.nyma!.fireBall.center, this.canvasRectangle)) {
-        this.nyma!.fireBall = null;
-      } else if (this.snake!.collidesWith(this.nyma!.fireBall)) {
+    if (this.nyma.fireBall) {
+      if (!isPositionInsideRect(this.nyma.fireBall.center, this.canvasRectangle)) {
+        this.nyma.fireBall = null;
+      } else if (this.snake.collidesWith(this.nyma.fireBall)) {
         this.scoring(5);
-
         this.needToShowBang = true;
-        this.bangPosition = this.nyma!.fireBall.center;
+        this.bangPosition = this.nyma.fireBall.center;
         setTimeout(() => { this.needToShowBang = false; }, 1000);
-        this.nyma!.fireBall = null;
+        this.nyma.fireBall = null;
       }
     }
 
-    if (this.snake!.collidesWith(this.hole!)) {
+    if (this.snake.collidesWith(this.hole)) {
       this.resolveCallback(AppMode.Losing);
       setLeaderboard(this.score);
       return;

@@ -1,6 +1,6 @@
 import { Level } from 'game/levels/Level';
 import { LinearPath } from 'game/path/LinearPath';
-import { CanvasHelper } from 'helpers/CanvasHelper';
+import { renderCircle } from 'helpers/CanvasHelper';
 import { Ball } from './Ball';
 import { Position } from './Position';
 
@@ -32,11 +32,11 @@ export class FireBall extends Ball {
   }
 
   draw(): void {
-    CanvasHelper.renderCircle(this.context, this.center, this.radius, this.color);
+    renderCircle(this.context, this.center, this.radius, this.color);
   }
 
   drawRelativeToPosition(position: Position): void {
-    CanvasHelper.renderCircle(
+    renderCircle(
       this.context,
       { x: this.center.x - position.x, y: this.center.y - position.y },
       this.radius,
