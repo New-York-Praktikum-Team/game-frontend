@@ -1,4 +1,4 @@
-import ballsImageSrc from 'assets/images/balls2.png';
+import ballsImageSrc from 'assets/images/balls.png';
 import { MovingGameObject } from './MovingGameObject';
 import { Position } from './Position';
 
@@ -33,27 +33,27 @@ export abstract class Ball extends MovingGameObject {
     super(context, center, radius);
   }
 
-  draw(shift = { x: 0, y: 0 }): void {
+  draw(shift = { x: 0, y: 0 }, angle = 0): void {
     const x = this.center.x - this.radius - shift.x;
     const y = this.center.y - this.radius - shift.y;
 
-    this.animationStep({ x, y });
+    this.animationStep({ x, y }, angle);
   }
 
   // frame number to start with
   private currentFrameNumber = 1;
 
-  animationStep(position: Position) {
-    this.drawFrame(this.currentFrameNumber, position);
+  animationStep(position: Position, angle: number) {
+    this.drawFrame(this.currentFrameNumber, position, angle);
 
     this.currentFrameNumber += 1;
 
-    if (this.currentFrameNumber > lastFrameNumber) {
-      this.currentFrameNumber = 0;
+    if (this.currentFrameNumber >= lastFrameNumber) {
+      this.currentFrameNumber = 1;
     }
   }
 
-  drawFrame(frame = 0, position: Position) {
+  drawFrame(frame: number, position: Position, angle: number) {
     const dx = width * frame;
 
     const startPositionX = 0;
@@ -64,16 +64,41 @@ export abstract class Ball extends MovingGameObject {
     const scaledWidth = width * scale;
     const scaledHeight = height * scale;
 
-    this.context.drawImage(
-      ballImage,
-      startPositionX + dx,
-      startPositionY,
-      width,
-      height,
-      position.x,
-      position.y,
-      scaledWidth,
-      scaledHeight,
-    );
+    if (angle !== 0) {
+      this.context.translate(position.x + this.radius, position.y + this.radius);
+      this.context.rotate(angle);
+
+      this.context.drawImage(
+        // image
+        ballImage,
+        // position of top left point of the frame on the original image
+        startPositionX + dx,
+        startPositionY,
+        // frame dimentions on the original image
+        width,
+        height,
+        // top left position where to draw a frame
+        -this.radius,
+        -this.radius,
+        // frame dimensions to draw on canvas
+        scaledWidth,
+        scaledHeight,
+      );
+
+      this.context.rotate(-angle);
+      this.context.translate(-(position.x + this.radius), -(position.y + this.radius));
+    } else {
+      this.context.drawImage(
+        ballImage,
+        startPositionX + dx,
+        startPositionY,
+        width,
+        height,
+        position.x,
+        position.y,
+        scaledWidth,
+        scaledHeight,
+      );
+    }
   }
 }

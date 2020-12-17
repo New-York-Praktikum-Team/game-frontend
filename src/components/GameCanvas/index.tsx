@@ -23,7 +23,7 @@ export class GameCanvas extends Component<CanvasProps, CanvasState> {
     appMode: AppMode.Main,
     context: null,
     canvasSize: {
-      width: 500,
+      width: 800,
       height: 500,
     },
   };

@@ -41,8 +41,8 @@ export class Nyma extends RoundGameObject {
     );
     renderRectangle(this.context, { x: 30, y: -10 }, 70, 20, 'DarkViolet');
 
-    this.currentBall.drawRelativeToPosition(this.center);
-    this.nextBall.drawRelativeToPosition(this.center);
+    this.currentBall.drawRelativeToPosition(this.center, Math.PI / 2);
+    this.nextBall.drawRelativeToPosition(this.center, Math.PI / 2);
 
     this.context.restore();
   }

@@ -14,7 +14,7 @@ enum Color {
 export class Level1 extends Level {
   get snakePath(): Path {
     const start = { x: 0, y: 0 };
-    const end = { x: 450, y: 200 };
+    const end = { x: 650, y: 300 };
 
     return new LinearPath(start, end);
   }

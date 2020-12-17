@@ -30,7 +30,11 @@ export class FireBall extends Ball {
     );
   }
 
-  drawRelativeToPosition(position: Position): void {
-    super.draw(position);
+  draw() {
+    super.draw({ x: 0, y: 0 }, this.angleValue - Math.PI / 2);
+  }
+
+  drawRelativeToPosition(position: Position, angle?: number): void {
+    super.draw(position, angle);
   }
 }
