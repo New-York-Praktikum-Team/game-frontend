@@ -78,7 +78,7 @@ export class LosingScene extends SceneButtonActions {
 
     if (isRestartButtonClicked) {
       this.countingDown = true;
-      super.renderCountdown(nextScene, this.options);
+      super.renderCountdown(nextScene);
     }
 
     if (isMenuButtonClicked) {

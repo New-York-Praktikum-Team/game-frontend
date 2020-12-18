@@ -42,7 +42,10 @@ export class GameCanvas extends Component<CanvasProps, CanvasState> {
 
     scene.render().then((appModeOptions) => {
       scene.destroy();
-      this.setState({ appMode: appModeOptions.appMode, options: appModeOptions.options });
+      this.setState({ 
+        appMode: appModeOptions.appMode, 
+        options: appModeOptions.options ?? this.state.options,
+      });
     });
   }
 
