@@ -28,6 +28,12 @@ export class LinearSection implements Section {
     return position.y.toFixed(2) === (this.k * position.x + this.b).toFixed(2);
   }
 
+  strictContainsPosition(position: Position): boolean {
+    return this.containsPosition(position)
+      && position.x <= Math.max(this.start.x, this.end.x)
+      && position.x >= Math.min(this.start.x, this.end.x);
+  }
+
   distance(position1: Position, position2: Position): number {
     if (!this.containsPosition(position1) || !this.containsPosition(position2)) {
       throw new Error('Positions are not on the path');

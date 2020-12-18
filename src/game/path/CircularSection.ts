@@ -7,33 +7,36 @@ export class CircularSection implements Section {
     public end: Position,
     private radius: number,
     private clockWise = true,
-    typeOne = true,
+    approximateCenter?: Position,
   ) {
-    const d = Math.sqrt((start.x - end.x) ** 2 + (start.y - end.y) ** 2);
+    const d = this.distanceBetween(start, end);
+    const middle = { x: (start.x + end.x) / 2, y: (start.y + end.y) / 2 };
 
     if (radius < 0.5 * d) {
       this.radius = 0.5 * d;
-      this.center = { x: (start.x + end.x) / 2, y: (start.y + end.y) / 2 };
+      this.center = middle;
     } else {
-      const alpha = Math.atan((end.x - start.x) / Math.abs(end.y - start.y));
+      const center1 = {
+        x: middle.x + (Math.sqrt(radius ** 2 - (d / 2) ** 2) * (start.y - end.y)) / d,
+        y: middle.y + (Math.sqrt(radius ** 2 - (d / 2) ** 2) * (end.x - start.x)) / d,
+      };
+      const center2 = {
+        x: middle.x - (Math.sqrt(radius ** 2 - (d / 2) ** 2) * (start.y - end.y)) / d,
+        y: middle.y - (Math.sqrt(radius ** 2 - (d / 2) ** 2) * (end.x - start.x)) / d,
+      };
 
-      const beta = Math.asin(d / (2 * radius));
-
-      if (typeOne) {
-        this.center = {
-          x: start.x - radius * Math.cos(alpha + beta),
-          y: start.y - radius * Math.sin(alpha + beta),
-        };
+      if (approximateCenter) {
+        const d1 = this.distanceBetween(approximateCenter, center1);
+        const d2 = this.distanceBetween(approximateCenter, center2);
+        this.center = d1 < d2 ? center1 : center2;
       } else {
-        this.center = {
-          x: end.x + radius * Math.cos(alpha + beta),
-          y: end.y + radius * Math.sin(alpha + beta),
-        };
+        this.center = center1;
       }
     }
+  }
 
-    // eslint-disable-next-line no-console
-    console.log('center: ', this.center);
+  private distanceBetween(p1: Position, p2: Position): number {
+    return Math.sqrt((p1.x - p2.x) ** 2 + (p1.y - p2.y) ** 2);
   }
 
   private center: Position;
@@ -43,13 +46,17 @@ export class CircularSection implements Section {
       === (this.radius ** 2).toFixed(2);
   }
 
+  strictContainsPosition(position: Position): boolean {
+    // TODO: implement
+    return this.containsPosition(position);
+  }
+
   distance(position1: Position, position2: Position): number {
     if (!this.containsPosition(position1) || !this.containsPosition(position2)) {
       throw new Error('Positions are not on the path');
     }
-
     // TODO: calculate distance along circle
-    return Math.sqrt((position1.x - position2.x) ** 2 + (position1.y - position2.y) ** 2);
+    return this.distanceBetween(position1, position2);
   }
 
   public next(current: Position, distanceDelta: number): Position {

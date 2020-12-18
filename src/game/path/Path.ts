@@ -18,12 +18,7 @@ export class Path {
     this.sections.forEach((section, index) => {
       if (
         !found
-        && section.containsPosition(current)
-        // current is between section start and end
-        && current.x <= Math.max(section.start.x, section.end.x)
-        && current.x >= Math.min(section.start.x, section.end.x)
-        && current.y <= Math.max(section.start.y, section.end.y)
-        && current.y >= Math.min(section.start.y, section.end.y)
+        && section.strictContainsPosition(current)
         && index !== this.sections.length - 1
       ) {
         if (section.distance(current, section.end) < distanceDelta) {
@@ -36,6 +31,7 @@ export class Path {
         }
       } else if (!found && index === this.sections.length - 1) {
         result = section.next(current, distanceDelta);
+        found = true;
       }
     });
     return result!;

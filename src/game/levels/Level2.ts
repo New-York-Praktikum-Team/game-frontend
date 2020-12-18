@@ -1,19 +1,19 @@
 import { Path } from 'game/path/Path';
 import { Position } from 'game/objects/Position';
 import { Helpers } from 'helpers/Helpers';
-import { treePath } from 'game/path/Paths';
+import { heartPath } from 'game/path/Paths';
 import { Level } from './Level';
 
 enum Color {
-  Green1 = 'DarkGreen',
-  Green2 = 'GreenYellow',
-  Green3 = 'green',
-  Green4 = 'forestgreen',
+  Pink1 = 'Crimson',
+  Pink2 = 'DarkRed',
+  Pink3 = 'DeepPink',
+  Pink4 = 'Pink',
 }
 
-export class Level1 extends Level {
+export class Level2 extends Level {
   get snakePath(): Path {
-    return treePath;
+    return heartPath;
   }
 
   get snakeBallVelocity(): number {
@@ -30,5 +30,9 @@ export class Level1 extends Level {
 
   get randomColor(): string {
     return Helpers.randomEnum(Color);
+  }
+
+  get backgroundColor(): string {
+    return 'LightYellow';
   }
 }

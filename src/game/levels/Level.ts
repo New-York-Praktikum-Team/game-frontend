@@ -1,5 +1,6 @@
 import { Path } from 'game/path/Path';
 import { Position } from 'game/objects/Position';
+import { Colors } from 'consts/colors';
 
 export abstract class Level {
   get ballRadius(): number {
@@ -38,5 +39,9 @@ export abstract class Level {
 
   get snakeBallStartPosition(): Position {
     return this.snakePath.start;
+  }
+
+  get backgroundColor(): string {
+    return Colors.PaleTurquoise;
   }
 }

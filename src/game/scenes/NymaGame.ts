@@ -7,7 +7,6 @@ import { Level1 } from 'game/levels/Level1';
 import { Hole } from 'game/objects/Hole';
 import { Nyma } from 'game/objects/Nyma';
 import { Snake } from 'game/objects/Snake';
-import { Colors } from 'consts/colors';
 import { Rectangle } from 'consts/shapes';
 import { setLeaderboard } from 'store/leaderboard/thunks';
 import { Scene } from './Scene';
@@ -63,7 +62,7 @@ export class NymaGame extends Scene {
   }
 
   clearAndDrawStaticObjects() {
-    clear(this.context, this.canvasSize, Colors.PaleTurquoise);
+    clear(this.context, this.canvasSize, this.level.backgroundColor);
     this.nyma.draw();
     this.hole.draw();
   }
