@@ -1,12 +1,23 @@
 import { CanvasSize, clear, renderText } from 'helpers/CanvasHelper';
 import { AppMode } from 'components/GameCanvas';
 import { Colors } from 'consts/colors';
+import { Level } from 'game/levels/Level';
 
 const secondsBeforeStart = 3;
 
 const tickDuration = 1000;
 
-type NextSceneResolveFunction = (value?: AppMode | PromiseLike<AppMode>) => void;
+export interface GameOptions {
+  level?: Level;
+}
+
+export interface AppModeOptions {
+  appMode: AppMode;
+  options?: GameOptions;
+}
+
+export type NextSceneResolveFunction =
+  (value?: AppModeOptions | PromiseLike<AppModeOptions>, options?: GameOptions) => void;
 type EventListenerFaсtory = (
   nextScene: NextSceneResolveFunction
 ) => (
@@ -25,18 +36,21 @@ export abstract class Scene {
   constructor(
     public canvasRef: HTMLCanvasElement,
     public canvasSize: CanvasSize,
+    public options?: GameOptions,
   ) {
     this.clientRect = canvasRef.getBoundingClientRect();
     this.context = canvasRef.getContext('2d')!;
   }
 
-  abstract render(): Promise<AppMode>;
+  abstract render(): Promise<AppModeOptions>;
 
   abstract destroy(): void;
 }
 
 export abstract class SceneButtonActions extends Scene {
-  protected renderCountdown(nextScene: (appMode: AppMode) => void): void {
+  protected renderCountdown(
+    nextScene: (value: AppModeOptions) => void, options?: GameOptions,
+    ): void {
     const { context, canvasSize } = this;
     let counter = secondsBeforeStart + 1; // add additional second to display "GO!"
 
@@ -44,7 +58,7 @@ export abstract class SceneButtonActions extends Scene {
     let timerId = setTimeout(function tick() {
       if (counter === 0) {
         clearInterval(timerId);
-        nextScene(AppMode.Game);
+        nextScene({ appMode: AppMode.Game, options });
         return;
       }
 
@@ -87,7 +101,7 @@ export abstract class SceneButtonActions extends Scene {
 
   private eventClickListener?: (event: MouseEvent) => void;
 
-  render(): Promise<AppMode> {
+  render(): Promise<AppModeOptions> {
     return new Promise((resolve) => {
       this.renderScene();
       this.eventClickListener = this.handleCanvasClick(resolve);

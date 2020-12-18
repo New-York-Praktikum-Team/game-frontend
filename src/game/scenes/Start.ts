@@ -4,7 +4,7 @@ import {
 import { AppMode } from 'components/GameCanvas';
 import { Colors } from 'consts/colors';
 import { Rectangle } from 'consts/shapes';
-import { SceneButtonActions } from './Scene';
+import { AppModeOptions, SceneButtonActions } from './Scene';
 
 const buttonSize = {
   width: 350,
@@ -43,7 +43,7 @@ export class StartScene extends SceneButtonActions {
     );
   }
 
-  handleCanvasClick = (nextScene: (appMode: AppMode) => void) => (event: MouseEvent) => {
+  handleCanvasClick = (nextScene: (appMode: AppModeOptions) => void) => (event: MouseEvent) => {
     const isButtonClicked = isMousePositionInsideRect(
       event,
       this.clientRect,
@@ -52,7 +52,8 @@ export class StartScene extends SceneButtonActions {
 
     if (isButtonClicked) {
       this.countingDown = true;
-      super.renderCountdown(nextScene);
+      // super.renderCountdown(nextScene);
+      nextScene({ appMode: AppMode.LevelSelection });
     }
   };
 }

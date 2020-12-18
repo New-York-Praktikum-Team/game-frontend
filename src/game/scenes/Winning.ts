@@ -4,7 +4,7 @@ import {
 import { AppMode } from 'components/GameCanvas';
 import { Colors } from 'consts/colors';
 import { Rectangle } from 'consts/shapes';
-import { SceneButtonActions } from './Scene';
+import { AppModeOptions, SceneButtonActions } from './Scene';
 
 const buttonSize = {
   width: 250,
@@ -43,7 +43,7 @@ export class WinningScene extends SceneButtonActions {
     );
   }
 
-  handleCanvasClick = (nextScene: (appMode: AppMode) => void) => (event: MouseEvent) => {
+  handleCanvasClick = (nextScene: (appMode: AppModeOptions) => void) => (event: MouseEvent) => {
     const isButtonClicked = isMousePositionInsideRect(
       event,
       this.clientRect,

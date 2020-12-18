@@ -2,7 +2,7 @@ import { isMousePositionInsideRect, renderButton, renderText } from 'helpers/Can
 import { AppMode } from 'components/GameCanvas';
 import { Colors } from 'consts/colors';
 import { Rectangle } from 'consts/shapes';
-import { SceneButtonActions } from './Scene';
+import { AppModeOptions, SceneButtonActions } from './Scene';
 
 const buttonSize = {
   width: 250,
@@ -63,7 +63,7 @@ export class LosingScene extends SceneButtonActions {
     );
   }
 
-  handleCanvasClick = (nextScene: (appMode: AppMode) => void) => (event: MouseEvent) => {
+  handleCanvasClick = (nextScene: (value: AppModeOptions) => void) => (event: MouseEvent) => {
     const isRestartButtonClicked = isMousePositionInsideRect(
       event,
       this.clientRect,
@@ -78,11 +78,11 @@ export class LosingScene extends SceneButtonActions {
 
     if (isRestartButtonClicked) {
       this.countingDown = true;
-      super.renderCountdown(nextScene);
+      super.renderCountdown(nextScene, this.options);
     }
 
     if (isMenuButtonClicked) {
-      nextScene(AppMode.Main);
+      nextScene({ appMode: AppMode.Main });
     }
   };
 }

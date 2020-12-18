@@ -4,16 +4,18 @@ import { NymaGame } from 'game/scenes/NymaGame';
 import { StartScene } from 'game/scenes/Start';
 import { LosingScene } from 'game/scenes/Losing';
 import { WinningScene } from 'game/scenes/Winning';
-import { SceneDerived } from 'game/scenes/Scene';
+import { GameOptions, SceneDerived } from 'game/scenes/Scene';
+import { LevelSelectionScene } from 'game/scenes/LevelSelection';
 
 export enum AppMode {
-  Main, Game, Losing, Winning,
+  Main, Game, Losing, Winning, LevelSelection,
 }
 
 type CanvasProps = {};
 
 interface CanvasState {
   appMode: AppMode;
+  options?: GameOptions;
   context: CanvasRenderingContext2D | null;
   canvasSize: CanvasSize;
 }
@@ -38,9 +40,9 @@ export class GameCanvas extends Component<CanvasProps, CanvasState> {
   componentDidUpdate() {
     const scene = this.getSceneByAppMode(this.state.appMode);
 
-    scene.render().then((appMode) => {
+    scene.render().then((appModeOptions) => {
       scene.destroy();
-      this.setState({ appMode });
+      this.setState({ appMode: appModeOptions.appMode, options: appModeOptions.options });
     });
   }
 
@@ -49,6 +51,7 @@ export class GameCanvas extends Component<CanvasProps, CanvasState> {
       case AppMode.Game: return this.sceneToRender(NymaGame);
       case AppMode.Losing: return this.sceneToRender(LosingScene);
       case AppMode.Winning: return this.sceneToRender(WinningScene);
+      case AppMode.LevelSelection: return this.sceneToRender(LevelSelectionScene);
 
       case AppMode.Main:
       default: return this.sceneToRender(StartScene);
@@ -59,6 +62,7 @@ export class GameCanvas extends Component<CanvasProps, CanvasState> {
     const scene = new SceneConstructor(
       this.canvasRef.current!,
       this.state.canvasSize,
+      this.state.options,
     );
 
     return scene;
