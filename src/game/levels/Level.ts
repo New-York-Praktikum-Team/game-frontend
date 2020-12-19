@@ -25,7 +25,7 @@ export abstract class Level {
 
   // pixels per second
   get fireBallVelocity(): number {
-    return 600;
+    return 1000;
   }
 
   get ballDistance(): number {

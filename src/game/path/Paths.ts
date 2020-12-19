@@ -46,7 +46,7 @@ export class TreePath extends Path {
       { x: 0.9, y: 0.66 },
       { x: 0.7, y: 0.66 },
       { x: 1, y: 1 },
-      { x: 0.5, y: 1 },
+      { x: 0.25, y: 1 },
     ];
 
     const points: Position[] = relativePoints.map((p) => {
