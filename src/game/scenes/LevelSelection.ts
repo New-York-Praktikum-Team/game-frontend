@@ -2,6 +2,7 @@ import { clear, isMousePositionInsideRect, renderButton } from 'helpers/CanvasHe
 import { Rectangle } from 'consts/shapes';
 import { Level1 } from 'game/levels/Level1';
 import { Level2 } from 'game/levels/Level2';
+import { Level3 } from 'game/levels/Level3';
 import { Colors } from 'consts/colors';
 import { AppOptions, SceneButtonActions } from './Scene';
 
@@ -40,19 +41,19 @@ export class LevelSelectionScene extends SceneButtonActions {
     renderButton(
       this.context,
       this.button1Rectangle,
-      { text: 'Level 1', fontSize: '24px' },
+      { text: '🌀 Level 1', fontSize: '24px' },
     );
 
     renderButton(
       this.context,
       this.button2Rectangle,
-      { text: 'Level 2', fontSize: '24px' },
+      { text: '💖 Level 2', fontSize: '24px' },
     );
 
     renderButton(
       this.context,
       this.button3Rectangle,
-      { text: 'Level 3', fontSize: '24px' },
+      { text: '🎄 Level 3', fontSize: '24px' },
     );
   }
 
@@ -86,7 +87,8 @@ export class LevelSelectionScene extends SceneButtonActions {
     }
 
     if (isButton3Clicked) {
-      // TODO: level3
+      this.countingDown = true;
+      super.renderCountdown(nextScene, { level: new Level3(this.canvasSize) });
     }
   };
 }

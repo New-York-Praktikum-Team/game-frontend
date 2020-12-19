@@ -3,6 +3,7 @@ import { Position } from 'game/objects/Position';
 import { Helpers } from 'helpers/Helpers';
 import { HeartPath } from 'game/path/Paths';
 import { CanvasSize } from 'helpers/CanvasHelper';
+import { Rectangle } from 'consts/shapes';
 import { Level } from './Level';
 
 enum Color {
@@ -15,8 +16,19 @@ enum Color {
 export class Level2 extends Level {
   constructor(canvasSize: CanvasSize) {
     super(canvasSize);
-    this.path = new HeartPath(canvasSize);
+
+    const minSize = Math.min(canvasSize.width, canvasSize.height);
+    this.drawingRectangle = {
+      x: 0.5 * canvasSize.width - 0.45 * minSize,
+      y: 0.5 * canvasSize.height - 0.45 * minSize,
+      width: 0.9 * minSize,
+      height: 0.9 * minSize,
+    };
+
+    this.path = new HeartPath(this.drawingRectangle);
   }
+
+  private drawingRectangle: Rectangle;
 
   private path: Path;
 
@@ -25,7 +37,10 @@ export class Level2 extends Level {
   }
 
   get nymaPosition(): Position {
-    return { x: 50, y: 50 };
+    const x = this.drawingRectangle.x + 0.3 * this.drawingRectangle.width;
+    const y = this.drawingRectangle.y + 0.4 * this.drawingRectangle.height;
+
+    return { x, y };
   }
 
   get snakeLength(): number {

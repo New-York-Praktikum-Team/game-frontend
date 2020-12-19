@@ -11,7 +11,6 @@ import { Rectangle } from 'consts/shapes';
 import { setLeaderboard } from 'store/leaderboard/thunks';
 import { AppOptions, GameOptions, Scene } from './Scene';
 
-
 export class NymaGame extends Scene {
   constructor(canvasRef: HTMLCanvasElement, canvasSize: CanvasSize, options?: GameOptions) {
     super(canvasRef, canvasSize);
@@ -155,7 +154,7 @@ export class NymaGame extends Scene {
     }
 
     if (this.snake.collidesWith(this.hole)) {
-      this.resolveCallback(AppMode.Losing);
+      this.resolveCallback({ appMode: AppMode.Losing });
       setLeaderboard(this.score);
       return;
     }

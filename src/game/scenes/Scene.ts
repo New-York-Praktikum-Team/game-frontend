@@ -50,7 +50,7 @@ export abstract class Scene {
 export abstract class SceneButtonActions extends Scene {
   protected renderCountdown(
     nextScene: (value: AppOptions) => void, options?: GameOptions,
-    ): void {
+  ): void {
     const { context, canvasSize } = this;
     let counter = secondsBeforeStart + 1; // add additional second to display "GO!"
 
