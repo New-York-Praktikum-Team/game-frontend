@@ -53,4 +53,8 @@ export class Level3 extends Level {
   get backgroundColor(): string {
     return 'Ivory';
   }
+
+  get name(): string {
+    return 'Level 3';
+  }
 }

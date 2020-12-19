@@ -4,7 +4,7 @@ import { Level1 } from 'game/levels/Level1';
 import { Level2 } from 'game/levels/Level2';
 import { Level3 } from 'game/levels/Level3';
 import { Colors } from 'consts/colors';
-import { AppOptions, SceneButtonActions } from './Scene';
+import { NextSceneResolveFunction, SceneButtonActions } from './Scene';
 
 export class LevelSelectionScene extends SceneButtonActions {
   private countingDown = false;
@@ -57,7 +57,7 @@ export class LevelSelectionScene extends SceneButtonActions {
     );
   }
 
-  handleCanvasClick = (nextScene: (value: AppOptions) => void) => (event: MouseEvent) => {
+  handleCanvasClick = (nextScene: NextSceneResolveFunction) => (event: MouseEvent) => {
     const isButton1Clicked = isMousePositionInsideRect(
       event,
       this.clientRect,

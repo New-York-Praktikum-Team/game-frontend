@@ -50,4 +50,8 @@ export class Level1 extends Level {
   get randomColor(): string {
     return Helpers.randomEnum(Color);
   }
+
+  get name(): string {
+    return 'Level 1';
+  }
 }

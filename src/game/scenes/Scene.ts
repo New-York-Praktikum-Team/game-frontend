@@ -17,7 +17,7 @@ export interface AppOptions {
 }
 
 export type NextSceneResolveFunction =
-  (value?: AppOptions | PromiseLike<AppOptions>, options?: GameOptions) => void;
+  (value: AppOptions | PromiseLike<AppOptions>) => void;
 type EventListenerFaсtory = (
   nextScene: NextSceneResolveFunction
 ) => (
@@ -49,7 +49,7 @@ export abstract class Scene {
 
 export abstract class SceneButtonActions extends Scene {
   protected renderCountdown(
-    nextScene: (value: AppOptions) => void, options?: GameOptions,
+    nextScene: NextSceneResolveFunction, options?: GameOptions,
   ): void {
     const { context, canvasSize } = this;
     let counter = secondsBeforeStart + 1; // add additional second to display "GO!"
@@ -66,9 +66,11 @@ export abstract class SceneButtonActions extends Scene {
 
       clear(context, canvasSize, Colors.LightBlue);
 
+      const text = options?.level ? ` Get ready for ${options?.level.name.toLowerCase()} in` : 'Get ready in';
+
       renderText(
         context,
-        'Get ready in',
+        text,
         {
           x: canvasSize.width / 2,
           y: canvasSize.height / 3,

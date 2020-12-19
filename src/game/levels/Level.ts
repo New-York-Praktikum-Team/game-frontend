@@ -47,4 +47,6 @@ export abstract class Level {
   get backgroundColor(): string {
     return Colors.PaleTurquoise;
   }
+
+  abstract get name(): string;
 }

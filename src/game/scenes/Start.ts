@@ -4,7 +4,7 @@ import {
 import { AppMode } from 'components/GameCanvas';
 import { Colors } from 'consts/colors';
 import { Rectangle } from 'consts/shapes';
-import { AppOptions, SceneButtonActions } from './Scene';
+import { NextSceneResolveFunction, SceneButtonActions } from './Scene';
 
 const buttonSize = {
   width: 350,
@@ -43,7 +43,7 @@ export class StartScene extends SceneButtonActions {
     );
   }
 
-  handleCanvasClick = (nextScene: (appMode: AppOptions) => void) => (event: MouseEvent) => {
+  handleCanvasClick = (nextScene: NextSceneResolveFunction) => (event: MouseEvent) => {
     const isButtonClicked = isMousePositionInsideRect(
       event,
       this.clientRect,
