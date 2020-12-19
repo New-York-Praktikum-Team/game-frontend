@@ -3,7 +3,7 @@ import { Rectangle } from 'consts/shapes';
 import { Level1 } from 'game/levels/Level1';
 import { Level2 } from 'game/levels/Level2';
 import { Colors } from 'consts/colors';
-import { AppModeOptions, SceneButtonActions } from './Scene';
+import { AppOptions, SceneButtonActions } from './Scene';
 
 export class LevelSelectionScene extends SceneButtonActions {
   private countingDown = false;
@@ -14,21 +14,21 @@ export class LevelSelectionScene extends SceneButtonActions {
   };
 
   private button1Rectangle: Rectangle = {
-    x: (this.canvasSize.width - this.buttonDimensions.width) * 0.1,
+    x: (this.canvasSize.width - this.buttonDimensions.width) / 2,
     y: 50,
     width: this.buttonDimensions.width,
     height: this.buttonDimensions.height,
   };
 
   private button2Rectangle: Rectangle = {
-    x: (this.canvasSize.width - this.buttonDimensions.width) * 0.1,
+    x: (this.canvasSize.width - this.buttonDimensions.width) / 2,
     y: 150,
     width: this.buttonDimensions.width,
     height: this.buttonDimensions.height,
   };
 
   private button3Rectangle: Rectangle = {
-    x: (this.canvasSize.width - this.buttonDimensions.width) * 0.1,
+    x: (this.canvasSize.width - this.buttonDimensions.width) / 2,
     y: 250,
     width: this.buttonDimensions.width,
     height: this.buttonDimensions.height,
@@ -56,7 +56,7 @@ export class LevelSelectionScene extends SceneButtonActions {
     );
   }
 
-  handleCanvasClick = (nextScene: (value: AppModeOptions) => void) => (event: MouseEvent) => {
+  handleCanvasClick = (nextScene: (value: AppOptions) => void) => (event: MouseEvent) => {
     const isButton1Clicked = isMousePositionInsideRect(
       event,
       this.clientRect,
@@ -77,12 +77,12 @@ export class LevelSelectionScene extends SceneButtonActions {
 
     if (isButton1Clicked) {
       this.countingDown = true;
-      super.renderCountdown(nextScene, { level: new Level1() });
+      super.renderCountdown(nextScene, { level: new Level1(this.canvasSize) });
     }
 
     if (isButton2Clicked) {
       this.countingDown = true;
-      super.renderCountdown(nextScene, { level: new Level2() });
+      super.renderCountdown(nextScene, { level: new Level2(this.canvasSize) });
     }
 
     if (isButton3Clicked) {

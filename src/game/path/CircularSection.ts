@@ -5,7 +5,7 @@ export class CircularSection implements Section {
   constructor(
     public start: Position,
     public end: Position,
-    private radius: number,
+    private radius: number = 0,
     private clockWise = true,
     approximateCenter?: Position,
   ) {

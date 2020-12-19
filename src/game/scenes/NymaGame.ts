@@ -9,13 +9,13 @@ import { Nyma } from 'game/objects/Nyma';
 import { Snake } from 'game/objects/Snake';
 import { Rectangle } from 'consts/shapes';
 import { setLeaderboard } from 'store/leaderboard/thunks';
-import { AppModeOptions, GameOptions, Scene } from './Scene';
+import { AppOptions, GameOptions, Scene } from './Scene';
 
 
 export class NymaGame extends Scene {
   constructor(canvasRef: HTMLCanvasElement, canvasSize: CanvasSize, options?: GameOptions) {
     super(canvasRef, canvasSize);
-    this.level = options?.level ?? new Level1();
+    this.level = options?.level ?? new Level1(this.canvasSize);
     this.score = 0;
 
     this.nyma = new Nyma(this.context, this.level);
@@ -38,7 +38,7 @@ export class NymaGame extends Scene {
 
   resolveCallback: Function = () => {};
 
-  render(): Promise<AppModeOptions> {
+  render(): Promise<AppOptions> {
     return new Promise((resolve) => {
       this.resolveCallback = resolve;
       this.startGame();

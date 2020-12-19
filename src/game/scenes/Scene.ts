@@ -11,13 +11,13 @@ export interface GameOptions {
   level?: Level;
 }
 
-export interface AppModeOptions {
+export interface AppOptions {
   appMode: AppMode;
   options?: GameOptions;
 }
 
 export type NextSceneResolveFunction =
-  (value?: AppModeOptions | PromiseLike<AppModeOptions>, options?: GameOptions) => void;
+  (value?: AppOptions | PromiseLike<AppOptions>, options?: GameOptions) => void;
 type EventListenerFaсtory = (
   nextScene: NextSceneResolveFunction
 ) => (
@@ -42,14 +42,14 @@ export abstract class Scene {
     this.context = canvasRef.getContext('2d')!;
   }
 
-  abstract render(): Promise<AppModeOptions>;
+  abstract render(): Promise<AppOptions>;
 
   abstract destroy(): void;
 }
 
 export abstract class SceneButtonActions extends Scene {
   protected renderCountdown(
-    nextScene: (value: AppModeOptions) => void, options?: GameOptions,
+    nextScene: (value: AppOptions) => void, options?: GameOptions,
     ): void {
     const { context, canvasSize } = this;
     let counter = secondsBeforeStart + 1; // add additional second to display "GO!"
@@ -101,7 +101,7 @@ export abstract class SceneButtonActions extends Scene {
 
   private eventClickListener?: (event: MouseEvent) => void;
 
-  render(): Promise<AppModeOptions> {
+  render(): Promise<AppOptions> {
     return new Promise((resolve) => {
       this.renderScene();
       this.eventClickListener = this.handleCanvasClick(resolve);

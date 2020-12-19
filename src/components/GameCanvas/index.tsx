@@ -25,8 +25,8 @@ export class GameCanvas extends Component<CanvasProps, CanvasState> {
     appMode: AppMode.Main,
     context: null,
     canvasSize: {
-      width: 500,
-      height: 500,
+      width: 1000,
+      height: 700,
     },
   };
 
@@ -40,11 +40,11 @@ export class GameCanvas extends Component<CanvasProps, CanvasState> {
   componentDidUpdate() {
     const scene = this.getSceneByAppMode(this.state.appMode);
 
-    scene.render().then((appModeOptions) => {
+    scene.render().then((appOptions) => {
       scene.destroy();
       this.setState({ 
-        appMode: appModeOptions.appMode, 
-        options: appModeOptions.options ?? this.state.options,
+        appMode: appOptions.appMode, 
+        options: appOptions.options ?? this.state.options,
       });
     });
   }

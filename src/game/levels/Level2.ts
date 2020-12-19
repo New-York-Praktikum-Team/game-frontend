@@ -1,7 +1,8 @@
 import { Path } from 'game/path/Path';
 import { Position } from 'game/objects/Position';
 import { Helpers } from 'helpers/Helpers';
-import { heartPath } from 'game/path/Paths';
+import { HeartPath } from 'game/path/Paths';
+import { CanvasSize } from 'helpers/CanvasHelper';
 import { Level } from './Level';
 
 enum Color {
@@ -12,12 +13,15 @@ enum Color {
 }
 
 export class Level2 extends Level {
-  get snakePath(): Path {
-    return heartPath;
+  constructor(canvasSize: CanvasSize) {
+    super(canvasSize);
+    this.path = new HeartPath(canvasSize);
   }
 
-  get snakeBallVelocity(): number {
-    return 50;
+  private path: Path;
+
+  get snakePath(): Path {
+    return this.path;
   }
 
   get nymaPosition(): Position {

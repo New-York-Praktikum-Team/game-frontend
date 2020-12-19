@@ -4,7 +4,7 @@ import {
 import { AppMode } from 'components/GameCanvas';
 import { Colors } from 'consts/colors';
 import { Rectangle } from 'consts/shapes';
-import { AppModeOptions, SceneButtonActions } from './Scene';
+import { AppOptions, SceneButtonActions } from './Scene';
 
 const buttonSize = {
   width: 350,
@@ -16,7 +16,7 @@ export class StartScene extends SceneButtonActions {
 
   private startButtonRectangle: Rectangle = {
     x: (this.canvasSize.width - buttonSize.width) / 2,
-    y: 100,
+    y: this.canvasSize.height / 2 - 150,
     width: buttonSize.width,
     height: buttonSize.height,
   };
@@ -43,7 +43,7 @@ export class StartScene extends SceneButtonActions {
     );
   }
 
-  handleCanvasClick = (nextScene: (appMode: AppModeOptions) => void) => (event: MouseEvent) => {
+  handleCanvasClick = (nextScene: (appMode: AppOptions) => void) => (event: MouseEvent) => {
     const isButtonClicked = isMousePositionInsideRect(
       event,
       this.clientRect,
@@ -52,7 +52,6 @@ export class StartScene extends SceneButtonActions {
 
     if (isButtonClicked) {
       this.countingDown = true;
-      // super.renderCountdown(nextScene);
       nextScene({ appMode: AppMode.LevelSelection });
     }
   };

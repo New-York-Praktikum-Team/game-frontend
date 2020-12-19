@@ -1,10 +1,13 @@
 import { Path } from 'game/path/Path';
 import { Position } from 'game/objects/Position';
 import { Colors } from 'consts/colors';
+import { CanvasSize } from 'helpers/CanvasHelper';
 
 export abstract class Level {
+  constructor(public canvasSize: CanvasSize) {}
+
   get ballRadius(): number {
-    return 10;
+    return 20;
   }
 
   get nymaRadius(): number {
@@ -17,16 +20,16 @@ export abstract class Level {
 
   // pixels per second
   get snakeBallVelocity(): number {
-    return 20;
+    return 80;
   }
 
   // pixels per second
   get fireBallVelocity(): number {
-    return 350;
+    return 600;
   }
 
   get ballDistance(): number {
-    return 5;
+    return 0;
   }
 
   abstract get snakePath(): Path;

@@ -1,25 +1,40 @@
 import { Position } from 'game/objects/Position';
+import { CanvasSize } from 'helpers/CanvasHelper';
 import { Path } from './Path';
 import { Section } from './Section';
 import { LinearSection } from './LinearSection';
 import { CircularSection } from './CircularSection';
 
-class TreePath extends Path {
-  constructor() {
-    const points: Position[] = [
-      { x: 0, y: 450 },
-      { x: 150, y: 350 },
-      { x: 50, y: 350 },
-      { x: 200, y: 250 },
-      { x: 100, y: 250 },
-      { x: 250, y: 50 },
-      { x: 400, y: 250 },
-      { x: 300, y: 250 },
-      { x: 450, y: 350 },
-      { x: 350, y: 350 },
-      { x: 500, y: 450 },
-      { x: 250, y: 450 },
+export class TreePath extends Path {
+  constructor(canvasSize: CanvasSize) {
+    const minSize = Math.min(canvasSize.width, canvasSize.height);
+    const drawingRectangle = {
+      x: 0.5 * canvasSize.width - 0.5 * minSize,
+      y: 0.5 * canvasSize.height - 0.4 * minSize,
+      width: minSize,
+      height: 0.8 * minSize,
+    };
+
+    const relativePoints = [
+      { x: 0, y: 1 },
+      { x: 0.3, y: 0.66 },
+      { x: 0.1, y: 0.66 },
+      { x: 0.4, y: 0.33 },
+      { x: 0.2, y: 0.33 },
+      { x: 0.5, y: 0 },
+      { x: 0.8, y: 0.33 },
+      { x: 0.6, y: 0.33 },
+      { x: 0.9, y: 0.66 },
+      { x: 0.7, y: 0.66 },
+      { x: 1, y: 1 },
+      { x: 0.5, y: 1 },
     ];
+
+    const points: Position[] = relativePoints.map((p) => {
+      const x = drawingRectangle.x + p.x * drawingRectangle.width;
+      const y = drawingRectangle.y + p.y * drawingRectangle.height;
+      return { x, y };
+    });
 
     const sections: Section[] = [];
     points.forEach((point, i) => {
@@ -32,26 +47,37 @@ class TreePath extends Path {
   }
 }
 
-export const treePath = new TreePath();
+export class HeartPath extends Path {
+  constructor(canvasSize: CanvasSize) {
+    const minSize = Math.min(canvasSize.width, canvasSize.height);
+    const drawingRectangle = {
+      x: 0.5 * canvasSize.width - 0.45 * minSize,
+      y: 0.5 * canvasSize.height - 0.45 * minSize,
+      width: 0.9 * minSize,
+      height: 0.9 * minSize,
+    };
 
-class HeartPath extends Path {
-  constructor() {
-    const p1 = { x: 250, y: 500 };
-    const p2 = { x: 100, y: 250 };
-    const p3 = { x: 250, y: 200 };
-    const p4 = { x: 400, y: 250 };
-    const p5 = { x: 300, y: 400 };
+    const relativePoints = [
+      { x: 0.5, y: 1 },
+      { x: 0, y: 0.4 },
+      { x: 0.5, y: 0.25 },
+      { x: 1, y: 0.4 },
+      { x: 0.65, y: 0.85 },
+    ];
 
-    const r = 80;
+    const points: Position[] = relativePoints.map((p) => {
+      const x = drawingRectangle.x + p.x * drawingRectangle.width;
+      const y = drawingRectangle.y + p.y * drawingRectangle.height;
+      return { x, y };
+    });
 
     const sections = [
-      new LinearSection(p1, p2),
-      new CircularSection(p2, p3, r),
-      new CircularSection(p3, p4, r, true, { x: 320, y: 230 }),
-      new LinearSection(p4, p5),
+      new LinearSection(points[0], points[1]),
+      new CircularSection(points[1], points[2]),
+      new CircularSection(points[2], points[3]),
+      new LinearSection(points[3], points[4]),
     ];
+
     super(sections);
   }
 }
-
-export const heartPath = new HeartPath();
