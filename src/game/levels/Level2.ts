@@ -7,10 +7,9 @@ import { Rectangle } from 'consts/shapes';
 import { Level } from './Level';
 
 enum Color {
-  Pink1 = 'Crimson',
-  Pink2 = 'DarkRed',
-  Pink3 = 'DeepPink',
-  Pink4 = 'Pink',
+  Color1 = 'DarkRed',
+  Color2 = 'DeepPink',
+  Color3 = 'Pink',
 }
 
 export class Level2 extends Level {
