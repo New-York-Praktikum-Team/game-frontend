@@ -1,0 +1,10 @@
+.offline {
+  background-color: red;
+  display: block;
+  padding: 5px;
+  text-align: center;
+}
+
+.offline__message {
+  color: #fff;
+}

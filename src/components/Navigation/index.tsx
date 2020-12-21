@@ -1,8 +1,9 @@
 import React, { FC } from 'react';
 import { AppUrls } from 'routes/appUrls';
 import { NavLink } from 'react-router-dom';
-import { Store } from 'store';
+import Flag from 'react-country-flag';
 import './Navigation.css';
+import { useGeolocation } from 'hooks/useGeolocation';
 
 const {
   SignIn, Game, Home, Leaderboard, Profile, SignUp,
@@ -13,23 +14,28 @@ const privateLinks = {
 };
 
 const publicLinks = {
-  Home, SignIn, SignUp,
+  Home, Game, SignIn, SignUp,
 };
 
-export const Navigation: FC = () => (
-  <Store.Consumer>
-    {({ isLogged }) => (
-      <nav className="navigation">
-        <ul>
-           {
-            Object.entries(isLogged ? privateLinks : publicLinks).map(([name, url]) => (
-              <li key={url}>
-                <NavLink exact={true} className="navigation__a" to={url}>{name}</NavLink>
-              </li>
-            ))
-           }
-        </ul>
-      </nav>
-    )}
-  </Store.Consumer>
-);
+export const Navigation: FC<{isLogged: boolean}> = ({ isLogged }) => {
+  const { geolocation } = useGeolocation();
+
+  return (
+    <nav className="navigation">
+      <ul>
+        {Object.entries(isLogged ? privateLinks : publicLinks).map(([name, url]) => (
+          <li key={url}>
+            <NavLink exact={true} className="navigation__a" to={url}>{name}</NavLink>
+          </li>
+        ))}
+      </ul>
+
+      {geolocation
+      && <div className="country">
+        <span>Country: </span>
+        <Flag countryCode={geolocation.country.countryCode}/>
+        <span className="country__name">{geolocation.country.countryName}</span>
+      </div>}
+    </nav>
+  );
+};

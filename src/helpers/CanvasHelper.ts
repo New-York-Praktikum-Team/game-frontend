@@ -12,73 +12,109 @@ interface TextOptions {
 
 export type CanvasSize = { width: number, height: number };
 export type CanvasButtonOptions = {
+  text: string;
   backgroundColor?: Colors;
   textColor?: Colors;
   fontSize?: string;
 };
 
-export class CanvasHelper {
-  static clear(context: CanvasRenderingContext2D, canvasSize: CanvasSize, color: string) {
-    context.fillStyle = color;
-    context.fillRect(0, 0, canvasSize.width, canvasSize.height);
-  }
+export const clear = (context: CanvasRenderingContext2D, canvasSize: CanvasSize, color: string) => {
+  context.fillStyle = color;
+  context.fillRect(0, 0, canvasSize.width, canvasSize.height);
+};
 
-  static renderText(context: CanvasRenderingContext2D, text: string, options?: TextOptions) {
-    context.fillStyle = options?.color ?? 'black';
-    context.textAlign = options?.align ?? 'left';
-    context.font = options?.font ?? '24px Arial';
-    context.fillText(text, options?.x ?? 0, options?.y ?? 0);
-  }
+export const renderText = (
+  context: CanvasRenderingContext2D, text: string, options?: TextOptions,
+) => {
+  context.fillStyle = options?.color ?? 'black';
+  context.textAlign = options?.align ?? 'left';
+  context.textBaseline = 'middle';
+  context.font = options?.font ?? '24px Arial';
+  context.fillText(text, options?.x ?? 0, options?.y ?? 0);
+};
 
-  static renderCircle(
-    context: CanvasRenderingContext2D, center: Position, radius: number, color?: string,
-  ) {
-    context.beginPath();
-    context.arc(center.x, center.y, radius, 0, 2 * Math.PI);
-    context.fillStyle = color ?? 'black';
-    context.fill();
-    context.closePath();
-  }
+export const renderCircle = (
+  context: CanvasRenderingContext2D, center: Position, radius: number, color?: string,
+) => {
+  context.beginPath();
+  context.arc(center.x, center.y, radius, 0, 2 * Math.PI);
+  context.fillStyle = color ?? 'black';
+  context.fill();
+  context.closePath();
+};
 
-  static isPositionInsideRect(position: Position, rectangle: Rectangle): boolean {
-    return (
-      position.x > rectangle.x
+export const renderRectangle = (
+  context: CanvasRenderingContext2D,
+  corner: Position,
+  width: number, height: number,
+  color?: string,
+) => {
+  context.beginPath();
+  context.rect(corner.x, corner.y, width, height);
+  context.fillStyle = color ?? 'black';
+  context.fill();
+  context.closePath();
+};
+
+export const getMousePosition = (event: MouseEvent, clientRect: ClientRect) => {
+  const { left, top } = clientRect;
+
+  return ({
+    x: event.clientX - left,
+    y: event.clientY - top,
+  }) as Position;
+};
+
+export const isPositionInsideRect = (position: Position, rectangle: Rectangle) => (
+  position.x > rectangle.x
       && rectangle.x + rectangle.width > position.x
       && position.y > rectangle.y
       && rectangle.y + rectangle.height > position.y
-    );
-  }
+);
 
-  static renderStartButton(
-    context: CanvasRenderingContext2D,
-    buttonRectangle: Rectangle,
-    topLeftPosition: Position,
-    buttonOptions?: CanvasButtonOptions,
-  ): void {
-    const {
-      backgroundColor = Colors.DarkBlue,
-      textColor = Colors.White,
-      fontSize = '42px',
-    } = buttonOptions || {};
+export const isMousePositionInsideRect = (
+  event: MouseEvent,
+  clientRect: ClientRect,
+  targetRect: Rectangle,
+): boolean => {
+  const mousePosition = getMousePosition(event, clientRect);
+  return isPositionInsideRect(mousePosition, targetRect);
+};
 
-    context.fillStyle = backgroundColor;
+export const renderButton = (
+  context: CanvasRenderingContext2D,
+  buttonRectangle: Rectangle,
+  buttonOptions: CanvasButtonOptions,
+): void => {
+  const {
+    text,
+    backgroundColor = Colors.DarkBlue,
+    textColor = Colors.White,
+    fontSize = '42px',
+  } = buttonOptions || {};
 
-    context.fillRect(
-      buttonRectangle.x,
-      buttonRectangle.y,
-      buttonRectangle.width,
-      buttonRectangle.height,
-    );
+  const textPosition: Position = {
+    x: buttonRectangle.x + buttonRectangle.width / 2,
+    y: buttonRectangle.y + buttonRectangle.height / 2,
+  };
 
-    CanvasHelper.renderText(
-      context,
-      'Play',
-      {
-        ...topLeftPosition,
-        align: 'center',
-        font: `${fontSize} Arial`,
-        color: textColor,
-      },
-    );
-  }
-}
+  context.fillStyle = backgroundColor;
+
+  context.fillRect(
+    buttonRectangle.x,
+    buttonRectangle.y,
+    buttonRectangle.width,
+    buttonRectangle.height,
+  );
+
+  renderText(
+    context,
+    text,
+    {
+      ...textPosition,
+      align: 'center',
+      font: `${fontSize} Arial`,
+      color: textColor,
+    },
+  );
+};

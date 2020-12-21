@@ -16,12 +16,12 @@ export abstract class Level {
 
   // pixels per second
   get snakeBallVelocity(): number {
-    return 50;
+    return 20;
   }
 
   // pixels per second
   get fireBallVelocity(): number {
-    return 50;
+    return 350;
   }
 
   get ballDistance(): number {

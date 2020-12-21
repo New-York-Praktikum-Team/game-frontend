@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import * as api from 'modules/api';
 import { User } from 'interfaces';
+import { getErrorFromRequest } from 'modules/getErrorFromRequest';
 
 export const useAuth = () => {
   const [isReady, setReady] = useState<boolean>(false);
@@ -12,8 +13,10 @@ export const useAuth = () => {
       setUser(result);
       setLogged(true);
     }).catch((err) => {
-      // eslint-disable-next-line no-console
-      console.log(err);
+      getErrorFromRequest(err).then(({ message }) => {
+        // eslint-disable-next-line no-console
+        console.info(message);
+      });
     }).finally(() => {
       setReady(true);
     });

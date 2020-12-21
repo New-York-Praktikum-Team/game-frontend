@@ -1,3 +1,16 @@
+type RatingFieldName = 'nymaScore';
+
+export interface Country {
+  languages: string;
+  distance: string,
+  countryCode: string,
+  countryName: string
+}
+
+export interface UserGeolocation extends Position {
+  country: Country
+}
+
 export interface User {
   id: number;
   firstName: string;
@@ -29,6 +42,15 @@ export interface SignUpRequestDTO {
   password: string;
 }
 
+export interface UserUpdateRequestDTO {
+  first_name: string;
+  second_name: string;
+  display_name: string
+  login: string;
+  email: string;
+  phone: string;
+}
+
 export interface SignUpRequest {
   email: string;
   login: string;
@@ -39,6 +61,36 @@ export interface SignUpRequest {
   verifyPassword: string;
 }
 
+export interface SignInRequest {
+  login: string;
+  password: string;
+}
+
 export interface SignUpResponse {
   id: number;
+}
+
+export interface ApiError {
+  code: number | null;
+  message: string;
+}
+
+export interface GetLeaderboardRequest {
+  ratingFieldName: RatingFieldName;
+  cursor: number;
+  limit: number;
+}
+
+export interface GetLeaderboardResponseItem {
+  data: Leader
+}
+
+export interface SetLeaderboardItemRequest {
+  data: Leader
+  ratingFieldName: RatingFieldName;
+}
+
+export interface Leader {
+  name: string;
+  nymaScore: number;
 }
