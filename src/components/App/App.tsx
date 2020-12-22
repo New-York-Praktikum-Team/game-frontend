@@ -1,5 +1,5 @@
 import React, { FC, useEffect } from 'react';
-import { BrowserRouter as Router, Switch } from 'react-router-dom';
+import { Switch } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { ErrorBoundary } from 'components/ErrorBoundary';
 import { PrivateRoute } from 'components/PrivateRoute';
@@ -8,36 +8,28 @@ import { OfflineMessage } from 'components/Offline';
 import { ROUTES } from 'routes/routes';
 import { store } from 'store/store';
 import { fetchUser } from 'store/user/thunks';
-import { loggedSelector, userLoadingSelector } from 'store/user/selectors';
+import { loggedSelector } from 'store/user/selectors';
 
 export const App: FC = () => {
   const isUserLogged = useSelector(loggedSelector);
-  const isUserLoading = useSelector(userLoadingSelector);
 
   useEffect(() => {
     store.dispatch(fetchUser);
   }, []);
 
-  if (isUserLoading) {
-    // TODO?: add loader
-    return null;
-  }
-
   return (
     <article className="app">
-      <Router>
-        <header>
-          <Navigation isLogged={isUserLogged}/>
-          <OfflineMessage />
-        </header>
-        <main>
-          <ErrorBoundary>
-            <Switch>
-              {ROUTES.map((appRoute) => PrivateRoute(appRoute, isUserLogged))}
-            </Switch>
-          </ErrorBoundary>
-        </main>
-      </Router>
+      <header>
+        <Navigation isLogged={isUserLogged}/>
+        <OfflineMessage />
+      </header>
+      <main>
+        <ErrorBoundary>
+          <Switch>
+            {ROUTES.map((appRoute) => PrivateRoute(appRoute, isUserLogged))}
+          </Switch>
+        </ErrorBoundary>
+      </main>
     </article>
   );
 };

@@ -1,5 +1,6 @@
 import React, { FC, useEffect } from 'react';
 import dollar from 'assets/images/dollar.png';
+import { PageMeta } from 'components/PageMeta/PageMeta';
 import { store } from 'store/store';
 import { fetchLeaderboard } from 'store/leaderboard/thunks';
 import { useEnhance } from './useEnhance';
@@ -14,6 +15,8 @@ export const Leaderboard: FC = () => {
 
   return (
     <section className="leaderboard-wrapper">
+      <PageMeta title="Leaderboard" description="The best players are displayed on this page"/>
+
       <h1>Leaderboard</h1>
 
       <table className="table table-leaderboard">
