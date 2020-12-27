@@ -42,6 +42,7 @@ const clientConfig = (_: undefined, { mode }: { mode: 'production' | 'developmen
     output: {
       path: path.resolve('dist'),
       filename: 'bundle.js',
+      publicPath: 'dist',
     },
     devtool: isProduction ? false : 'source-map',
     resolve: {
