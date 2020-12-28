@@ -1,5 +1,4 @@
 import { Level } from 'game/levels/Level';
-import { renderCircle, renderText } from 'helpers/CanvasHelper';
 import { RoundGameObject } from './RoundGameObject';
 
 export class Hole extends RoundGameObject {
@@ -8,16 +7,5 @@ export class Hole extends RoundGameObject {
   }
 
   draw(): void {
-    renderCircle(this.context, this.center, this.radius);
-    renderText(
-      this.context,
-      'Hole', {
-        x: this.center.x,
-        y: this.center.y,
-        color: 'white',
-        align: 'center',
-        font: '16px Arial',
-      },
-    );
   }
 }

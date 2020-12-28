@@ -4,6 +4,7 @@ import { Helpers } from 'helpers/Helpers';
 import { HeartPath } from 'game/path/Paths';
 import { CanvasSize } from 'helpers/CanvasHelper';
 import { Rectangle } from 'consts/shapes';
+import level2Background from 'assets/images/level2.png';
 import { Level } from './Level';
 
 enum Color {
@@ -52,6 +53,12 @@ export class Level2 extends Level {
 
   get backgroundColor(): string {
     return 'LightYellow';
+  }
+
+  setBackground(context: CanvasRenderingContext2D): void {
+    const background = new Image();
+    background.src = level2Background;
+    context.drawImage(background, 0, 0);
   }
 
   get name(): string {

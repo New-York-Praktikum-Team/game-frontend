@@ -4,6 +4,7 @@ import { Helpers } from 'helpers/Helpers';
 import { TreePath } from 'game/path/Paths';
 import { CanvasSize } from 'helpers/CanvasHelper';
 import { Rectangle } from 'consts/shapes';
+import level3Background from 'assets/images/level3.png';
 import { Level } from './Level';
 
 enum Color {
@@ -52,6 +53,12 @@ export class Level3 extends Level {
 
   get backgroundColor(): string {
     return 'Ivory';
+  }
+
+  setBackground(context: CanvasRenderingContext2D): void {
+    const background = new Image();
+    background.src = level3Background;
+    context.drawImage(background, 0, 0);
   }
 
   get name(): string {

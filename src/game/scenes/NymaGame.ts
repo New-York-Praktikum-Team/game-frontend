@@ -1,6 +1,6 @@
 import { AppMode } from 'components/GameCanvas';
 import {
-  CanvasSize, clear, getMousePosition, isMousePositionInsideRect, isPositionInsideRect, renderText,
+  CanvasSize, getMousePosition, isMousePositionInsideRect, isPositionInsideRect, renderText,
 } from 'helpers/CanvasHelper';
 import { Level } from 'game/levels/Level';
 import { Level1 } from 'game/levels/Level1';
@@ -58,7 +58,7 @@ export class NymaGame extends Scene {
   }
 
   clearAndDrawStaticObjects() {
-    clear(this.context, this.canvasSize, this.level.backgroundColor);
+    this.level.setBackground(this.context);
     this.nyma.draw();
     this.hole.draw();
   }

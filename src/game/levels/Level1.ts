@@ -4,6 +4,7 @@ import { Helpers } from 'helpers/Helpers';
 import { SpiralPath } from 'game/path/Paths';
 import { CanvasSize } from 'helpers/CanvasHelper';
 import { Rectangle } from 'consts/shapes';
+import level1Background from 'assets/images/level1.png';
 import { Level } from './Level';
 
 enum Color {
@@ -53,5 +54,11 @@ export class Level1 extends Level {
 
   get name(): string {
     return 'Level 1';
+  }
+
+  setBackground(context: CanvasRenderingContext2D): void {
+    const background = new Image();
+    background.src = level1Background;
+    context.drawImage(background, 0, 0);
   }
 }

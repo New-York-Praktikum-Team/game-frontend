@@ -48,5 +48,10 @@ export abstract class Level {
     return Colors.PaleTurquoise;
   }
 
+  setBackground(context: CanvasRenderingContext2D): void {
+    context.fillStyle = this.backgroundColor;
+    context.fillRect(0, 0, this.canvasSize.width, this.canvasSize.height);
+  }
+
   abstract get name(): string;
 }
