@@ -1,4 +1,4 @@
-import { Configuration, WebpackPluginInstance } from 'webpack';
+import { Configuration, HotModuleReplacementPlugin, WebpackPluginInstance } from 'webpack';
 import path from 'path';
 import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin';
 import { GenerateSW } from 'workbox-webpack-plugin';
@@ -36,19 +36,27 @@ const clientConfig = (_: undefined, { mode }: { mode: 'production' | 'developmen
         navigationPreload: false,
       }),
     ];
+  } else {
+    plugins = [...plugins, new HotModuleReplacementPlugin()];
   }
 
   return {
-    entry: './src/client.tsx',
+    entry: [
+      './src/client.tsx',
+      'webpack-hot-middleware/client',
+    ],
     output: {
       path: path.resolve('dist'),
       filename: 'bundle.js',
-      publicPath: 'dist',
+      publicPath: '/',
     },
     devtool: isProduction ? false : 'source-map',
     resolve: {
       extensions: ['*', '.js', '.jsx', '.tsx', '.ts'],
       plugins: [new TsconfigPathsPlugin()],
+      alias: {
+        'react-dom': '@hot-loader/react-dom',
+      },
     },
     module: {
       rules: [
