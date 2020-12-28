@@ -1,13 +1,14 @@
-const path = require('path');
-const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
-const { GenerateSW } = require('workbox-webpack-plugin');
-const CopyPlugin = require('copy-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+import { Configuration, WebpackPluginInstance } from 'webpack';
+import path from 'path';
+import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin';
+import { GenerateSW } from 'workbox-webpack-plugin';
+import CopyPlugin from 'copy-webpack-plugin';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 
-const clientConfig = (_: undefined, { mode }: { mode: 'production' | 'development' }) => {
+const clientConfig = (_: undefined, { mode }: { mode: 'production' | 'development' }): Configuration => {
   const isProduction = mode === 'production';
 
-  let plugins: unknown[] = [
+  let plugins: WebpackPluginInstance[] = [
     new MiniCssExtractPlugin(),
     new CopyPlugin({
       patterns: [

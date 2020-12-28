@@ -4,6 +4,7 @@
     "airbnb-typescript/base"
   ],
   "rules": {
+    "import/no-extraneous-dependencies": "off",
     "@typescript-eslint/dot-notation": "off",
     "@typescript-eslint/no-implied-eval": "off",
     "@typescript-eslint/no-throw-literal": "off",

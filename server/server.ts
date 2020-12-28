@@ -9,10 +9,11 @@ import webpackConfigs from '../webpack/client.config';
 import { serverRenderMiddleware } from './server-render-middleware';
 
 const app = express();
-const compiler = webpack({ ...webpackConfigs, mode: 'development' });
+const compiler = webpack(webpackConfigs(undefined, { mode: 'development' }));
 
 app.use(compression()).use(express.static(path.resolve(__dirname, '../dist')));
-app.use([webpackDevMiddleware(compiler, {})]);
+
+app.use(webpackDevMiddleware(compiler));
 
 app.get('/*', serverRenderMiddleware);
 
