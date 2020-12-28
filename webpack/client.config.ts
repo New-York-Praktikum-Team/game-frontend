@@ -41,6 +41,7 @@ const clientConfig = (_: undefined, { mode }: { mode: 'production' | 'developmen
   }
 
   return {
+    mode,
     entry: [
       './src/client.tsx',
       'webpack-hot-middleware/client',
