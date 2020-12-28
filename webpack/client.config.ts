@@ -6,9 +6,11 @@ import CopyPlugin from 'copy-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 
 const clientConfig = (_: undefined, { mode }: { mode: 'production' | 'development' }): Configuration => {
-  const isProduction = mode === 'production';
+  const isProduction: boolean = mode === 'production';
 
-  let plugins: WebpackPluginInstance[] = [
+  const entry: [string, ...string[]] = ['./src/client.tsx'];
+
+  const plugins: WebpackPluginInstance[] = [
     new MiniCssExtractPlugin(),
     new CopyPlugin({
       patterns: [
@@ -21,31 +23,25 @@ const clientConfig = (_: undefined, { mode }: { mode: 'production' | 'developmen
   ];
 
   if (isProduction) {
-    plugins = [
-      ...plugins,
-      new GenerateSW({
-        clientsClaim: true,
-        skipWaiting: true,
-        maximumFileSizeToCacheInBytes: 10 * 1024 * 1024,
-        modifyURLPrefix: {
-          auto: '/',
-        },
-        cleanupOutdatedCaches: true,
-        exclude: [/\.map$/],
-        navigateFallback: '/index.html',
-        navigationPreload: false,
-      }),
-    ];
+    plugins.push(new GenerateSW({
+      clientsClaim: true,
+      skipWaiting: true,
+      maximumFileSizeToCacheInBytes: 10 * 1024 * 1024,
+      modifyURLPrefix: { auto: '/' },
+      cleanupOutdatedCaches: true,
+      exclude: [/\.map$/],
+      navigateFallback: '/index.html',
+      navigationPreload: false,
+    }));
   } else {
-    plugins = [...plugins, new HotModuleReplacementPlugin()];
+    entry.push('webpack-hot-middleware/client');
+    plugins.push(new HotModuleReplacementPlugin());
   }
 
   return {
     mode,
-    entry: [
-      './src/client.tsx',
-      'webpack-hot-middleware/client',
-    ],
+    entry,
+    plugins,
     output: {
       path: path.resolve('dist'),
       filename: 'bundle.js',
@@ -90,7 +86,6 @@ const clientConfig = (_: undefined, { mode }: { mode: 'production' | 'developmen
         },
       ],
     },
-    plugins,
   };
 };
 

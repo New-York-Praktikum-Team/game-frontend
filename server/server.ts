@@ -10,11 +10,13 @@ import { serverRenderMiddleware } from './server-render-middleware';
 
 const app = express();
 
-const compiler = webpack(webpackClientConfig(undefined, { mode: 'development' }));
-
 app.use(compression()).use(express.static(path.resolve(__dirname, '../dist')));
-app.use(webpackHotMiddleware(compiler));
-app.use(webpackDevMiddleware(compiler, { serverSideRender: true, writeToDisk: true }));
+
+if (process.env.NODE_ENV === 'development') {
+  const compiler = webpack(webpackClientConfig(undefined, { mode: 'development' }));
+  app.use(webpackHotMiddleware(compiler));
+  app.use(webpackDevMiddleware(compiler, { serverSideRender: true, writeToDisk: true }));
+}
 
 app.get('/*', serverRenderMiddleware);
 
