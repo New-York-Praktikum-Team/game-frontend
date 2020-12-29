@@ -30,8 +30,8 @@ export const updateUserProfile = (user: User) => (
     try {
       await api.changeUserProfile(user);
       notification.success('Profile updated successfully');
-      const item = await api.getUserInfo();
-      store.dispatch(userUpdateSuccess(item));
+      const updatedUser = await api.getUserInfo();
+      store.dispatch(userUpdateSuccess(updatedUser));
     } catch (responseError) {
       const error = await getErrorFromRequest(responseError);
       notification.error(error.message);
