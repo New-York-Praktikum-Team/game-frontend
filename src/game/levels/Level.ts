@@ -15,7 +15,7 @@ export abstract class Level {
   }
 
   get holeRadius(): number {
-    return 30;
+    return 0;
   }
 
   // pixels per second

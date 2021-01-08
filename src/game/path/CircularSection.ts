@@ -1,4 +1,4 @@
-import { Position } from 'game/objects/Position';
+import { Position, distanceBetween } from 'game/objects/Position';
 import { Section } from './Section';
 
 export class CircularSection implements Section {
@@ -9,7 +9,7 @@ export class CircularSection implements Section {
     private clockWise = true,
     approximateCenter?: Position,
   ) {
-    const d = this.distanceBetween(start, end);
+    const d = distanceBetween(start, end);
     const middle = { x: (start.x + end.x) / 2, y: (start.y + end.y) / 2 };
 
     if (radius < 0.5 * d) {
@@ -26,17 +26,13 @@ export class CircularSection implements Section {
       };
 
       if (approximateCenter) {
-        const d1 = this.distanceBetween(approximateCenter, center1);
-        const d2 = this.distanceBetween(approximateCenter, center2);
+        const d1 = distanceBetween(approximateCenter, center1);
+        const d2 = distanceBetween(approximateCenter, center2);
         this.center = d1 < d2 ? center1 : center2;
       } else {
         this.center = center1;
       }
     }
-  }
-
-  private distanceBetween(p1: Position, p2: Position): number {
-    return Math.sqrt((p1.x - p2.x) ** 2 + (p1.y - p2.y) ** 2);
   }
 
   private center: Position;
@@ -56,7 +52,7 @@ export class CircularSection implements Section {
       throw new Error('Positions are not on the path');
     }
     // TODO: calculate distance along circle
-    return this.distanceBetween(position1, position2);
+    return distanceBetween(position1, position2);
   }
 
   public next(current: Position, distanceDelta: number): Position {

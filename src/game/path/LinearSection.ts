@@ -1,4 +1,4 @@
-import { Position } from 'game/objects/Position';
+import { Position, distanceBetween } from 'game/objects/Position';
 import { Section } from './Section';
 
 export class LinearSection implements Section {
@@ -38,7 +38,7 @@ export class LinearSection implements Section {
     if (!this.containsPosition(position1) || !this.containsPosition(position2)) {
       throw new Error('Positions are not on the path');
     }
-    return Math.sqrt((position1.x - position2.x) ** 2 + (position1.y - position2.y) ** 2);
+    return distanceBetween(position1, position2);
   }
 
   public next(current: Position, distanceDelta: number): Position {

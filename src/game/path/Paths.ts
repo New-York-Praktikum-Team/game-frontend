@@ -12,7 +12,7 @@ export class SpiralPath extends Path {
       { x: 1, y: 0.53 },
       { x: 0.15, y: 0.53 },
       { x: 0.85, y: 0.53 },
-      { x: 0.3, y: 0.53 },
+      { x: 0.3, y: 0.5 },
     ];
 
     const points: Position[] = relativePoints.map((p) => {
@@ -46,7 +46,7 @@ export class TreePath extends Path {
       { x: 0.9, y: 0.66 },
       { x: 0.7, y: 0.66 },
       { x: 1, y: 1 },
-      { x: 0.25, y: 1 },
+      { x: 0.26, y: 1 },
     ];
 
     const points: Position[] = relativePoints.map((p) => {
@@ -73,7 +73,7 @@ export class HeartPath extends Path {
       { x: 0, y: 0.4 },
       { x: 0.5, y: 0.25 },
       { x: 1, y: 0.4 },
-      { x: 0.6, y: 0.9 },
+      { x: 0.645, y: 0.825 },
     ];
 
     const points: Position[] = relativePoints.map((p) => {
