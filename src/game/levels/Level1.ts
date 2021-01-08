@@ -57,6 +57,7 @@ export class Level1 extends Level {
   }
 
   setBackground(context: CanvasRenderingContext2D): void {
+    super.setBackground(context);
     const background = new Image();
     background.src = level1Background;
     context.drawImage(background, 0, 0);

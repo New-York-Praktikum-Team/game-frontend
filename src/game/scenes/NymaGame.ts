@@ -1,6 +1,7 @@
 import { AppMode } from 'components/GameCanvas';
 import {
-  CanvasSize, getMousePosition, isMousePositionInsideRect, isPositionInsideRect, renderText,
+  CanvasSize, getMousePosition, isMousePositionInsideRect,
+  isPositionInsideRect, renderImageButton, renderText,
 } from 'helpers/CanvasHelper';
 import { Level } from 'game/levels/Level';
 import { Level1 } from 'game/levels/Level1';
@@ -9,6 +10,8 @@ import { Nyma } from 'game/objects/Nyma';
 import { Snake } from 'game/objects/Snake';
 import { Rectangle } from 'consts/shapes';
 import { setLeaderboard } from 'store/leaderboard/thunks';
+import fullscreen from 'assets/images/Fullscreen.png';
+import fullscreenExit from 'assets/images/FullscreenExit.png';
 import { AppOptions, GameOptions, Scene } from './Scene';
 
 export class NymaGame extends Scene {
@@ -37,6 +40,8 @@ export class NymaGame extends Scene {
 
   resolveCallback: Function = () => {};
 
+  fullScreenButtonClickTarget?: Rectangle;
+
   render(): Promise<AppOptions> {
     return new Promise((resolve) => {
       this.resolveCallback = resolve;
@@ -61,6 +66,17 @@ export class NymaGame extends Scene {
     this.level.setBackground(this.context);
     this.nyma.draw();
     this.hole.draw();
+
+    if (document.fullscreenEnabled) {
+      this.fullScreenButtonClickTarget = renderImageButton(
+        this.context,
+        {
+          x: this.canvasSize.width - 100,
+          y: this.canvasSize.height - 100,
+        },
+        !document.fullscreenElement ? fullscreen : fullscreenExit,
+      );
+    }
   }
 
   private canvasRectangle: Rectangle = {
@@ -84,7 +100,23 @@ export class NymaGame extends Scene {
       this.canvasRectangle,
     );
 
-    if (isMouseInsideCanvas) {
+    const isFullScreenButtonClicked = isMousePositionInsideRect(
+      event,
+      this.clientRect,
+      this.fullScreenButtonClickTarget!,
+    );
+
+    if (isFullScreenButtonClicked) {
+      if (!document.fullscreenElement) {
+        this.canvasRef.requestFullscreen().then(() => {
+          this.clientRect = this.canvasRef.getBoundingClientRect();
+        });
+      } else {
+        document.exitFullscreen().then(() => {
+          this.clientRect = this.canvasRef.getBoundingClientRect();
+        });
+      }
+    } else if (isMouseInsideCanvas) {
       this.nyma.shoot();
     }
   };

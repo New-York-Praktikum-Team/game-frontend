@@ -67,9 +67,9 @@ export const getMousePosition = (event: MouseEvent, clientRect: ClientRect) => {
 
 export const isPositionInsideRect = (position: Position, rectangle: Rectangle) => (
   position.x > rectangle.x
-      && rectangle.x + rectangle.width > position.x
-      && position.y > rectangle.y
-      && rectangle.y + rectangle.height > position.y
+  && rectangle.x + rectangle.width > position.x
+  && position.y > rectangle.y
+  && rectangle.y + rectangle.height > position.y
 );
 
 export const isMousePositionInsideRect = (
@@ -117,4 +117,23 @@ export const renderButton = (
       color: textColor,
     },
   );
+};
+
+export const renderImageButton = (
+  context: CanvasRenderingContext2D,
+  position: Position,
+  src: string,
+): Rectangle => {
+  const image = new Image();
+  image.src = src;
+
+  const clickTarget = {
+    x: position.x,
+    y: position.y,
+    width: image.width + 20,
+    height: image.height + 20,
+  };
+
+  context.drawImage(image, position.x + 10, position.y + 10);
+  return clickTarget;
 };
