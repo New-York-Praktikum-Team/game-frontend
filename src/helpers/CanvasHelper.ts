@@ -62,7 +62,7 @@ export const getMousePosition = (event: MouseEvent, clientRect: ClientRect): Pos
   const canvasSize = {
     width: 1000,
     height: 700,
-  }
+  };
 
   if (!document.fullscreenElement) {
     return {
@@ -141,7 +141,12 @@ export const renderImageButton = (
   position: Position,
   src: string,
 ): Rectangle => {
+  const render = (imageElement: HTMLImageElement) => {
+    context.drawImage(imageElement, position.x + 10, position.y + 10);
+  };
+
   const image = new Image();
+  image.onload = () => render(image);
   image.src = src;
 
   const clickTarget = {
@@ -151,6 +156,6 @@ export const renderImageButton = (
     height: image.height + 20,
   };
 
-  context.drawImage(image, position.x + 10, position.y + 10);
+  render(image);
   return clickTarget;
 };

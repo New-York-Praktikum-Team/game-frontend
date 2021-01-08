@@ -1,7 +1,12 @@
-import { CanvasSize, clear, renderText } from 'helpers/CanvasHelper';
+import {
+  CanvasSize, clear, isMousePositionInsideRect, renderImageButton, renderText,
+} from 'helpers/CanvasHelper';
 import { AppMode } from 'components/GameCanvas';
 import { Colors } from 'consts/colors';
 import { Level } from 'game/levels/Level';
+import { Rectangle } from 'consts/shapes';
+import fullscreen from 'assets/images/Fullscreen.png';
+import fullscreenExit from 'assets/images/FullscreenExit.png';
 
 const secondsBeforeStart = 3;
 
@@ -33,6 +38,8 @@ export abstract class Scene {
 
   context: CanvasRenderingContext2D;
 
+  fullScreenButtonClickTarget?: Rectangle;
+
   constructor(
     public canvasRef: HTMLCanvasElement,
     public canvasSize: CanvasSize,
@@ -45,16 +52,45 @@ export abstract class Scene {
   setUp(): void {
     window.onresize = () => {
       this.clientRect = this.canvasRef.getBoundingClientRect();
-    }
+    };
 
     document.onfullscreenchange = () => {
       this.clientRect = this.canvasRef.getBoundingClientRect();
-    }
+    };
   }
 
   abstract render(): Promise<AppOptions>;
 
   abstract destroy(): void;
+
+  renderFullScreenButton(): void {
+    if (document.fullscreenEnabled) {
+      this.fullScreenButtonClickTarget = renderImageButton(
+        this.context,
+        {
+          x: this.canvasSize.width - 100,
+          y: this.canvasSize.height - 100,
+        },
+        !document.fullscreenElement ? fullscreen : fullscreenExit,
+      );
+    }
+  }
+
+  handleFullScreenButtonClick(event: MouseEvent): void {
+    const isFullScreenButtonClicked = isMousePositionInsideRect(
+      event,
+      this.clientRect,
+      this.fullScreenButtonClickTarget!,
+    );
+
+    if (isFullScreenButtonClicked) {
+      if (!document.fullscreenElement) {
+        this.canvasRef.requestFullscreen();
+      } else {
+        document.exitFullscreen();
+      }
+    }
+  }
 }
 
 export abstract class SceneButtonActions extends Scene {
@@ -121,7 +157,11 @@ export abstract class SceneButtonActions extends Scene {
   render(): Promise<AppOptions> {
     return new Promise((resolve) => {
       this.renderScene();
-      this.eventClickListener = this.handleCanvasClick(resolve);
+      this.renderFullScreenButton();
+      this.eventClickListener = (event) => {
+        this.handleFullScreenButtonClick(event);
+        this.handleCanvasClick(resolve);
+      };
       this.canvasRef.addEventListener('click', this.eventClickListener);
     });
   }
