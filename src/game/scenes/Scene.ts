@@ -160,7 +160,7 @@ export abstract class SceneButtonActions extends Scene {
       this.renderFullScreenButton();
       this.eventClickListener = (event) => {
         this.handleFullScreenButtonClick(event);
-        this.handleCanvasClick(resolve);
+        this.handleCanvasClick(resolve)(event);
       };
       this.canvasRef.addEventListener('click', this.eventClickListener);
     });
