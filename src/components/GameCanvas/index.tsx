@@ -40,6 +40,7 @@ export class GameCanvas extends Component<CanvasProps, CanvasState> {
   componentDidUpdate() {
     const scene = this.getSceneByAppMode(this.state.appMode);
 
+    scene.setUp();
     scene.render().then((appOptions) => {
       scene.destroy();
       this.setState({

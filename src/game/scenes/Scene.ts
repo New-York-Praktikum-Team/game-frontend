@@ -42,6 +42,16 @@ export abstract class Scene {
     this.context = canvasRef.getContext('2d')!;
   }
 
+  setUp(): void {
+    window.onresize = () => {
+      this.clientRect = this.canvasRef.getBoundingClientRect();
+    }
+
+    document.onfullscreenchange = () => {
+      this.clientRect = this.canvasRef.getBoundingClientRect();
+    }
+  }
+
   abstract render(): Promise<AppOptions>;
 
   abstract destroy(): void;

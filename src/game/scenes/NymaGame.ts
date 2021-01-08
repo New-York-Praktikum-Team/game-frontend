@@ -108,13 +108,9 @@ export class NymaGame extends Scene {
 
     if (isFullScreenButtonClicked) {
       if (!document.fullscreenElement) {
-        this.canvasRef.requestFullscreen().then(() => {
-          this.clientRect = this.canvasRef.getBoundingClientRect();
-        });
+        this.canvasRef.requestFullscreen();
       } else {
-        document.exitFullscreen().then(() => {
-          this.clientRect = this.canvasRef.getBoundingClientRect();
-        });
+        document.exitFullscreen();
       }
     } else if (isMouseInsideCanvas) {
       this.nyma.shoot();

@@ -56,12 +56,29 @@ export const renderRectangle = (
   context.closePath();
 };
 
-export const getMousePosition = (event: MouseEvent, clientRect: ClientRect) => {
+export const getMousePosition = (event: MouseEvent, clientRect: ClientRect): Position => {
   const { left, top } = clientRect;
 
+  const canvasSize = {
+    width: 1000,
+    height: 700,
+  }
+
+  if (!document.fullscreenElement) {
+    return {
+      x: event.clientX - left,
+      y: event.clientY - top,
+    };
+  }
+
+  const xScale = canvasSize.width / clientRect.width;
+  const realCanvasHeight = canvasSize.height / xScale;
+
+  const yMargin = (clientRect.height - realCanvasHeight) / 2;
+
   return ({
-    x: event.clientX - left,
-    y: event.clientY - top,
+    x: (event.clientX - left) * xScale,
+    y: (event.clientY - yMargin) * xScale,
   }) as Position;
 };
 
