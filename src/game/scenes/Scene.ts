@@ -38,7 +38,7 @@ export abstract class Scene {
 
   context: CanvasRenderingContext2D;
 
-  fullScreenButtonClickTarget?: Rectangle;
+  fullScreenButtonRectangle: Rectangle;
 
   constructor(
     public canvasRef: HTMLCanvasElement,
@@ -47,16 +47,27 @@ export abstract class Scene {
   ) {
     this.clientRect = canvasRef.getBoundingClientRect();
     this.context = canvasRef.getContext('2d')!;
+
+    this.fullScreenButtonRectangle = {
+      x: this.canvasSize.width - 68,
+      y: this.canvasSize.height - 68,
+      width: 68,
+      height: 68,
+    };
   }
 
   setUp(): void {
-    window.onresize = () => {
+    window.addEventListener('resize', () => {
       this.clientRect = this.canvasRef.getBoundingClientRect();
-    };
+    });
 
-    document.onfullscreenchange = () => {
+    window.addEventListener('scroll', () => {
       this.clientRect = this.canvasRef.getBoundingClientRect();
-    };
+    });
+
+    document.addEventListener('fullscreenchange', () => {
+      this.clientRect = this.canvasRef.getBoundingClientRect();
+    });
   }
 
   abstract render(): Promise<AppOptions>;
@@ -65,11 +76,11 @@ export abstract class Scene {
 
   renderFullScreenButton(): void {
     if (document.fullscreenEnabled) {
-      this.fullScreenButtonClickTarget = renderImageButton(
+      renderImageButton(
         this.context,
         {
-          x: this.canvasSize.width - 100,
-          y: this.canvasSize.height - 100,
+          x: this.fullScreenButtonRectangle.x + 10,
+          y: this.fullScreenButtonRectangle.y + 10,
         },
         !document.fullscreenElement ? fullscreen : fullscreenExit,
       );
@@ -80,7 +91,7 @@ export abstract class Scene {
     const isFullScreenButtonClicked = isMousePositionInsideRect(
       event,
       this.clientRect,
-      this.fullScreenButtonClickTarget!,
+      this.fullScreenButtonRectangle,
     );
 
     if (isFullScreenButtonClicked) {
@@ -97,10 +108,7 @@ export abstract class SceneButtonActions extends Scene {
   protected renderCountdown(
     nextScene: NextSceneResolveFunction, options?: GameOptions,
   ): void {
-    let counter = secondsBeforeStart + 1; // add additional second to display "GO!"
-
-    // draw countdown before the game starts
-
+    let counter = secondsBeforeStart + 1;
     let timerId: NodeJS.Timeout;
 
     const tick = () => {
@@ -110,7 +118,7 @@ export abstract class SceneButtonActions extends Scene {
         return;
       }
 
-      const counterText = counter === 1 ? 'GO!' : (counter - 1).toString(); // substract additional second
+      const counterText = counter === 1 ? 'GO!' : (counter - 1).toString();
 
       clear(this.context, this.canvasSize, Colors.LightBlue);
 
@@ -146,6 +154,14 @@ export abstract class SceneButtonActions extends Scene {
     };
 
     timerId = setTimeout(tick, 0);
+  }
+
+  setUp(): void {
+    super.setUp();
+    document.addEventListener('fullscreenchange', () => {
+      this.renderScene();
+      this.renderFullScreenButton();
+    });
   }
 
   protected abstract renderScene(): void;

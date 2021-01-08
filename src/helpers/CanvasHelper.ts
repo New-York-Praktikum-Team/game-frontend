@@ -71,15 +71,29 @@ export const getMousePosition = (event: MouseEvent, clientRect: ClientRect): Pos
     };
   }
 
-  const xScale = canvasSize.width / clientRect.width;
-  const realCanvasHeight = canvasSize.height / xScale;
+  const canvasRatio = canvasSize.width / canvasSize.height;
+  const clientRectRatio = clientRect.width / clientRect.height;
 
-  const yMargin = (clientRect.height - realCanvasHeight) / 2;
+  if (canvasRatio >= clientRectRatio) {
+    const xScale = canvasSize.width / clientRect.width;
+    const realCanvasHeight = canvasSize.height / xScale;
+
+    const yMargin = (clientRect.height - realCanvasHeight) / 2;
+
+    return ({
+      x: event.clientX * xScale,
+      y: (event.clientY - yMargin) * xScale,
+    });
+  }
+  const yScale = canvasSize.height / clientRect.height;
+  const realCanvasWidth = canvasSize.width / yScale;
+
+  const xMargin = (clientRect.width - realCanvasWidth) / 2;
 
   return ({
-    x: (event.clientX - left) * xScale,
-    y: (event.clientY - yMargin) * xScale,
-  }) as Position;
+    x: (event.clientX - xMargin) * yScale,
+    y: event.clientY * yScale,
+  });
 };
 
 export const isPositionInsideRect = (position: Position, rectangle: Rectangle) => (
@@ -140,22 +154,14 @@ export const renderImageButton = (
   context: CanvasRenderingContext2D,
   position: Position,
   src: string,
-): Rectangle => {
+): void => {
   const render = (imageElement: HTMLImageElement) => {
-    context.drawImage(imageElement, position.x + 10, position.y + 10);
+    context.drawImage(imageElement, position.x, position.y);
   };
 
   const image = new Image();
-  image.onload = () => render(image);
   image.src = src;
-
-  const clickTarget = {
-    x: position.x,
-    y: position.y,
-    width: image.width + 20,
-    height: image.height + 20,
-  };
+  image.onload = () => render(image);
 
   render(image);
-  return clickTarget;
 };
