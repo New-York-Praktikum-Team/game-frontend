@@ -150,7 +150,7 @@ export const renderButton = (
   );
 };
 
-export const renderImageButton = (
+export const renderImage = (
   context: CanvasRenderingContext2D,
   position: Position,
   src: string,
@@ -165,3 +165,17 @@ export const renderImageButton = (
 
   render(image);
 };
+
+export const blurCanvas = (context: CanvasRenderingContext2D): Promise<void> => new Promise(
+  (resolve) => {
+    const img = new Image();
+    img.src = context.canvas.toDataURL('image/png');
+
+    img.addEventListener('load', () => {
+      context.filter = 'blur(3px)';
+      context.drawImage(img, 0, 0);
+      context.filter = 'none';
+      resolve();
+    });
+  },
+);

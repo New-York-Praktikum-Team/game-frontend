@@ -1,23 +1,26 @@
-import { clear, isMousePositionInsideRect, renderButton } from 'helpers/CanvasHelper';
+import { clear, isMousePositionInsideRect, renderImage } from 'helpers/CanvasHelper';
 import { Rectangle } from 'consts/shapes';
 import { Level1 } from 'game/levels/Level1';
 import { Level2 } from 'game/levels/Level2';
 import { Level3 } from 'game/levels/Level3';
 import { Colors } from 'consts/colors';
+import level1ButtonImage from 'assets/images/Level1Button.png';
+import level2ButtonImage from 'assets/images/Level2Button.png';
+import level3ButtonImage from 'assets/images/Level3Button.png';
 import { NextSceneResolveFunction, SceneButtonActions } from './Scene';
 
 const buttonSize = {
-  width: 250,
-  height: 50,
+  width: 310,
+  height: 40,
 };
 
 export class LevelSelectionScene extends SceneButtonActions {
   private countingDown = false;
 
   private buttonProps = [
-    { y: 50, text: '🌀 Level 1', LevelConstructor: Level1 },
-    { y: 150, text: '💖 Level 2', LevelConstructor: Level2 },
-    { y: 250, text: '🎄 Level 3', LevelConstructor: Level3 },
+    { y: this.canvasSize.height / 2 - 150, image: level1ButtonImage, LevelConstructor: Level1 },
+    { y: this.canvasSize.height / 2 - 50, image: level2ButtonImage, LevelConstructor: Level2 },
+    { y: this.canvasSize.height / 2 + 50, image: level3ButtonImage, LevelConstructor: Level3 },
   ];
 
   private buttonRectangles: Rectangle[] = this.buttonProps.map((prop) => ({
@@ -31,10 +34,13 @@ export class LevelSelectionScene extends SceneButtonActions {
     clear(this.context, this.canvasSize, Colors.LightBlue);
 
     this.buttonRectangles.forEach((rectangle, index) => {
-      renderButton(
+      renderImage(
         this.context,
-        rectangle,
-        { text: this.buttonProps[index].text, fontSize: '24px' },
+        {
+          x: rectangle.x,
+          y: rectangle.y,
+        },
+        this.buttonProps[index].image,
       );
     });
   }

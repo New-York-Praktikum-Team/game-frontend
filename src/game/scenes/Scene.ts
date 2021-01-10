@@ -1,5 +1,5 @@
 import {
-  CanvasSize, clear, isMousePositionInsideRect, renderImageButton, renderText,
+  CanvasSize, clear, isMousePositionInsideRect, renderImage, renderText,
 } from 'helpers/CanvasHelper';
 import { AppMode } from 'components/GameCanvas';
 import { Colors } from 'consts/colors';
@@ -76,7 +76,21 @@ export abstract class Scene {
 
   renderFullScreenButton(): void {
     if (document.fullscreenEnabled) {
-      renderImageButton(
+      const pxData = this.context.getImageData(
+        this.fullScreenButtonRectangle.x + this.fullScreenButtonRectangle.width / 2,
+        this.fullScreenButtonRectangle.y + this.fullScreenButtonRectangle.height / 2,
+        1,
+        1,
+      ).data;
+      this.context.fillStyle = `rgba(${pxData[0]}, ${pxData[1]}, ${pxData[2]}, ${pxData[3]})`;
+      this.context.fillRect(
+        this.fullScreenButtonRectangle.x,
+        this.fullScreenButtonRectangle.y,
+        this.fullScreenButtonRectangle.width,
+        this.fullScreenButtonRectangle.height,
+      );
+
+      renderImage(
         this.context,
         {
           x: this.fullScreenButtonRectangle.x + 10,
@@ -159,7 +173,6 @@ export abstract class SceneButtonActions extends Scene {
   setUp(): void {
     super.setUp();
     document.addEventListener('fullscreenchange', () => {
-      this.renderScene();
       this.renderFullScreenButton();
     });
   }

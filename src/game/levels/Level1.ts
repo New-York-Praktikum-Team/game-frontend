@@ -38,8 +38,8 @@ export class Level1 extends Level {
   }
 
   get nymaPosition(): Position {
-    const x = this.drawingRectangle.x + 0.6 * this.drawingRectangle.width;
-    const y = this.drawingRectangle.y + 0.53 * this.drawingRectangle.height;
+    const x = this.drawingRectangle.x + 0.65 * this.drawingRectangle.width;
+    const y = this.drawingRectangle.y + 0.51 * this.drawingRectangle.height;
 
     return { x, y };
   }
