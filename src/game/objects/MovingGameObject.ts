@@ -5,7 +5,7 @@ import { RoundGameObject } from './RoundGameObject';
 export abstract class MovingGameObject extends RoundGameObject implements MovingObject {
   public isMoving = false;
 
-  private path?: Path;
+  protected path?: Path;
 
   protected setPath(path: Path) {
     this.path = path;
