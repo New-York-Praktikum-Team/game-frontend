@@ -6,6 +6,7 @@ import { LosingScene } from 'game/scenes/Losing';
 import { WinningScene } from 'game/scenes/Winning';
 import { GameOptions, SceneDerived } from 'game/scenes/Scene';
 import { LevelSelectionScene } from 'game/scenes/LevelSelection';
+import './GameCanvas.css';
 
 export enum AppMode {
   Main, Game, Losing, Winning, LevelSelection,
@@ -79,6 +80,7 @@ export class GameCanvas extends Component<CanvasProps, CanvasState> {
   render() {
     return (
       <canvas
+        className="canvas-main"
         ref={this.canvasRef}
         width={this.state.canvasSize.width}
         height={this.state.canvasSize.height}
