@@ -34,12 +34,14 @@ export const renderText = (
 };
 
 export const renderCircle = (
-  context: CanvasRenderingContext2D, center: Position, radius: number, color?: string,
+  context: CanvasRenderingContext2D, center: Position, radius: number, color?: string, opacity: number = 1
 ) => {
   context.beginPath();
   context.arc(center.x, center.y, radius, 0, 2 * Math.PI);
   context.fillStyle = color ?? 'black';
+  context.globalAlpha = opacity; 
   context.fill();
+  context.globalAlpha = 1; 
   context.closePath();
 };
 
