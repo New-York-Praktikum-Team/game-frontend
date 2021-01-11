@@ -105,6 +105,7 @@ export abstract class Scene {
     const isFullScreenButtonClicked = isMousePositionInsideRect(
       event,
       this.clientRect,
+      this.canvasSize,
       this.fullScreenButtonRectangle,
     );
 

@@ -43,8 +43,8 @@ export class StartScene extends SceneButtonActions {
     renderImage(
       this.context,
       {
-        x: this.startButtonRectangle.x,
-        y: this.startButtonRectangle.y,
+        x: this.startButtonRectangle.x - 8,
+        y: this.startButtonRectangle.y - 6,
       },
       playButtonImage,
     );
@@ -54,6 +54,7 @@ export class StartScene extends SceneButtonActions {
     const isButtonClicked = isMousePositionInsideRect(
       event,
       this.clientRect,
+      this.canvasSize,
       this.startButtonRectangle,
     ) && !this.countingDown;
 

@@ -34,11 +34,12 @@ export class LevelSelectionScene extends SceneButtonActions {
     clear(this.context, this.canvasSize, Colors.LightBlue);
 
     this.buttonRectangles.forEach((rectangle, index) => {
+      // button images have 20 px top and left margin
       renderImage(
         this.context,
         {
-          x: rectangle.x,
-          y: rectangle.y,
+          x: rectangle.x - 20,
+          y: rectangle.y - 20,
         },
         this.buttonProps[index].image,
       );
@@ -50,6 +51,7 @@ export class LevelSelectionScene extends SceneButtonActions {
       (rectangle) => isMousePositionInsideRect(
         event,
         this.clientRect,
+        this.canvasSize,
         rectangle,
       ) && !this.countingDown,
     );

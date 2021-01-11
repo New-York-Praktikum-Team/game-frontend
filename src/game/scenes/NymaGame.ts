@@ -74,7 +74,7 @@ export class NymaGame extends Scene {
   };
 
   handleMouseMove = (event: MouseEvent) => {
-    const position = getMousePosition(event, this.clientRect);
+    const position = getMousePosition(event, this.clientRect, this.canvasSize);
     if (isPositionInsideRect(position, this.canvasRectangle)) {
       this.nyma.setDirection(position);
     }
@@ -84,6 +84,7 @@ export class NymaGame extends Scene {
     const isMouseInsideCanvas = isMousePositionInsideRect(
       event,
       this.clientRect,
+      this.canvasSize,
       this.canvasRectangle,
     );
 

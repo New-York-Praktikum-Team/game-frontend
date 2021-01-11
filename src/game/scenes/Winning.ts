@@ -46,6 +46,7 @@ export class WinningScene extends SceneButtonActions {
     const isButtonClicked = isMousePositionInsideRect(
       event,
       this.clientRect,
+      this.canvasSize,
       this.restartButtonRectangle,
     ) && !this.countingDown;
 

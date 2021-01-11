@@ -73,8 +73,8 @@ export class LosingScene extends SceneButtonActions {
       renderImage(
         this.context,
         {
-          x: this.menuButtonRectangle.x,
-          y: this.menuButtonRectangle.y,
+          x: this.menuButtonRectangle.x - 8,
+          y: this.menuButtonRectangle.y - 6,
         },
         goToMenuButtonImage,
       );
@@ -82,8 +82,8 @@ export class LosingScene extends SceneButtonActions {
       renderImage(
         this.context,
         {
-          x: this.restartButtonRectangle.x,
-          y: this.restartButtonRectangle.y,
+          x: this.restartButtonRectangle.x - 8,
+          y: this.restartButtonRectangle.y - 6,
         },
         playAgainButtonImage,
       );
@@ -96,12 +96,14 @@ export class LosingScene extends SceneButtonActions {
     const isRestartButtonClicked = isMousePositionInsideRect(
       event,
       this.clientRect,
+      this.canvasSize,
       this.restartButtonRectangle,
     ) && !this.countingDown;
 
     const isMenuButtonClicked = isMousePositionInsideRect(
       event,
       this.clientRect,
+      this.canvasSize,
       this.menuButtonRectangle,
     ) && !this.countingDown;
 

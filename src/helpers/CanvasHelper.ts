@@ -56,13 +56,12 @@ export const renderRectangle = (
   context.closePath();
 };
 
-export const getMousePosition = (event: MouseEvent, clientRect: ClientRect): Position => {
+export const getMousePosition = (
+  event: MouseEvent,
+  clientRect: ClientRect,
+  canvasSize: CanvasSize,
+): Position => {
   const { left, top } = clientRect;
-
-  const canvasSize = {
-    width: 1000,
-    height: 700,
-  };
 
   if (!document.fullscreenElement) {
     return {
@@ -106,9 +105,10 @@ export const isPositionInsideRect = (position: Position, rectangle: Rectangle) =
 export const isMousePositionInsideRect = (
   event: MouseEvent,
   clientRect: ClientRect,
+  canvasSize: CanvasSize,
   targetRect: Rectangle,
 ): boolean => {
-  const mousePosition = getMousePosition(event, clientRect);
+  const mousePosition = getMousePosition(event, clientRect, canvasSize);
   return isPositionInsideRect(mousePosition, targetRect);
 };
 
