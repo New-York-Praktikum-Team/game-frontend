@@ -2,6 +2,7 @@ import { Level } from 'game/levels/Level';
 import { Position, positionAfterRotation } from 'game/objects/Position';
 import nymaImage from 'assets/images/Nyma.png';
 import nymaBaseImage from 'assets/images/NymaBase.png';
+import { renderImage } from 'helpers/CanvasHelper';
 import { FireBall } from './FireBall';
 import { RoundGameObject } from './RoundGameObject';
 
@@ -35,13 +36,8 @@ export class Nyma extends RoundGameObject {
     this.context.translate(this.center.x, this.center.y);
     this.context.rotate(this.angle);
 
-    const nymaBase = new Image();
-    nymaBase.src = nymaBaseImage;
-    this.context.drawImage(nymaBase, -63, -63);
-
-    const nyma = new Image();
-    nyma.src = nymaImage;
-    this.context.drawImage(nyma, -31, -31);
+    renderImage(this.context, { x: -63, y: -63 }, nymaBaseImage);
+    renderImage(this.context, { x: -31, y: -31 }, nymaImage);
 
     this.context.restore();
 

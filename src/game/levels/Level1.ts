@@ -2,7 +2,7 @@ import { Path } from 'game/path/Path';
 import { Position } from 'game/objects/Position';
 import { Helpers } from 'helpers/Helpers';
 import { SpiralPath } from 'game/path/Paths';
-import { CanvasSize } from 'helpers/CanvasHelper';
+import { CanvasSize, renderImage } from 'helpers/CanvasHelper';
 import { Rectangle } from 'consts/shapes';
 import level1Background from 'assets/images/level1.png';
 import { Level } from './Level';
@@ -58,8 +58,6 @@ export class Level1 extends Level {
 
   setBackground(context: CanvasRenderingContext2D): void {
     super.setBackground(context);
-    const background = new Image();
-    background.src = level1Background;
-    context.drawImage(background, 0, 0);
+    renderImage(context, { x: 0, y: 0 }, level1Background);
   }
 }
