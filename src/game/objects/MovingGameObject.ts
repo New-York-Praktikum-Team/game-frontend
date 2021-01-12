@@ -33,7 +33,7 @@ export abstract class MovingGameObject extends RoundGameObject implements Moving
       }
       const nextPos = this.path!.next(this.center, distance);
       this.center = nextPos;
-      this.draw();
     }
+    this.draw();
   }
 }

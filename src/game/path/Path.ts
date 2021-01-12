@@ -38,9 +38,11 @@ export class Path {
   }
 
   angle(current: Position): number {
-    const next = this.next(current, 0.001);
+    const next = this.next(current, 1);
     const k = (next.y - current.y) / (next.x - current.x);
-    const sign = current.x < next.x ? 1 : -1;
-    return sign * Math.atan(k);
+    if (current.x < next.x) {
+      return Math.PI + Math.atan(k);
+    }
+    return Math.atan(k);
   }
 }
