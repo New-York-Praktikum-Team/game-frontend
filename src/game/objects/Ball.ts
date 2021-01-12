@@ -3,8 +3,9 @@ import ballsImage from 'assets/images/Balls.png';
 import { MovingGameObject } from './MovingGameObject';
 import { Position } from './Position';
 
-const frameWidth = 162;
-const frameHeight = 162;
+const frameCount = 60;
+const frameWidth = 160;
+const frameHeight = 160;
 
 export abstract class Ball extends MovingGameObject {
   constructor(
@@ -16,12 +17,13 @@ export abstract class Ball extends MovingGameObject {
     super(context, center, radius);
   }
 
+  private frameIndex = 59;
+
+  private cumDistance = 0;
+
   draw(): void {
     const sprite = new Image();
     sprite.src = ballsImage;
-
-    const row = 0;
-    const column = 0;
 
     const scale = (this.radius * 2) / frameWidth;
     const scaledWidth = frameWidth * scale;
@@ -35,8 +37,8 @@ export abstract class Ball extends MovingGameObject {
 
     this.context.drawImage(
       sprite,
-      column * frameWidth,
-      row * frameHeight,
+      this.frameIndex * frameWidth,
+      0,
       frameWidth,
       frameHeight,
       -this.radius,
@@ -48,5 +50,16 @@ export abstract class Ball extends MovingGameObject {
     this.context.restore();
 
     renderCircle(this.context, this.center, this.radius, this.color, 0.6);
+  }
+
+  protected moveAndDraw(distance: number)
+    : void {
+    this.cumDistance += distance;
+    if (this.cumDistance > (2 * this.radius) / frameCount) {
+      this.frameIndex = (this.frameIndex + 1) % frameCount;
+      this.cumDistance = 0;
+    }
+
+    super.moveAndDraw(distance);
   }
 }
