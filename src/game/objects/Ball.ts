@@ -26,8 +26,6 @@ export abstract class Ball extends MovingGameObject {
     sprite.src = ballsImage;
 
     const scale = (this.radius * 2) / frameWidth;
-    const scaledWidth = frameWidth * scale;
-    const scaledHeight = frameHeight * scale;
 
     this.context.save();
     this.context.translate(this.center.x, this.center.y);
@@ -43,8 +41,8 @@ export abstract class Ball extends MovingGameObject {
       frameHeight,
       -this.radius,
       -this.radius,
-      scaledWidth,
-      scaledHeight,
+      frameWidth * scale,
+      frameHeight * scale,
     );
 
     this.context.restore();
