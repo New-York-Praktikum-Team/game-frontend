@@ -19,19 +19,19 @@ export abstract class MovingGameObject extends RoundGameObject implements Moving
 
   // time in milliseconds
   public clock(time: number): void {
-    if (!this.path) {
-      throw new Error('Object path was not provided');
-    }
     if (!this.velocity) {
       throw new Error('Object velocity was not provided');
     }
-    this.moveAndDraw((this.velocity * time) / 1000, this.path);
+    this.moveAndDraw((this.velocity * time) / 1000);
   }
 
-  public moveAndDraw(dist: number, path: Path)
+  protected moveAndDraw(distance: number)
     : void {
     if (this.isMoving) {
-      const nextPos = path.next(this.center, dist);
+      if (!this.path) {
+        throw new Error('Object path was not provided');
+      }
+      const nextPos = this.path!.next(this.center, distance);
       this.center = nextPos;
       this.draw();
     }
