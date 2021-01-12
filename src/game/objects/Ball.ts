@@ -52,9 +52,8 @@ export abstract class Ball extends MovingGameObject {
 
   protected moveAndDraw(distance: number)
     : void {
-
     this.cumDistance += distance;
-    if (this.cumDistance > (Math.PI * this.radius) / frameCount) {
+    if (this.cumDistance > (2 * Math.PI * this.radius) / frameCount) {
       this.frameIndex = (((this.frameIndex - 1) % frameCount) + frameCount) % frameCount;
       this.cumDistance = 0;
     }
