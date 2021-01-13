@@ -14,10 +14,11 @@ import * as api from '../../modules/api';
 
 export const App = withRouter(({ history }) => {
   const isUserLogged = useSelector(loggedSelector);
-  const urlParams = new URLSearchParams(window.location.search);
-  const code = urlParams.get('code');
 
   useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const code = urlParams.get('code');
+
     if (code) {
       urlParams.delete('code');
       history.replace({ search: urlParams.toString() });
