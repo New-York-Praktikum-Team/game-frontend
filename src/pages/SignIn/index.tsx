@@ -81,6 +81,11 @@ export const SignIn: FC = () => {
           </Form>
         )}
       </Formik>
+
+      <fieldset className="signin-fieldset">
+        <legend className="signin-fieldset__legend">Log in with</legend>
+        <button className="signin-fieldset__button-yandex"/>
+      </fieldset>
     </section>
   );
 };
