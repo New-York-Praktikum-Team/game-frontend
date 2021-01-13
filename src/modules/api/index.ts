@@ -64,6 +64,6 @@ export const getYandexOAuthService = async (): Promise<OAuthYandexService> => {
   return transformYandexService(response);
 };
 
-export const OauthYandexSignInRequest = async (
+export const OAuthYandexSignInRequest = async (
   code: string,
 ): Promise<string> => HTTPTransport.post('oauth/yandex', { json: { code } }).text();
