@@ -1,5 +1,5 @@
-import React, { FC, useEffect } from 'react';
-import { Switch } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Switch, withRouter } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { ErrorBoundary } from 'components/ErrorBoundary';
 import { PrivateRoute } from 'components/PrivateRoute';
@@ -9,12 +9,28 @@ import { ROUTES } from 'routes/routes';
 import { store } from 'store/store';
 import { fetchUser } from 'store/user/thunks';
 import { loggedSelector } from 'store/user/selectors';
+import { notification } from 'components/Notification';
+import * as api from '../../modules/api';
 
-export const App: FC = () => {
+export const App = withRouter(({ history }) => {
   const isUserLogged = useSelector(loggedSelector);
 
   useEffect(() => {
-    store.dispatch(fetchUser);
+    const urlParams = new URLSearchParams(window.location.search);
+    const code = urlParams.get('code');
+
+    if (code) {
+      urlParams.delete('code');
+      history.replace({ search: urlParams.toString() });
+
+      api.OauthYandexSignInRequest(code).then(() => {
+        store.dispatch(fetchUser);
+      }).catch(() => {
+        notification.error('Authorisation Error with Yandex');
+      });
+    } else {
+      store.dispatch(fetchUser);
+    }
   }, []);
 
   return (
@@ -32,4 +48,4 @@ export const App: FC = () => {
       </main>
     </article>
   );
-};
+});

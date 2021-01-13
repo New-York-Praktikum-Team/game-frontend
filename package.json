@@ -6,7 +6,7 @@
   "scripts": {
     "start": "NODE_ENV=development npm-run-all --print-label --parallel start:webpack start:server",
     "start:webpack": "webpack --mode=development --watch",
-    "start:server": "nodemon -r esm index.ts --watch dist/server.js",
+    "start:server": "PORT=5000 nodemon -r esm index.ts --watch dist/server.js",
     "start:prod": "webpack --mode=production && node -r esm index.ts",
     "build": "npm run clean && webpack --mode production",
     "clean": "rimraf dist",
