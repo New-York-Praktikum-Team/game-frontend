@@ -21,6 +21,8 @@ export abstract class Ball extends MovingGameObject {
 
   private cumDistance = 0;
 
+  abstract get angle(): number;
+
   draw(): void {
     const sprite = new Image();
     sprite.src = ballsImage;
@@ -29,9 +31,7 @@ export abstract class Ball extends MovingGameObject {
 
     this.context.save();
     this.context.translate(this.center.x, this.center.y);
-    if (this.isMoving) {
-      this.context.rotate(this.path!.angle(this.center));
-    }
+    this.context.rotate(this.angle);
 
     this.context.drawImage(
       sprite,
@@ -52,12 +52,13 @@ export abstract class Ball extends MovingGameObject {
 
   protected moveAndDraw(distance: number)
     : void {
-    this.cumDistance += distance;
-    if (this.cumDistance > (2 * Math.PI * this.radius) / frameCount) {
-      this.frameIndex = (((this.frameIndex - 1) % frameCount) + frameCount) % frameCount;
-      this.cumDistance = 0;
+    if (this.isMoving) {
+      this.cumDistance += distance;
+      if (this.cumDistance > (2 * Math.PI * this.radius) / frameCount) {
+        this.frameIndex = (((this.frameIndex - 1) % frameCount) + frameCount) % frameCount;
+        this.cumDistance = 0;
+      }
     }
-
     super.moveAndDraw(distance);
   }
 }

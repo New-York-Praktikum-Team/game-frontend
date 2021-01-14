@@ -14,7 +14,7 @@ export class Snake extends GameObject implements MovingObject {
     this.balls = [];
   }
 
-  balls: Ball[];
+  balls: SnakeBall[];
 
   draw(): void {
     this.balls.forEach((ball) => ball.draw());
@@ -44,11 +44,49 @@ export class Snake extends GameObject implements MovingObject {
     return Math.min(...this.balls.map((ball) => ball.distanceToPosition(pos)));
   }
 
-  distanceTo(obj: RoundGameObject): number {
-    return this.distanceToPosition(obj.center) - obj.radius;
+  collidesWith(obj: RoundGameObject): boolean {
+    return this.distanceToPosition(obj.center) - obj.radius <= 0;
   }
 
-  collidesWith(obj: RoundGameObject): boolean {
-    return this.distanceTo(obj) <= 0;
+  collisionBallIndex(obj: RoundGameObject): number | undefined {
+    let index;
+    this.balls.forEach((ball, i) => {
+      const distance = ball.distanceToPosition(obj.center);
+      if (distance - obj.radius <= 0) {
+        index = i;
+      }
+    });
+    return index;
+  }
+
+  addBallAtIndex(ball: Ball, index: number): void {
+    const snakeBall = new SnakeBall(this.context, this.level, true);
+    snakeBall.center = this.balls[index].center;
+    snakeBall.color = ball.color;
+    this.balls.splice(index, 0, snakeBall);
+  }
+
+  private epsilon = 2;
+
+  findSpace(): void {
+    for (let i = 1; i < this.balls.length; i += 1) {
+      const current = this.balls[i - 1];
+      const previous = this.balls[i];
+
+      if (current.distanceTo(previous) > this.epsilon) {
+        this.balls[i].isMoving = true;
+        this.balls[i - 1].isMoving = false;
+      } else if (current.isNew && current.distanceTo(previous) < -this.epsilon) {
+        for (let j = this.balls.length - 1; j >= i; j -= 1) {
+          this.balls[j].isMoving = false;
+        }
+        this.balls[i - 1].isMoving = true;
+        break;
+      } else {
+        this.balls[i].isMoving = true;
+        this.balls[i - 1].isMoving = true;
+        this.balls[i - 1].isNew = false;
+      }
+    }
   }
 }

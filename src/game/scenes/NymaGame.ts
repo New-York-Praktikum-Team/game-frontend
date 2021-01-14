@@ -96,25 +96,6 @@ export class NymaGame extends Scene {
     this.handleFullScreenButtonClick(event);
   };
 
-  private needToShowBang = false;
-
-  private bangPosition = { x: 0, y: 0 };
-
-  showBang() {
-    if (this.needToShowBang) {
-      renderText(
-        this.context,
-        'BANG!', {
-          x: this.bangPosition.x,
-          y: this.bangPosition.y,
-          color: 'black',
-          align: 'center',
-          font: '24px Arial',
-        },
-      );
-    }
-  }
-
   score: number;
 
   scoring = (score: number = 5): void => {
@@ -145,20 +126,21 @@ export class NymaGame extends Scene {
     this.snake.clock(timeDelta);
     this.nyma.fireBall?.clock(timeDelta);
 
-    this.showBang();
     this.showScore();
 
     if (this.nyma.fireBall) {
       if (!isPositionInsideRect(this.nyma.fireBall.center, this.canvasRectangle)) {
         this.nyma.fireBall = null;
-      } else if (this.snake.collidesWith(this.nyma.fireBall)) {
-        this.scoring(5);
-        this.needToShowBang = true;
-        this.bangPosition = this.nyma.fireBall.center;
-        setTimeout(() => { this.needToShowBang = false; }, 1000);
-        this.nyma.fireBall = null;
+      } else {
+        const collisionIndex = this.snake.collisionBallIndex(this.nyma.fireBall);
+        if (collisionIndex) {
+          this.scoring(5);
+          this.snake.addBallAtIndex(this.nyma.fireBall, collisionIndex);
+          this.nyma.fireBall = null;
+        }
       }
     }
+    this.snake.findSpace();
 
     if (this.snake.collidesWith(this.hole)) {
       this.resolveCallback({ appMode: AppMode.Losing });
