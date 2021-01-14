@@ -68,24 +68,30 @@ export class Snake extends GameObject implements MovingObject {
 
   private epsilon = 2;
 
-  findSpace(): void {
-    for (let i = 1; i < this.balls.length; i += 1) {
-      const current = this.balls[i - 1];
-      const previous = this.balls[i];
+  private tooClose(ball1: SnakeBall, ball2: SnakeBall): boolean {
+    return ball1.distanceTo(ball2) < this.level.ballDistance - this.epsilon;
+  }
 
-      if (current.distanceTo(previous) > this.epsilon) {
-        this.balls[i].isMoving = true;
-        this.balls[i - 1].isMoving = false;
-      } else if (current.isNew && current.distanceTo(previous) < -this.epsilon) {
-        for (let j = this.balls.length - 1; j >= i; j -= 1) {
+  private tooFar(ball1: SnakeBall, ball2: SnakeBall): boolean {
+    return ball1.distanceTo(ball2) > this.level.ballDistance + this.epsilon;
+  }
+
+  findSpace(): void {
+    for (let i = 0; i < this.balls.length - 1; i += 1) {
+      const currentBall = this.balls[i];
+      const previousBall = this.balls[i + 1];
+
+      if (this.tooFar(currentBall, previousBall)) {
+        currentBall.isMoving = false;
+      } else if (currentBall.isNew && this.tooClose(currentBall, previousBall)) {
+        for (let j = this.balls.length - 1; j > i; j -= 1) {
           this.balls[j].isMoving = false;
         }
-        this.balls[i - 1].isMoving = true;
         break;
       } else {
-        this.balls[i].isMoving = true;
-        this.balls[i - 1].isMoving = true;
-        this.balls[i - 1].isNew = false;
+        previousBall.isMoving = true;
+        currentBall.isMoving = true;
+        currentBall.isNew = false;
       }
     }
   }
