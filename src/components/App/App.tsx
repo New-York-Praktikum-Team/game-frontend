@@ -9,8 +9,9 @@ import { ROUTES } from 'routes/routes';
 import { store } from 'store/store';
 import { fetchUser } from 'store/user/thunks';
 import { loggedSelector } from 'store/user/selectors';
+import { hot } from 'react-hot-loader/root';
 
-export const App: FC = () => {
+export const App: FC = hot(() => {
   const isUserLogged = useSelector(loggedSelector);
 
   useEffect(() => {
@@ -32,4 +33,4 @@ export const App: FC = () => {
       </main>
     </article>
   );
-};
+});

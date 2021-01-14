@@ -44,6 +44,10 @@ export class GameCanvas extends Component<CanvasProps, CanvasState> {
     });
   }
 
+  componentWillUnmount() {
+    this.setState({ appMode: AppMode.Main });
+  }
+
   getSceneByAppMode = (appMode: AppMode) => {
     switch (appMode) {
       case AppMode.Game: return this.sceneToRender(NymaGame);

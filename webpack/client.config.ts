@@ -1,13 +1,16 @@
-const path = require('path');
-const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
-const { GenerateSW } = require('workbox-webpack-plugin');
-const CopyPlugin = require('copy-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+import { Configuration, HotModuleReplacementPlugin, WebpackPluginInstance } from 'webpack';
+import path from 'path';
+import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin';
+import { GenerateSW } from 'workbox-webpack-plugin';
+import CopyPlugin from 'copy-webpack-plugin';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 
-const clientConfig = (_: undefined, { mode }: { mode: 'production' | 'development' }) => {
-  const isProduction = mode === 'production';
+const clientConfig = (_: undefined, { mode }: { mode: 'production' | 'development' }): Configuration => {
+  const isProduction: boolean = mode === 'production';
 
-  let plugins: unknown[] = [
+  const entry: [string, ...string[]] = ['./src/client.tsx'];
+
+  const plugins: WebpackPluginInstance[] = [
     new MiniCssExtractPlugin(),
     new CopyPlugin({
       patterns: [
@@ -20,33 +23,37 @@ const clientConfig = (_: undefined, { mode }: { mode: 'production' | 'developmen
   ];
 
   if (isProduction) {
-    plugins = [
-      ...plugins,
-      new GenerateSW({
-        clientsClaim: true,
-        skipWaiting: true,
-        maximumFileSizeToCacheInBytes: 10 * 1024 * 1024,
-        modifyURLPrefix: {
-          auto: '/',
-        },
-        cleanupOutdatedCaches: true,
-        exclude: [/\.map$/],
-        navigateFallback: '/index.html',
-        navigationPreload: false,
-      }),
-    ];
+    plugins.push(new GenerateSW({
+      clientsClaim: true,
+      skipWaiting: true,
+      maximumFileSizeToCacheInBytes: 10 * 1024 * 1024,
+      modifyURLPrefix: { auto: '/' },
+      cleanupOutdatedCaches: true,
+      exclude: [/\.map$/],
+      navigateFallback: '/index.html',
+      navigationPreload: false,
+    }));
+  } else {
+    entry.push('webpack-hot-middleware/client');
+    plugins.push(new HotModuleReplacementPlugin());
   }
 
   return {
-    entry: './src/client.tsx',
+    mode,
+    entry,
+    plugins,
     output: {
       path: path.resolve('dist'),
       filename: 'bundle.js',
+      publicPath: '/',
     },
     devtool: isProduction ? false : 'source-map',
     resolve: {
       extensions: ['*', '.js', '.jsx', '.tsx', '.ts'],
       plugins: [new TsconfigPathsPlugin()],
+      alias: {
+        'react-dom': '@hot-loader/react-dom',
+      },
     },
     module: {
       rules: [
@@ -79,7 +86,6 @@ const clientConfig = (_: undefined, { mode }: { mode: 'production' | 'developmen
         },
       ],
     },
-    plugins,
   };
 };
 
