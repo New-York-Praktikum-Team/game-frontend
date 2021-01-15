@@ -36,7 +36,9 @@ export class NymaGame extends Scene {
 
   lastTime: number = 0;
 
-  resolveCallback: Function = () => {};
+  resolveCallback: Function = () => { };
+
+  private globalId?: number;
 
   render(): Promise<AppOptions> {
     return new Promise((resolve) => {
@@ -56,7 +58,7 @@ export class NymaGame extends Scene {
 
     this.clearAndDrawStaticObjects();
 
-    requestAnimationFrame(() => { this.updateCanvas(); });
+    this.globalId = requestAnimationFrame(this.updateCanvas);
   }
 
   clearAndDrawStaticObjects() {
@@ -115,7 +117,9 @@ export class NymaGame extends Scene {
     );
   };
 
-  updateCanvas(): void {
+  private gameEndTimer?: NodeJS.Timeout;
+
+  updateCanvas = () => {
     const time = performance.now();
     const timeDelta = time - this.lastTime;
     this.lastTime = time;
@@ -133,7 +137,7 @@ export class NymaGame extends Scene {
         this.nyma.fireBall = null;
       } else {
         const collisionIndex = this.snake.collisionBallIndex(this.nyma.fireBall);
-        if (collisionIndex) {
+        if (collisionIndex >= 0) {
           this.scoring(5);
           this.snake.addBallAtIndex(this.nyma.fireBall, collisionIndex);
           this.nyma.fireBall = null;
@@ -141,13 +145,22 @@ export class NymaGame extends Scene {
       }
     }
     this.snake.findSpace();
+    this.snake.explode();
+
+    this.globalId = requestAnimationFrame(this.updateCanvas);
 
     if (this.snake.collidesWith(this.hole)) {
+      cancelAnimationFrame(this.globalId!);
       this.resolveCallback({ appMode: AppMode.Losing });
       setLeaderboard(this.score);
-      return;
+    } else if (this.snake.balls.length === 0 && !this.snake.neeedMoreBalls()) {
+      if (!this.gameEndTimer) {
+        this.gameEndTimer = setTimeout(() => {
+          cancelAnimationFrame(this.globalId!);
+          this.resolveCallback({ appMode: AppMode.Winning });
+          setLeaderboard(this.score);
+        }, 0);
+      }
     }
-
-    requestAnimationFrame(() => this.updateCanvas());
-  }
+  };
 }

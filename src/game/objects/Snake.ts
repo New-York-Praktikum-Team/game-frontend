@@ -16,6 +16,8 @@ export class Snake extends GameObject implements MovingObject {
 
   balls: SnakeBall[];
 
+  ballsCount: number = 0;
+
   draw(): void {
     this.balls.forEach((ball) => ball.draw());
   }
@@ -25,19 +27,21 @@ export class Snake extends GameObject implements MovingObject {
   }
 
   addBall(): void {
-    if (this.shouldAddAnotherBall) {
+    if (
+      this.neeedMoreBalls()
+      && (
+        this.distanceToPosition(this.level.snakeBallStartPosition)
+        > this.level.ballDistance + this.level.ballRadius
+      )
+    ) {
       const ball = new SnakeBall(this.context, this.level);
       this.balls.push(ball);
+      this.ballsCount += 1;
     }
   }
 
-  private get shouldAddAnotherBall(): boolean {
-    return this.balls.length < this.level.snakeLength
-      && (
-        this.balls.length === 0
-        || this.distanceToPosition(this.level.snakeBallStartPosition)
-        > this.level.ballDistance + this.level.ballRadius
-      );
+  neeedMoreBalls(): boolean {
+    return this.ballsCount < this.level.snakeLength;
   }
 
   distanceToPosition(pos: Position): number {
@@ -48,8 +52,8 @@ export class Snake extends GameObject implements MovingObject {
     return this.distanceToPosition(obj.center) - obj.radius <= 0;
   }
 
-  collisionBallIndex(obj: RoundGameObject): number | undefined {
-    let index;
+  collisionBallIndex(obj: RoundGameObject): number {
+    let index = -1;
     this.balls.forEach((ball, i) => {
       const distance = ball.distanceToPosition(obj.center);
       if (distance - obj.radius <= 0) {
@@ -82,7 +86,10 @@ export class Snake extends GameObject implements MovingObject {
       const previousBall = this.balls[i + 1];
 
       if (this.tooFar(currentBall, previousBall)) {
-        currentBall.isMoving = false;
+        for (let j = 0; j <= i; j += 1) {
+          this.balls[j].isMoving = false;
+        }
+        previousBall.isMoving = true;
       } else if (currentBall.isNew && this.tooClose(currentBall, previousBall)) {
         for (let j = this.balls.length - 1; j > i; j -= 1) {
           this.balls[j].isMoving = false;
@@ -92,6 +99,46 @@ export class Snake extends GameObject implements MovingObject {
         previousBall.isMoving = true;
         currentBall.isMoving = true;
         currentBall.isNew = false;
+      }
+    }
+  }
+
+  explode(): void {
+    if (this.balls.length < 3) {
+      return;
+    }
+
+    const sameColorInfo = new Map();
+    let currentColorStartIndex = 0;
+    let currentColor = this.balls[currentColorStartIndex].color;
+    let currentColorCount = 1;
+
+    sameColorInfo.set(currentColorStartIndex, currentColorCount);
+
+    for (let i = 1; i <= this.balls.length - 1; i += 1) {
+      const currentBall = this.balls[i];
+
+      if (
+        currentBall.color === currentColor
+        && !this.tooFar(currentBall, this.balls[i - 1])
+        && !this.tooClose(currentBall, this.balls[i - 1])
+      ) {
+        currentColorCount += 1;
+      } else {
+        currentColorStartIndex = i;
+        currentColor = currentBall.color;
+        currentColorCount = 1;
+      }
+      sameColorInfo.set(currentColorStartIndex, currentColorCount);
+    }
+
+    for (let i = this.balls.length - 1; i >= 0; i -= 1) {
+      if (sameColorInfo.has(i)) {
+        const sameColorCount = sameColorInfo.get(i);
+        if (sameColorCount >= 3) {
+          this.balls.splice(i, sameColorCount);
+          break;
+        }
       }
     }
   }
