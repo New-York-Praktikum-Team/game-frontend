@@ -16,7 +16,6 @@ export class NymaGame extends Scene {
   constructor(canvasRef: HTMLCanvasElement, canvasSize: CanvasSize, options?: GameOptions) {
     super(canvasRef, canvasSize);
     this.level = options?.level ?? new Level1(this.canvasSize);
-    this.score = 0;
 
     this.nyma = new Nyma(this.context, this.level);
     this.hole = new Hole(this.context, this.level);
@@ -98,10 +97,10 @@ export class NymaGame extends Scene {
     this.handleFullScreenButtonClick(event);
   };
 
-  score: number;
+  score: number = 0;
 
-  scoring = (score: number = 5): void => {
-    this.score += score;
+  scoring = (explodedCount: number = 5): void => {
+    this.score += explodedCount * 5;
   };
 
   showScore = () => {
@@ -138,14 +137,14 @@ export class NymaGame extends Scene {
       } else {
         const collisionIndex = this.snake.collisionBallIndex(this.nyma.fireBall);
         if (collisionIndex >= 0) {
-          this.scoring(5);
           this.snake.addBallAtIndex(this.nyma.fireBall, collisionIndex);
           this.nyma.fireBall = null;
         }
       }
     }
     this.snake.findSpace();
-    this.snake.explode();
+    const explodedCount = this.snake.explode();
+    this.scoring(explodedCount);
 
     this.globalId = requestAnimationFrame(this.updateCanvas);
 
@@ -157,7 +156,7 @@ export class NymaGame extends Scene {
       if (!this.gameEndTimer) {
         this.gameEndTimer = setTimeout(() => {
           cancelAnimationFrame(this.globalId!);
-          this.resolveCallback({ appMode: AppMode.Winning });
+          this.resolveCallback({ appMode: AppMode.Winning, options: { score: this.score } });
           setLeaderboard(this.score);
         }, 0);
       }

@@ -103,9 +103,9 @@ export class Snake extends GameObject implements MovingObject {
     }
   }
 
-  explode(): void {
+  explode(): number {
     if (this.balls.length < 3) {
-      return;
+      return 0;
     }
 
     const sameColorInfo = new Map();
@@ -137,9 +137,11 @@ export class Snake extends GameObject implements MovingObject {
         const sameColorCount = sameColorInfo.get(i);
         if (sameColorCount >= 3) {
           this.balls.splice(i, sameColorCount);
-          break;
+          return sameColorCount;
         }
       }
     }
+
+    return 0;
   }
 }

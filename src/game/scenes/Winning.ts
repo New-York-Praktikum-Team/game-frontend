@@ -60,13 +60,25 @@ export class WinningScene extends SceneButtonActions {
 
       renderText(
         this.context,
-        'You are the WINNER!',
+        'Congratulations, You WIN!',
         {
           x: this.canvasSize.width / 2,
           y: this.canvasSize.height / 2 - 20,
           align: 'center',
           font: '32px Arial',
           color: Colors.DarkGrey,
+        },
+      );
+
+      renderText(
+        this.context,
+        `Score: ${this.options?.score ?? 0}`,
+        {
+          x: this.canvasSize.width / 2,
+          y: this.canvasSize.height / 2 + 30,
+          align: 'center',
+          font: '24px Arial',
+          color: Colors.DarkBlue,
         },
       );
 
