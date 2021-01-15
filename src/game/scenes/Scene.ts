@@ -1,12 +1,23 @@
 import { CanvasSize, clear, renderText } from 'helpers/CanvasHelper';
 import { AppMode } from 'components/GameCanvas';
 import { Colors } from 'consts/colors';
+import { Level } from 'game/levels/Level';
 
 const secondsBeforeStart = 3;
 
 const tickDuration = 1000;
 
-type NextSceneResolveFunction = (value?: AppMode | PromiseLike<AppMode>) => void;
+export interface GameOptions {
+  level?: Level;
+}
+
+export interface AppOptions {
+  appMode: AppMode;
+  options?: GameOptions;
+}
+
+export type NextSceneResolveFunction =
+  (value: AppOptions | PromiseLike<AppOptions>) => void;
 type EventListenerFaсtory = (
   nextScene: NextSceneResolveFunction
 ) => (
@@ -25,39 +36,47 @@ export abstract class Scene {
   constructor(
     public canvasRef: HTMLCanvasElement,
     public canvasSize: CanvasSize,
+    public options?: GameOptions,
   ) {
     this.clientRect = canvasRef.getBoundingClientRect();
     this.context = canvasRef.getContext('2d')!;
   }
 
-  abstract render(): Promise<AppMode>;
+  abstract render(): Promise<AppOptions>;
 
   abstract destroy(): void;
 }
 
 export abstract class SceneButtonActions extends Scene {
-  protected renderCountdown(nextScene: (appMode: AppMode) => void): void {
-    const { context, canvasSize } = this;
+  protected renderCountdown(
+    nextScene: NextSceneResolveFunction, options?: GameOptions,
+  ): void {
     let counter = secondsBeforeStart + 1; // add additional second to display "GO!"
 
     // draw countdown before the game starts
-    let timerId = setTimeout(function tick() {
+
+    let timerId: NodeJS.Timeout;
+
+    const tick = () => {
       if (counter === 0) {
         clearInterval(timerId);
-        nextScene(AppMode.Game);
+        nextScene({ appMode: AppMode.Game, options });
         return;
       }
 
       const counterText = counter === 1 ? 'GO!' : (counter - 1).toString(); // substract additional second
 
-      clear(context, canvasSize, Colors.LightBlue);
+      clear(this.context, this.canvasSize, Colors.LightBlue);
+
+      const level = options?.level ?? this.options?.level;
+      const text = level ? `Get ready for ${level.name.toLowerCase()} in` : 'Get ready in';
 
       renderText(
-        context,
-        'Get ready in',
+        this.context,
+        text,
         {
-          x: canvasSize.width / 2,
-          y: canvasSize.height / 3,
+          x: this.canvasSize.width / 2,
+          y: this.canvasSize.height / 3,
           align: 'center',
           font: '32px Arial',
           color: Colors.DarkGrey,
@@ -65,11 +84,11 @@ export abstract class SceneButtonActions extends Scene {
       );
 
       renderText(
-        context,
+        this.context,
         counterText,
         {
-          x: canvasSize.width / 2,
-          y: canvasSize.height / 2,
+          x: this.canvasSize.width / 2,
+          y: this.canvasSize.height / 2,
           align: 'center',
           font: '72px Arial',
           color: Colors.DarkBlue,
@@ -78,7 +97,9 @@ export abstract class SceneButtonActions extends Scene {
 
       counter -= 1;
       timerId = setTimeout(tick, tickDuration);
-    }, 0);
+    };
+
+    timerId = setTimeout(tick, 0);
   }
 
   protected abstract renderScene(): void;
@@ -87,7 +108,7 @@ export abstract class SceneButtonActions extends Scene {
 
   private eventClickListener?: (event: MouseEvent) => void;
 
-  render(): Promise<AppMode> {
+  render(): Promise<AppOptions> {
     return new Promise((resolve) => {
       this.renderScene();
       this.eventClickListener = this.handleCanvasClick(resolve);

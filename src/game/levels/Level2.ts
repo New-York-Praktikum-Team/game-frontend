@@ -1,32 +1,31 @@
 import { Path } from 'game/path/Path';
 import { Position } from 'game/objects/Position';
 import { Helpers } from 'helpers/Helpers';
-import { SpiralPath } from 'game/path/Paths';
+import { HeartPath } from 'game/path/Paths';
 import { CanvasSize } from 'helpers/CanvasHelper';
 import { Rectangle } from 'consts/shapes';
-import level1Background from 'assets/images/level1.png';
+import level2Background from 'assets/images/level2.png';
 import { Level } from './Level';
 
 enum Color {
-  Color1 = 'Yellow',
-  Color2 = 'Blue',
-  Color3 = 'Red',
-  Color4 = 'Green',
+  Color1 = 'DarkRed',
+  Color2 = 'DeepPink',
+  Color3 = 'Pink',
 }
 
-export class Level1 extends Level {
+export class Level2 extends Level {
   constructor(canvasSize: CanvasSize) {
     super(canvasSize);
 
     const minSize = Math.min(canvasSize.width, canvasSize.height);
     this.drawingRectangle = {
       x: 0.5 * canvasSize.width - 0.45 * minSize,
-      y: 0.5 * canvasSize.height - 0.5 * minSize,
+      y: 0.5 * canvasSize.height - 0.45 * minSize,
       width: 0.9 * minSize,
-      height: minSize,
+      height: 0.9 * minSize,
     };
 
-    this.path = new SpiralPath(this.drawingRectangle);
+    this.path = new HeartPath(this.drawingRectangle);
   }
 
   private drawingRectangle: Rectangle;
@@ -38,8 +37,8 @@ export class Level1 extends Level {
   }
 
   get nymaPosition(): Position {
-    const x = this.drawingRectangle.x + 0.6 * this.drawingRectangle.width;
-    const y = this.drawingRectangle.y + 0.53 * this.drawingRectangle.height;
+    const x = this.drawingRectangle.x + 0.3 * this.drawingRectangle.width;
+    const y = this.drawingRectangle.y + 0.4 * this.drawingRectangle.height;
 
     return { x, y };
   }
@@ -52,13 +51,18 @@ export class Level1 extends Level {
     return Helpers.randomEnum(Color);
   }
 
-  get name(): string {
-    return 'Level 1';
+  get backgroundColor(): string {
+    return 'LightYellow';
   }
 
   setBackground(context: CanvasRenderingContext2D): void {
+    super.setBackground(context);
     const background = new Image();
-    background.src = level1Background;
-    context.drawImage(background, 0, 0);
+    background.src = level2Background;
+    context.drawImage(background, 5, -5);
+  }
+
+  get name(): string {
+    return 'Level 2';
   }
 }
