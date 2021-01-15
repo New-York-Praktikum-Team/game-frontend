@@ -44,6 +44,10 @@ export class Level1 extends Level {
     return { x, y };
   }
 
+  get snakeLength(): number {
+    return 15;
+  }
+
   get randomColor(): string {
     return Helpers.randomEnum(Color);
   }
