@@ -4,16 +4,19 @@ import { NymaGame } from 'game/scenes/NymaGame';
 import { StartScene } from 'game/scenes/Start';
 import { LosingScene } from 'game/scenes/Losing';
 import { WinningScene } from 'game/scenes/Winning';
-import { SceneDerived } from 'game/scenes/Scene';
+import { GameOptions, SceneDerived } from 'game/scenes/Scene';
+import { LevelSelectionScene } from 'game/scenes/LevelSelection';
+import './GameCanvas.css';
 
 export enum AppMode {
-  Main, Game, Losing, Winning,
+  Main, Game, Losing, Winning, LevelSelection,
 }
 
 type CanvasProps = {};
 
 interface CanvasState {
   appMode: AppMode;
+  options?: GameOptions;
   context: CanvasRenderingContext2D | null;
   canvasSize: CanvasSize;
 }
@@ -23,8 +26,8 @@ export class GameCanvas extends Component<CanvasProps, CanvasState> {
     appMode: AppMode.Main,
     context: null,
     canvasSize: {
-      width: 500,
-      height: 500,
+      width: 1000,
+      height: 700,
     },
   };
 
@@ -38,9 +41,13 @@ export class GameCanvas extends Component<CanvasProps, CanvasState> {
   componentDidUpdate() {
     const scene = this.getSceneByAppMode(this.state.appMode);
 
-    scene.render().then((appMode) => {
+    scene.setUp();
+    scene.render().then((appOptions) => {
       scene.destroy();
-      this.setState({ appMode });
+      this.setState({
+        appMode: appOptions.appMode,
+        options: appOptions.options ?? this.state.options,
+      });
     });
   }
 
@@ -53,6 +60,7 @@ export class GameCanvas extends Component<CanvasProps, CanvasState> {
       case AppMode.Game: return this.sceneToRender(NymaGame);
       case AppMode.Losing: return this.sceneToRender(LosingScene);
       case AppMode.Winning: return this.sceneToRender(WinningScene);
+      case AppMode.LevelSelection: return this.sceneToRender(LevelSelectionScene);
 
       case AppMode.Main:
       default: return this.sceneToRender(StartScene);
@@ -63,6 +71,7 @@ export class GameCanvas extends Component<CanvasProps, CanvasState> {
     const scene = new SceneConstructor(
       this.canvasRef.current!,
       this.state.canvasSize,
+      this.state.options,
     );
 
     return scene;
@@ -71,6 +80,7 @@ export class GameCanvas extends Component<CanvasProps, CanvasState> {
   render() {
     return (
       <canvas
+        className="canvas-main"
         ref={this.canvasRef}
         width={this.state.canvasSize.width}
         height={this.state.canvasSize.height}

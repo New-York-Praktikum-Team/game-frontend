@@ -1,25 +1,21 @@
 import { AppMode } from 'components/GameCanvas';
 import {
-  CanvasSize, clear, getMousePosition, isMousePositionInsideRect, isPositionInsideRect, renderText,
+  CanvasSize, getMousePosition, isMousePositionInsideRect,
+  isPositionInsideRect, renderText,
 } from 'helpers/CanvasHelper';
 import { Level } from 'game/levels/Level';
 import { Level1 } from 'game/levels/Level1';
 import { Hole } from 'game/objects/Hole';
 import { Nyma } from 'game/objects/Nyma';
 import { Snake } from 'game/objects/Snake';
-import { Colors } from 'consts/colors';
 import { Rectangle } from 'consts/shapes';
 import { setLeaderboard } from 'store/leaderboard/thunks';
-import { Scene } from './Scene';
-
-interface GameOptions {
-  level?: Level;
-}
+import { AppOptions, GameOptions, Scene } from './Scene';
 
 export class NymaGame extends Scene {
   constructor(canvasRef: HTMLCanvasElement, canvasSize: CanvasSize, options?: GameOptions) {
     super(canvasRef, canvasSize);
-    this.level = options?.level ?? new Level1();
+    this.level = options?.level ?? new Level1(this.canvasSize);
     this.score = 0;
 
     this.nyma = new Nyma(this.context, this.level);
@@ -40,9 +36,9 @@ export class NymaGame extends Scene {
 
   lastTime: number = 0;
 
-  resolveCallback: Function = () => { };
+  resolveCallback: Function = () => {};
 
-  render(): Promise<AppMode> {
+  render(): Promise<AppOptions> {
     return new Promise((resolve) => {
       this.resolveCallback = resolve;
       this.startGame();
@@ -50,6 +46,7 @@ export class NymaGame extends Scene {
   }
 
   destroy(): void {
+    super.destroy();
     this.canvasRef.removeEventListener('click', this.handleClick);
     this.canvasRef.removeEventListener('mousemove', this.handleMouseMove);
   }
@@ -63,9 +60,11 @@ export class NymaGame extends Scene {
   }
 
   clearAndDrawStaticObjects() {
-    clear(this.context, this.canvasSize, Colors.PaleTurquoise);
+    this.level.setBackground(this.context);
     this.nyma.draw();
     this.hole.draw();
+
+    this.renderFullScreenButton();
   }
 
   private canvasRectangle: Rectangle = {
@@ -76,7 +75,7 @@ export class NymaGame extends Scene {
   };
 
   handleMouseMove = (event: MouseEvent) => {
-    const position = getMousePosition(event, this.clientRect);
+    const position = getMousePosition(event, this.clientRect, this.canvasSize);
     if (isPositionInsideRect(position, this.canvasRectangle)) {
       this.nyma.setDirection(position);
     }
@@ -86,12 +85,15 @@ export class NymaGame extends Scene {
     const isMouseInsideCanvas = isMousePositionInsideRect(
       event,
       this.clientRect,
+      this.canvasSize,
       this.canvasRectangle,
     );
 
     if (isMouseInsideCanvas) {
       this.nyma.shoot();
     }
+
+    this.handleFullScreenButtonClick(event);
   };
 
   private needToShowBang = false;
@@ -159,7 +161,7 @@ export class NymaGame extends Scene {
     }
 
     if (this.snake.collidesWith(this.hole)) {
-      this.resolveCallback(AppMode.Losing);
+      this.resolveCallback({ appMode: AppMode.Losing });
       setLeaderboard(this.score);
       return;
     }
