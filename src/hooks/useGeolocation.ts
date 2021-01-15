@@ -8,9 +8,8 @@ const success = async (
   setGeolocation: Dispatch<SetStateAction<UserGeolocation | null>>,
 ): Promise<void> => {
   try {
-    const country = await ky.get('http://api.geonames.org/countryCodeJSON', {
+    const country = await ky.get('/api/geolocation', {
       searchParams: {
-        username: 'elfexor',
         lat: position.coords.latitude,
         lng: position.coords.longitude,
       },
