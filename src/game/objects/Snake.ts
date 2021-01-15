@@ -80,7 +80,7 @@ export class Snake extends GameObject implements MovingObject {
     return ball1.distanceTo(ball2) > this.level.ballDistance + this.epsilon;
   }
 
-  findSpace(): void {
+  normalize(): void {
     for (let i = 0; i < this.balls.length - 1; i += 1) {
       const currentBall = this.balls[i];
       const previousBall = this.balls[i + 1];
@@ -90,6 +90,7 @@ export class Snake extends GameObject implements MovingObject {
           this.balls[j].isMoving = false;
         }
         previousBall.isMoving = true;
+        currentBall.wasTooFar = true;
       } else if (currentBall.isNew && this.tooClose(currentBall, previousBall)) {
         for (let j = this.balls.length - 1; j > i; j -= 1) {
           this.balls[j].isMoving = false;
@@ -135,7 +136,13 @@ export class Snake extends GameObject implements MovingObject {
     for (let i = this.balls.length - 1; i >= 0; i -= 1) {
       if (sameColorInfo.has(i)) {
         const sameColorCount = sameColorInfo.get(i);
-        if (sameColorCount >= 3) {
+
+        const subset = this.balls.slice(i, i + sameColorCount);
+
+        // don't explode initial ball sequences
+        const shouldExplode = subset.some((ball) => ball.wasNew || ball.wasTooFar);
+
+        if (shouldExplode && sameColorCount >= 3) {
           this.balls.splice(i, sameColorCount);
           return sameColorCount;
         }

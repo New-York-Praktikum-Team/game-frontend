@@ -37,7 +37,7 @@ export abstract class Level {
   abstract get nymaPosition(): Position;
 
   get snakeLength(): number {
-    return 10;
+    return 100;
   }
 
   abstract get randomColor(): string;

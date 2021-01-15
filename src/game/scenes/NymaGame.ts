@@ -142,7 +142,7 @@ export class NymaGame extends Scene {
         }
       }
     }
-    this.snake.findSpace();
+    this.snake.normalize();
     const explodedCount = this.snake.explode();
     this.scoring(explodedCount);
 
