@@ -56,25 +56,25 @@ export abstract class Scene {
     };
   }
 
+  protected updateClientRect = (): void => {
+    this.clientRect = this.canvasRef.getBoundingClientRect();
+  };
+
   setUp(): void {
-    window.addEventListener('resize', () => {
-      this.clientRect = this.canvasRef.getBoundingClientRect();
-    });
-
-    window.addEventListener('scroll', () => {
-      this.clientRect = this.canvasRef.getBoundingClientRect();
-    });
-
-    document.addEventListener('fullscreenchange', () => {
-      this.clientRect = this.canvasRef.getBoundingClientRect();
-    });
+    window.addEventListener('resize', this.updateClientRect);
+    window.addEventListener('scroll', this.updateClientRect);
+    document.addEventListener('fullscreenchange', this.updateClientRect);
   }
 
   abstract render(): Promise<AppOptions>;
 
-  abstract destroy(): void;
+  destroy(): void {
+    window.removeEventListener('resize', this.updateClientRect);
+    window.removeEventListener('scroll', this.updateClientRect);
+    document.removeEventListener('fullscreenchange', this.updateClientRect);
+  }
 
-  renderFullScreenButton(): void {
+  renderFullScreenButton = (): void => {
     if (document.fullscreenEnabled) {
       const pxData = this.context.getImageData(
         this.fullScreenButtonRectangle.x + this.fullScreenButtonRectangle.width / 2,
@@ -99,7 +99,7 @@ export abstract class Scene {
         !document.fullscreenElement ? fullscreen : fullscreenExit,
       );
     }
-  }
+  };
 
   handleFullScreenButtonClick(event: MouseEvent): void {
     const isFullScreenButtonClicked = isMousePositionInsideRect(
@@ -173,9 +173,7 @@ export abstract class SceneButtonActions extends Scene {
 
   setUp(): void {
     super.setUp();
-    document.addEventListener('fullscreenchange', () => {
-      this.renderFullScreenButton();
-    });
+    document.addEventListener('fullscreenchange', this.renderFullScreenButton);
   }
 
   protected abstract renderScene(): void;
@@ -197,6 +195,8 @@ export abstract class SceneButtonActions extends Scene {
   }
 
   destroy(): void {
+    super.destroy();
     this.canvasRef.removeEventListener('click', this.eventClickListener!);
+    document.removeEventListener('fullscreenchange', this.renderFullScreenButton);
   }
 }

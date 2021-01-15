@@ -46,6 +46,7 @@ export class NymaGame extends Scene {
   }
 
   destroy(): void {
+    super.destroy();
     this.canvasRef.removeEventListener('click', this.handleClick);
     this.canvasRef.removeEventListener('mousemove', this.handleMouseMove);
   }
