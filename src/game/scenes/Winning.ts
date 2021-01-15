@@ -60,7 +60,7 @@ export class WinningScene extends SceneButtonActions {
 
       renderText(
         this.context,
-        'Congratulations, You WIN!',
+        'You WIN!',
         {
           x: this.canvasSize.width / 2,
           y: this.canvasSize.height / 2 - 20,
