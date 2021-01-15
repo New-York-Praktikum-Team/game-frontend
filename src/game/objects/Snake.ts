@@ -70,7 +70,7 @@ export class Snake extends GameObject implements MovingObject {
     this.balls.splice(index, 0, snakeBall);
   }
 
-  private epsilon = 2;
+  private epsilon = 5;
 
   private tooClose(ball1: SnakeBall, ball2: SnakeBall): boolean {
     return ball1.distanceTo(ball2) < this.level.ballDistance - this.epsilon;
