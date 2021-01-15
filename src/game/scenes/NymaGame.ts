@@ -1,6 +1,7 @@
 import { AppMode } from 'components/GameCanvas';
 import {
-  CanvasSize, getMousePosition, isMousePositionInsideRect, isPositionInsideRect, renderText,
+  CanvasSize, getMousePosition, isMousePositionInsideRect,
+  isPositionInsideRect, renderText,
 } from 'helpers/CanvasHelper';
 import { Level } from 'game/levels/Level';
 import { Level1 } from 'game/levels/Level1';
@@ -45,6 +46,7 @@ export class NymaGame extends Scene {
   }
 
   destroy(): void {
+    super.destroy();
     this.canvasRef.removeEventListener('click', this.handleClick);
     this.canvasRef.removeEventListener('mousemove', this.handleMouseMove);
   }
@@ -61,6 +63,8 @@ export class NymaGame extends Scene {
     this.level.setBackground(this.context);
     this.nyma.draw();
     this.hole.draw();
+
+    this.renderFullScreenButton();
   }
 
   private canvasRectangle: Rectangle = {
@@ -71,7 +75,7 @@ export class NymaGame extends Scene {
   };
 
   handleMouseMove = (event: MouseEvent) => {
-    const position = getMousePosition(event, this.clientRect);
+    const position = getMousePosition(event, this.clientRect, this.canvasSize);
     if (isPositionInsideRect(position, this.canvasRectangle)) {
       this.nyma.setDirection(position);
     }
@@ -81,12 +85,15 @@ export class NymaGame extends Scene {
     const isMouseInsideCanvas = isMousePositionInsideRect(
       event,
       this.clientRect,
+      this.canvasSize,
       this.canvasRectangle,
     );
 
     if (isMouseInsideCanvas) {
       this.nyma.shoot();
     }
+
+    this.handleFullScreenButtonClick(event);
   };
 
   private needToShowBang = false;

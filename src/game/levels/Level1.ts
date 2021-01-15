@@ -2,7 +2,7 @@ import { Path } from 'game/path/Path';
 import { Position } from 'game/objects/Position';
 import { Helpers } from 'helpers/Helpers';
 import { SpiralPath } from 'game/path/Paths';
-import { CanvasSize } from 'helpers/CanvasHelper';
+import { CanvasSize, renderImage } from 'helpers/CanvasHelper';
 import { Rectangle } from 'consts/shapes';
 import level1Background from 'assets/images/level1.png';
 import { Level } from './Level';
@@ -38,8 +38,8 @@ export class Level1 extends Level {
   }
 
   get nymaPosition(): Position {
-    const x = this.drawingRectangle.x + 0.6 * this.drawingRectangle.width;
-    const y = this.drawingRectangle.y + 0.53 * this.drawingRectangle.height;
+    const x = this.drawingRectangle.x + 0.65 * this.drawingRectangle.width;
+    const y = this.drawingRectangle.y + 0.51 * this.drawingRectangle.height;
 
     return { x, y };
   }
@@ -57,8 +57,7 @@ export class Level1 extends Level {
   }
 
   setBackground(context: CanvasRenderingContext2D): void {
-    const background = new Image();
-    background.src = level1Background;
-    context.drawImage(background, 0, 0);
+    super.setBackground(context);
+    renderImage(context, { x: 0, y: 0 }, level1Background);
   }
 }

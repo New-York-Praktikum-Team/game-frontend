@@ -1,14 +1,21 @@
 import {
-  clear, isMousePositionInsideRect, renderButton, renderText,
+  clear, isMousePositionInsideRect, renderImage,
 } from 'helpers/CanvasHelper';
 import { AppMode } from 'components/GameCanvas';
 import { Colors } from 'consts/colors';
 import { Rectangle } from 'consts/shapes';
+import playButtonImage from 'assets/images/PlayButton.png';
+import smileEmojiImage from 'assets/images/SmileEmoji.png';
 import { NextSceneResolveFunction, SceneButtonActions } from './Scene';
 
 const buttonSize = {
-  width: 350,
-  height: 100,
+  width: 310,
+  height: 52,
+};
+
+const emojiSize = {
+  width: 101,
+  height: 101,
 };
 
 export class StartScene extends SceneButtonActions {
@@ -16,7 +23,7 @@ export class StartScene extends SceneButtonActions {
 
   private startButtonRectangle: Rectangle = {
     x: (this.canvasSize.width - buttonSize.width) / 2,
-    y: this.canvasSize.height / 2 - 150,
+    y: this.canvasSize.height / 3 + 150,
     width: buttonSize.width,
     height: buttonSize.height,
   };
@@ -24,22 +31,22 @@ export class StartScene extends SceneButtonActions {
   renderScene(): void {
     clear(this.context, this.canvasSize, Colors.LightBlue);
 
-    renderButton(
+    renderImage(
       this.context,
-      this.startButtonRectangle,
-      { text: 'Play' },
+      {
+        x: (this.canvasSize.width - emojiSize.width) / 2,
+        y: this.canvasSize.height / 3,
+      },
+      smileEmojiImage,
     );
 
-    renderText(
+    renderImage(
       this.context,
-      'To start the game, press the big blue button above',
       {
-        x: this.canvasSize.width / 2,
-        y: this.canvasSize.height / 2,
-        align: 'center',
-        font: '16px Arial',
-        color: Colors.DarkGrey,
+        x: this.startButtonRectangle.x - 8,
+        y: this.startButtonRectangle.y - 6,
       },
+      playButtonImage,
     );
   }
 
@@ -47,6 +54,7 @@ export class StartScene extends SceneButtonActions {
     const isButtonClicked = isMousePositionInsideRect(
       event,
       this.clientRect,
+      this.canvasSize,
       this.startButtonRectangle,
     ) && !this.countingDown;
 

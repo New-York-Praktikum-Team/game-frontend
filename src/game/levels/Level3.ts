@@ -2,7 +2,7 @@ import { Path } from 'game/path/Path';
 import { Position } from 'game/objects/Position';
 import { Helpers } from 'helpers/Helpers';
 import { TreePath } from 'game/path/Paths';
-import { CanvasSize } from 'helpers/CanvasHelper';
+import { CanvasSize, renderImage } from 'helpers/CanvasHelper';
 import { Rectangle } from 'consts/shapes';
 import level3Background from 'assets/images/level3.png';
 import { Level } from './Level';
@@ -57,9 +57,7 @@ export class Level3 extends Level {
 
   setBackground(context: CanvasRenderingContext2D): void {
     super.setBackground(context);
-    const background = new Image();
-    background.src = level3Background;
-    context.drawImage(background, 5, 5);
+    renderImage(context, { x: 5, y: 5 }, level3Background);
   }
 
   get name(): string {
