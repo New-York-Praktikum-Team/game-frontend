@@ -67,7 +67,7 @@ const clientConfig = (_: undefined, { mode }: { mode: 'production' | 'developmen
           ],
         },
         {
-          test: /\.(png|jpe?g|gif|icoz)$/i,
+          test: /\.(png|jpe?g|gif|ico)$/i,
           use: [
             {
               loader: 'file-loader',
