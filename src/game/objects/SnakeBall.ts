@@ -2,7 +2,7 @@ import { Level } from 'game/levels/Level';
 import { Ball } from './Ball';
 
 export class SnakeBall extends Ball {
-  public wasTooFar = false;
+  public wasApart = false;
 
   public wasNew = false;
 

@@ -68,9 +68,16 @@ export class Snake extends GameObject implements MovingObject {
     snakeBall.center = this.balls[index].center;
     snakeBall.color = ball.color;
     this.balls.splice(index, 0, snakeBall);
+
+    if (index < this.balls.length - 1) {
+      this.balls[index + 1].wasApart = true;
+    }
+    if (index > 0) {
+      this.balls[index - 1].wasApart = true;
+    }
   }
 
-  private epsilon = 5;
+  private epsilon = 2;
 
   private tooClose(ball1: SnakeBall, ball2: SnakeBall): boolean {
     return ball1.distanceTo(ball2) < this.level.ballDistance - this.epsilon;
@@ -90,7 +97,6 @@ export class Snake extends GameObject implements MovingObject {
           this.balls[j].isMoving = false;
         }
         previousBall.isMoving = true;
-        currentBall.wasTooFar = true;
       } else if (currentBall.isNew && this.tooClose(currentBall, previousBall)) {
         for (let j = this.balls.length - 1; j > i; j -= 1) {
           this.balls[j].isMoving = false;
@@ -140,7 +146,15 @@ export class Snake extends GameObject implements MovingObject {
         const subset = this.balls.slice(i, i + sameColorCount);
 
         // don't explode initial ball sequences
-        const shouldExplode = subset.some((ball) => ball.wasNew || ball.wasTooFar);
+        let shouldExplode = false;
+        for (let j = 0; j < subset.length; j += 1) {
+          if (subset[j].wasNew) {
+            shouldExplode = true;
+          }
+          if (j < subset.length - 1 && subset[j].wasApart && subset[j + 1].wasApart) {
+            shouldExplode = true;
+          }
+        }
 
         if (shouldExplode && sameColorCount >= 3) {
           this.balls.splice(i, sameColorCount);
