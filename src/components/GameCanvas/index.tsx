@@ -47,7 +47,7 @@ export class GameCanvas extends Component<CanvasProps, CanvasState> {
         scene.destroy();
         this.setState({
           appMode: appOptions.appMode,
-          options: appOptions.options ?? this.state.options,
+          options: Object.assign(this.state.options ?? {}, appOptions.options ?? {}),
         });
       });
     }
