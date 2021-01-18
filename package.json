@@ -4,7 +4,7 @@
   "description": "A fun and mischievous game",
   "main": "index.ts",
   "scripts": {
-    "start": "npm run clean && NODE_ENV=development npm-run-all --print-label --parallel start:webpack start:server",
+    "start": "npm run clean && NODE_ENV=development && npm-run-all --print-label --parallel start:webpack start:server",
     "start:webpack": "webpack --mode=development --watch",
     "start:server": "wait-on dist/server.js && node -r esm index.ts",
     "start:prod": "npm run build && node -r esm index.ts",
