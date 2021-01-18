@@ -10,18 +10,15 @@ import { store } from 'store/store';
 import { fetchUser } from 'store/user/thunks';
 import { loggedSelector } from 'store/user/selectors';
 import { notification } from 'components/Notification';
-import * as api from '../../modules/api';
 import { hot } from 'react-hot-loader/root';
+import * as api from '../../modules/api';
 
 export const App = hot(withRouter(({ history }) => {
   const isUserLogged = useSelector(loggedSelector);
 
   useEffect(() => {
     if (isUserLogged) return;
-    store.dispatch(fetchUser);
-  }, []);
 
-  useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get('code');
 
