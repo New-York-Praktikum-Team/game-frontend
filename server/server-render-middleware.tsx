@@ -7,8 +7,9 @@ import { Helmet, HelmetData } from 'react-helmet';
 import { App } from '../src/components/App';
 import { store } from '../src/store/store';
 import { AppUrls } from '../src/routes/appUrls';
+import { RootState } from '../src/store/rootReducer';
 
-const getHtml = (reactHtml: string, reduxState = {}, helmetData: HelmetData): string => (`
+const getHtml = (reactHtml: string, state: RootState, helmetData: HelmetData): string => (`
       <!DOCTYPE html>
       <html lang="en">
         <head>
@@ -23,7 +24,7 @@ const getHtml = (reactHtml: string, reduxState = {}, helmetData: HelmetData): st
         <body>
             <div id="root">${reactHtml}</div>
             <script>
-              window.__INITIAL_STATE__ = ${JSON.stringify(reduxState)}
+              window.__INITIAL_STATE__ = ${JSON.stringify(state).replace(/</g, '\\\u003c')}
             </script>
             <script src="/bundle.js"></script>
         </body>
@@ -46,5 +47,7 @@ export const serverRenderMiddleware = (request: Request, response: Response): vo
 
   const pageIsAvailable = (Object.values(AppUrls) as string[]).includes(request.path);
 
-  response.status(pageIsAvailable ? 200 : 404).send(getHtml(reactHtml, {}, helmetData));
+  const state = store.getState();
+
+  response.status(pageIsAvailable ? 200 : 404).send(getHtml(reactHtml, state, helmetData));
 };

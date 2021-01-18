@@ -19,7 +19,7 @@ export abstract class Ball extends MovingGameObject {
 
   private frameIndex = 59;
 
-  private cumDistance = 0;
+  private cumulativeDistance = 0;
 
   abstract get angle(): number;
 
@@ -31,6 +31,7 @@ export abstract class Ball extends MovingGameObject {
 
     this.context.save();
     this.context.translate(this.center.x, this.center.y);
+
     this.context.rotate(this.angle);
 
     this.context.drawImage(
@@ -50,15 +51,15 @@ export abstract class Ball extends MovingGameObject {
     renderCircle(this.context, this.center, this.radius, this.color, 0.6);
   }
 
-  protected moveAndDraw(distance: number)
-    : void {
-    if (this.isMoving) {
-      this.cumDistance += distance;
-      if (this.cumDistance > (2 * Math.PI * this.radius) / frameCount) {
-        this.frameIndex = (((this.frameIndex - 1) % frameCount) + frameCount) % frameCount;
-        this.cumDistance = 0;
-      }
+  private ballCircleLength = 2 * Math.PI * this.radius;
+
+  protected moveAndDraw(distance: number) : void {
+    this.cumulativeDistance += distance;
+    if (this.cumulativeDistance > this.ballCircleLength / frameCount) {
+      this.frameIndex = (((this.frameIndex - 1) % frameCount) + frameCount) % frameCount;
+      this.cumulativeDistance = 0;
     }
+
     super.moveAndDraw(distance);
   }
 }
