@@ -1,6 +1,7 @@
 import React, {
   FC, useCallback, useEffect, useRef,
 } from 'react';
+import * as api from 'modules/api';
 import { Form, Formik, FormikHelpers } from 'formik';
 import { object, string } from 'yup';
 import { useHistory } from 'react-router-dom';
@@ -25,6 +26,17 @@ const validationSchema = object().shape({
   login: string().required('Username is required'),
   password: string().required('Password is required'),
 });
+
+// Authorization using Yandex
+const loginWithYandex = async (): Promise<void> => {
+  try {
+    const { serviceId } = await api.getYandexOAuthService();
+    const { origin } = window.location;
+    window.location.href = `https://oauth.yandex.ru/authorize?response_type=code&client_id=${serviceId}&redirect_uri=${origin}/`;
+  } catch (err) {
+    notification.error('Authorisation Error');
+  }
+};
 
 export const SignIn: FC = () => {
   const formRef = useRef<HTMLFormElement>(null);
@@ -81,6 +93,11 @@ export const SignIn: FC = () => {
           </Form>
         )}
       </Formik>
+
+      <fieldset className="signin-fieldset">
+        <legend className="signin-fieldset__legend">Log in with</legend>
+        <button onClick={loginWithYandex} type="button" className="signin-fieldset__button-yandex" />
+      </fieldset>
     </section>
   );
 };

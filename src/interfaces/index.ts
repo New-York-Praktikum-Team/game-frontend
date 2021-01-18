@@ -94,3 +94,11 @@ export interface Leader {
   name: string;
   nymaScore: number;
 }
+
+export interface OAuthGetYandexServiceResponseDTO {
+  service_id: string;
+}
+
+export interface OAuthYandexService {
+  serviceId: string;
+}
