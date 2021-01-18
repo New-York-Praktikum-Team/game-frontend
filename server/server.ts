@@ -7,8 +7,8 @@ import webpackDevMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
 import cookieParser from 'cookie-parser';
 import webpackClientConfig from '../webpack/client.config';
-import { serverRenderMiddleware } from './server-render-middleware';
-import { serverUserAuthMiddleware } from './server-user-auth-middleware';
+import { serverRenderMiddleware } from './middlewares/server-render-middleware';
+import { serverUserAuthMiddleware } from './middlewares/server-user-auth-middleware';
 import api from './api';
 
 const app = express();
