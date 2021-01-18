@@ -29,6 +29,11 @@ export function userReducer(
         data: (action as ItemActionType).item,
         isLoading: false,
       };
+    case UserActions.USER_UPDATE_SUCCESS:
+      return {
+        ...state,
+        data: (action as ItemActionType).item,
+      };
     case UserActions.FETCH_USER_ERROR:
       return {
         ...state,

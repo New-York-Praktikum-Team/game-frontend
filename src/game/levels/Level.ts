@@ -1,9 +1,13 @@
 import { Path } from 'game/path/Path';
 import { Position } from 'game/objects/Position';
+import { Colors } from 'consts/colors';
+import { CanvasSize } from 'helpers/CanvasHelper';
 
 export abstract class Level {
+  constructor(public canvasSize: CanvasSize) {}
+
   get ballRadius(): number {
-    return 10;
+    return 20;
   }
 
   get nymaRadius(): number {
@@ -11,32 +15,45 @@ export abstract class Level {
   }
 
   get holeRadius(): number {
-    return 30;
+    return 0;
   }
 
   // pixels per second
   get snakeBallVelocity(): number {
-    return 20;
+    return 80;
   }
 
   // pixels per second
   get fireBallVelocity(): number {
-    return 350;
+    return 1000;
   }
 
   get ballDistance(): number {
-    return 5;
+    return 0;
   }
 
   abstract get snakePath(): Path;
 
   abstract get nymaPosition(): Position;
 
-  abstract get snakeLength(): number;
+  get snakeLength(): number {
+    return 10;
+  }
 
   abstract get randomColor(): string;
 
   get snakeBallStartPosition(): Position {
     return this.snakePath.start;
   }
+
+  get backgroundColor(): string {
+    return Colors.PaleTurquoise;
+  }
+
+  setBackground(context: CanvasRenderingContext2D): void {
+    context.fillStyle = this.backgroundColor;
+    context.fillRect(0, 0, this.canvasSize.width, this.canvasSize.height);
+  }
+
+  abstract get name(): string;
 }

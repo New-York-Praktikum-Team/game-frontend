@@ -3,7 +3,6 @@ import { Dispatch } from 'react';
 import { BaseActionType } from 'store/types';
 import { User } from 'interfaces';
 import { getErrorFromRequest } from 'modules/getErrorFromRequest';
-
 import { notification } from 'components/Notification';
 import { store } from 'store/store';
 import {
@@ -13,6 +12,7 @@ import {
   fetchUserRequest,
   fetchUserSuccess,
   userLogoutRequest,
+  userUpdateSuccess,
 } from './actions';
 
 export async function fetchUser(dispatch: Dispatch<ItemActionType | BaseActionType<UserActions>>) {
@@ -30,7 +30,8 @@ export const updateUserProfile = (user: User) => (
     try {
       await api.changeUserProfile(user);
       notification.success('Profile updated successfully');
-      await store.dispatch(fetchUser);
+      const updatedUser = await api.getUserInfo();
+      store.dispatch(userUpdateSuccess(updatedUser));
     } catch (responseError) {
       const error = await getErrorFromRequest(responseError);
       notification.error(error.message);
