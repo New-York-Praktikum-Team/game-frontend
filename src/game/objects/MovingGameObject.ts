@@ -5,7 +5,7 @@ import { RoundGameObject } from './RoundGameObject';
 export abstract class MovingGameObject extends RoundGameObject implements MovingObject {
   public isMoving = false;
 
-  private path?: Path;
+  protected path?: Path;
 
   protected setPath(path: Path) {
     this.path = path;
@@ -19,21 +19,20 @@ export abstract class MovingGameObject extends RoundGameObject implements Moving
 
   // time in milliseconds
   public clock(time: number): void {
-    if (!this.path) {
-      throw new Error('Object path was not provided');
-    }
     if (!this.velocity) {
       throw new Error('Object velocity was not provided');
     }
-    this.moveAndDraw((this.velocity * time) / 1000, this.path);
+    this.moveAndDraw((this.velocity * time) / 1000);
   }
 
-  public moveAndDraw(dist: number, path: Path)
-    : void {
+  protected moveAndDraw(distance: number) : void {
     if (this.isMoving) {
-      const nextPos = path.next(this.center, dist);
-      this.center = nextPos;
-      this.draw();
+      if (!this.path) {
+        throw new Error('Object path was not provided');
+      }
+      const nextPosition = this.path!.next(this.center, distance);
+      this.center = nextPosition;
     }
+    this.draw();
   }
 }

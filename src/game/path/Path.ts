@@ -36,4 +36,13 @@ export class Path {
     });
     return result!;
   }
+
+  angle(current: Position): number {
+    const next = this.next(current, 1);
+    const k = (next.y - current.y) / (next.x - current.x);
+    if (current.x < next.x) {
+      return Math.PI + Math.atan(k);
+    }
+    return Math.atan(k);
+  }
 }
