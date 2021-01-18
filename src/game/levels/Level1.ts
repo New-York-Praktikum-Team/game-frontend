@@ -45,7 +45,7 @@ export class Level1 extends Level {
   }
 
   get snakeLength(): number {
-    return 100;
+    return 15;
   }
 
   get randomColor(): string {

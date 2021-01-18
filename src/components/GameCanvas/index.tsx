@@ -38,17 +38,19 @@ export class GameCanvas extends Component<CanvasProps, CanvasState> {
     this.setState({ context });
   }
 
-  componentDidUpdate() {
-    const scene = this.getSceneByAppMode(this.state.appMode);
+  componentDidUpdate(prevProps: CanvasProps, prevState: CanvasState) {
+    if (this.state.appMode === AppMode.Main || prevState.appMode !== this.state.appMode) {
+      const scene = this.getSceneByAppMode(this.state.appMode);
 
-    scene.setUp();
-    scene.render().then((appOptions) => {
-      scene.destroy();
-      this.setState({
-        appMode: appOptions.appMode,
-        options: appOptions.options ?? this.state.options,
+      scene.setUp();
+      scene.render().then((appOptions) => {
+        scene.destroy();
+        this.setState({
+          appMode: appOptions.appMode,
+          options: Object.assign(this.state.options ?? {}, appOptions.options ?? {}),
+        });
       });
-    });
+    }
   }
 
   componentWillUnmount() {

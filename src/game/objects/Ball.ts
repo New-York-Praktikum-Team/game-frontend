@@ -21,6 +21,8 @@ export abstract class Ball extends MovingGameObject {
 
   private cumulativeDistance = 0;
 
+  abstract get angle(): number;
+
   draw(): void {
     const sprite = new Image();
     sprite.src = ballsImage;
@@ -29,9 +31,8 @@ export abstract class Ball extends MovingGameObject {
 
     this.context.save();
     this.context.translate(this.center.x, this.center.y);
-    if (this.isMoving) {
-      this.context.rotate(this.path!.angle(this.center));
-    }
+
+    this.context.rotate(this.angle);
 
     this.context.drawImage(
       sprite,

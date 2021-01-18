@@ -17,8 +17,4 @@ export abstract class RoundGameObject extends GameObject {
   distanceTo(obj: RoundGameObject): number {
     return this.distanceToPosition(obj.center) - obj.radius;
   }
-
-  collidesWith(obj: RoundGameObject): boolean {
-    return this.distanceTo(obj) <= 0;
-  }
 }
