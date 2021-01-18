@@ -68,13 +68,6 @@ export class Snake extends GameObject implements MovingObject {
     snakeBall.center = this.balls[index].center;
     snakeBall.color = ball.color;
     this.balls.splice(index, 0, snakeBall);
-
-    if (index < this.balls.length - 1) {
-      this.balls[index + 1].wasApart = true;
-    }
-    if (index > 0) {
-      this.balls[index - 1].wasApart = true;
-    }
   }
 
   private epsilon = 2;
@@ -87,10 +80,19 @@ export class Snake extends GameObject implements MovingObject {
     return ball1.distanceTo(ball2) > this.level.ballDistance + this.epsilon;
   }
 
+  private isApart(ball1: SnakeBall, ball2: SnakeBall): boolean {
+    return ball1.distanceTo(ball2) > this.level.ballDistance + 2 * ball1.radius;
+  }
+
   normalize(): void {
     for (let i = 0; i < this.balls.length - 1; i += 1) {
       const currentBall = this.balls[i];
       const previousBall = this.balls[i + 1];
+
+      if (this.isApart(currentBall, previousBall)) {
+        currentBall.wasApart = true;
+        previousBall.wasApart = true;
+      }
 
       if (this.tooFar(currentBall, previousBall)) {
         for (let j = 0; j <= i; j += 1) {
@@ -107,6 +109,10 @@ export class Snake extends GameObject implements MovingObject {
         currentBall.isMoving = true;
         currentBall.isNew = false;
       }
+    }
+
+    if (this.balls.length === 1) {
+      this.balls[0].isMoving = true;
     }
   }
 
