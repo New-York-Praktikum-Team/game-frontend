@@ -57,8 +57,8 @@ export class LinearSection implements Section {
       console.log("Current position isn't on the path");
     }
 
-    const sign = this.start.x < this.end.x ? 1 : -1;
-    const nextX = current.x + sign * Math.cos(Math.atan(this.k)) * distanceDelta;
+    const angle = this.start.x < this.end.x ? Math.atan(this.k) : Math.PI + Math.atan(this.k);
+    const nextX = current.x + Math.cos(angle) * distanceDelta;
     const nextY = this.k * nextX + this.b;
 
     return { x: nextX, y: nextY };

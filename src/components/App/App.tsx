@@ -14,7 +14,8 @@ import { hot } from 'react-hot-loader/root';
 export const App: FC = hot(() => {
   const isUserLogged = useSelector(loggedSelector);
 
-  useEffect(() => {
+  useEffect((): void => {
+    if (isUserLogged) return; // If user logged from SSR
     store.dispatch(fetchUser);
   }, []);
 

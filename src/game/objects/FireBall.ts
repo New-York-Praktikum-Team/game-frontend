@@ -31,10 +31,6 @@ export class FireBall extends Ball {
     );
   }
 
-  draw(): void {
-    renderCircle(this.context, this.center, this.radius, this.color);
-  }
-
   drawRelativeToPosition(position: Position): void {
     renderCircle(
       this.context,
