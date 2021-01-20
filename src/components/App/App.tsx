@@ -1,5 +1,5 @@
-import React, { FC, useEffect } from 'react';
-import { Switch } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Switch, withRouter } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { ErrorBoundary } from 'components/ErrorBoundary';
 import { PrivateRoute } from 'components/PrivateRoute';
@@ -9,14 +9,32 @@ import { ROUTES } from 'routes/routes';
 import { store } from 'store/store';
 import { fetchUser } from 'store/user/thunks';
 import { loggedSelector } from 'store/user/selectors';
+import { notification } from 'components/Notification';
 import { hot } from 'react-hot-loader/root';
+import * as api from '../../modules/api';
 
-export const App: FC = hot(() => {
+export const App = hot(withRouter(({ history }) => {
   const isUserLogged = useSelector(loggedSelector);
 
-  useEffect((): void => {
-    if (isUserLogged) return; // If user logged from SSR
-    store.dispatch(fetchUser);
+  useEffect(() => {
+    if (isUserLogged) return;
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const code = urlParams.get('code');
+
+    if (code) {
+      urlParams.delete('code');
+      history.replace({ search: urlParams.toString() });
+
+      api.OAuthYandexSignInRequest(code).then(() => {
+        notification.success('Authorisation Success with Yandex');
+        store.dispatch(fetchUser);
+      }).catch(() => {
+        notification.error('Authorisation Error with Yandex');
+      });
+    } else {
+      store.dispatch(fetchUser);
+    }
   }, []);
 
   return (
@@ -34,4 +52,4 @@ export const App: FC = hot(() => {
       </main>
     </article>
   );
-});
+}));

@@ -16,7 +16,6 @@ export class NymaGame extends Scene {
   constructor(canvasRef: HTMLCanvasElement, canvasSize: CanvasSize, options?: GameOptions) {
     super(canvasRef, canvasSize);
     this.level = options?.level ?? new Level1(this.canvasSize);
-    this.score = 0;
 
     this.nyma = new Nyma(this.context, this.level);
     this.hole = new Hole(this.context, this.level);
@@ -36,7 +35,9 @@ export class NymaGame extends Scene {
 
   lastTime: number = 0;
 
-  resolveCallback: Function = () => {};
+  resolveCallback: Function = () => { };
+
+  private globalId?: number;
 
   render(): Promise<AppOptions> {
     return new Promise((resolve) => {
@@ -56,7 +57,7 @@ export class NymaGame extends Scene {
 
     this.clearAndDrawStaticObjects();
 
-    requestAnimationFrame(() => { this.updateCanvas(); });
+    this.globalId = requestAnimationFrame(this.updateCanvas);
   }
 
   clearAndDrawStaticObjects() {
@@ -96,29 +97,10 @@ export class NymaGame extends Scene {
     this.handleFullScreenButtonClick(event);
   };
 
-  private needToShowBang = false;
+  score: number = 0;
 
-  private bangPosition = { x: 0, y: 0 };
-
-  showBang() {
-    if (this.needToShowBang) {
-      renderText(
-        this.context,
-        'BANG!', {
-          x: this.bangPosition.x,
-          y: this.bangPosition.y,
-          color: 'black',
-          align: 'center',
-          font: '24px Arial',
-        },
-      );
-    }
-  }
-
-  score: number;
-
-  scoring = (score: number = 5): void => {
-    this.score += score;
+  scoring = (explodedCount: number = 5): void => {
+    this.score += explodedCount * 5;
   };
 
   showScore = () => {
@@ -134,7 +116,9 @@ export class NymaGame extends Scene {
     );
   };
 
-  updateCanvas(): void {
+  private gameEndTimer?: NodeJS.Timeout;
+
+  updateCanvas = () => {
     const time = performance.now();
     const timeDelta = time - this.lastTime;
     this.lastTime = time;
@@ -145,27 +129,37 @@ export class NymaGame extends Scene {
     this.snake.clock(timeDelta);
     this.nyma.fireBall?.clock(timeDelta);
 
-    this.showBang();
     this.showScore();
 
     if (this.nyma.fireBall) {
       if (!isPositionInsideRect(this.nyma.fireBall.center, this.canvasRectangle)) {
         this.nyma.fireBall = null;
-      } else if (this.snake.collidesWith(this.nyma.fireBall)) {
-        this.scoring(5);
-        this.needToShowBang = true;
-        this.bangPosition = this.nyma.fireBall.center;
-        setTimeout(() => { this.needToShowBang = false; }, 1000);
-        this.nyma.fireBall = null;
+      } else {
+        const collisionIndex = this.snake.collisionBallIndex(this.nyma.fireBall);
+        if (collisionIndex >= 0) {
+          this.snake.addBallAtIndex(this.nyma.fireBall, collisionIndex);
+          this.nyma.fireBall = null;
+        }
       }
     }
+    this.snake.normalize();
+    const explodedCount = this.snake.explode();
+    this.scoring(explodedCount);
+
+    this.globalId = requestAnimationFrame(this.updateCanvas);
 
     if (this.snake.collidesWith(this.hole)) {
+      cancelAnimationFrame(this.globalId!);
       this.resolveCallback({ appMode: AppMode.Losing });
       setLeaderboard(this.score);
-      return;
+    } else if (this.snake.balls.length === 0 && !this.snake.neeedMoreBalls()) {
+      if (!this.gameEndTimer) {
+        this.gameEndTimer = setTimeout(() => {
+          cancelAnimationFrame(this.globalId!);
+          this.resolveCallback({ appMode: AppMode.Winning, options: { score: this.score } });
+          setLeaderboard(this.score);
+        }, 0);
+      }
     }
-
-    requestAnimationFrame(() => this.updateCanvas());
-  }
+  };
 }

@@ -46,6 +46,7 @@ export const Profile: FC = () => {
   const formFields: User = {
     ...profile,
     displayName: profile.displayName || '',
+    phone: profile.phone || '',
   };
 
   const updateProfile = useCallback(async (

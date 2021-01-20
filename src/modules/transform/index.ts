@@ -1,4 +1,5 @@
 import {
+  OAuthGetYandexServiceResponseDTO, OAuthYandexService,
   SignUpRequest, SignUpRequestDTO, User, UserDTO, UserUpdateRequestDTO,
 } from 'interfaces';
 
@@ -29,4 +30,10 @@ export const transformUserUpdate = (user: User): UserUpdateRequestDTO => ({
   second_name: user.secondName,
   display_name: user.displayName || '',
   phone: user.phone,
+});
+
+export const transformYandexService = (
+  service: OAuthGetYandexServiceResponseDTO,
+): OAuthYandexService => ({
+  serviceId: service.service_id,
 });
