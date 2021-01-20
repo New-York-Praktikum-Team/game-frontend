@@ -54,12 +54,13 @@ export abstract class Ball extends MovingGameObject {
   private ballCircleLength = 2 * Math.PI * this.radius;
 
   protected moveAndDraw(distance: number) : void {
-    this.cumulativeDistance += distance;
-    if (this.cumulativeDistance > this.ballCircleLength / frameCount) {
-      this.frameIndex = (((this.frameIndex - 1) % frameCount) + frameCount) % frameCount;
-      this.cumulativeDistance = 0;
+    if (this.isMoving) {
+      this.cumulativeDistance += distance;
+      if (this.cumulativeDistance > this.ballCircleLength / frameCount) {
+        this.frameIndex = (((this.frameIndex - 1) % frameCount) + frameCount) % frameCount;
+        this.cumulativeDistance = 0;
+      }
     }
-
     super.moveAndDraw(distance);
   }
 }

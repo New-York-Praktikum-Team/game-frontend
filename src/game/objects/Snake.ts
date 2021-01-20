@@ -133,8 +133,7 @@ export class Snake extends GameObject implements MovingObject {
 
       if (
         currentBall.color === currentColor
-        && !this.tooFar(currentBall, this.balls[i - 1])
-        && !this.tooClose(currentBall, this.balls[i - 1])
+        && !this.isApart(currentBall, this.balls[i - 1])
       ) {
         currentColorCount += 1;
       } else {
@@ -152,6 +151,8 @@ export class Snake extends GameObject implements MovingObject {
         const subset = this.balls.slice(i, i + sameColorCount);
 
         // don't explode initial ball sequences
+        // if some balls are too close or too far then don't explode,
+        // wait intil the sequence is normalized
         let shouldExplode = false;
         for (let j = 0; j < subset.length; j += 1) {
           if (subset[j].wasNew) {
@@ -159,6 +160,15 @@ export class Snake extends GameObject implements MovingObject {
           }
           if (j < subset.length - 1 && subset[j].wasApart && subset[j + 1].wasApart) {
             shouldExplode = true;
+          }
+
+          if (
+            j < subset.length - 1
+            && ((subset[j].isNew && this.tooClose(subset[j], subset[j + 1]))
+              || this.tooFar(subset[j], subset[j + 1]))
+          ) {
+            shouldExplode = false;
+            break;
           }
         }
 
