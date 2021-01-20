@@ -4,7 +4,9 @@ const { app } = require('./dist/server.js');
 
 const port = process.env.PORT || 5000;
 
-if (process.env.NODE_ENV === 'development') {
+const certificateIsExist = fs.existsSync('server/certificate/server.key') && fs.existsSync('server/certificate/server.cert');
+
+if (process.env.NODE_ENV === 'development' && certificateIsExist) {
   https.createServer({
     key: fs.readFileSync('server/certificate/server.key'),
     cert: fs.readFileSync('server/certificate/server.cert'),
