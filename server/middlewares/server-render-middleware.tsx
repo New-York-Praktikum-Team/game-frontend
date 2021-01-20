@@ -4,10 +4,12 @@ import { renderToString } from 'react-dom/server';
 import { Request, Response } from 'express';
 import { StaticRouter } from 'react-router-dom';
 import { Helmet, HelmetData } from 'react-helmet';
-import { App } from '../src/components/App';
-import { store } from '../src/store/store';
-import { AppUrls } from '../src/routes/appUrls';
-import { RootState } from '../src/store/rootReducer';
+import { App } from '../../src/components/App';
+import { store } from '../../src/store/store';
+import { AppUrls } from '../../src/routes/appUrls';
+import { RootState } from '../../src/store/rootReducer';
+import { fetchUserSuccess } from '../../src/store/user/actions';
+import { transformUser } from '../../src/modules/transform';
 
 const getHtml = (reactHtml: string, state: RootState, helmetData: HelmetData): string => (`
       <!DOCTYPE html>
@@ -33,6 +35,10 @@ const getHtml = (reactHtml: string, state: RootState, helmetData: HelmetData): s
 
 export const serverRenderMiddleware = (request: Request, response: Response): void => {
   const location: string = request.url;
+
+  if (response.locals.user) {
+    store.dispatch(fetchUserSuccess(transformUser(response.locals.user)));
+  }
 
   const jsx = (
     <ReduxProvider store={store}>

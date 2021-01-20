@@ -93,6 +93,13 @@ heroku restart # restar service
 heroku releases #  list of all releases
 ```
 
+## Development
+### User SSR authorization on localhost
+1. Add the line to the host file: 127.0.0.1 local.ya-praktikum.tech
+2. Generate SSL certificates [server.cert, server.key] to folder server/certificate. [Guideline](https://flaviocopes.com/express-https-self-signed-certificate/)
+3. Run server: npm run start
+4. Go to [https://local.ya-praktikum.tech](https://local.ya-praktikum.tech)
+
 ## Contibuting
 
 To be done.
