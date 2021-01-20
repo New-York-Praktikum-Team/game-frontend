@@ -28,4 +28,4 @@ ENV PORT=80
 EXPOSE 80
 
 # Server serves static files from /dist
-CMD npm run start:prod
+CMD npm run start:serve
