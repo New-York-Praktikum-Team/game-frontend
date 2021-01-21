@@ -18,9 +18,10 @@ import { createConnection } from 'typeorm';
     const connection = await createConnection({
       name: 'mongodb',
       type: 'mongodb',
-      url: 'mongodb://localhost:27017',
+      url: 'mongodb://localhost:27017/nyma-api',
       useUnifiedTopology: true,
     });
+
     // eslint-disable-next-line no-console
     console.log(`connection to DB success: ${connection.name}`);
   } catch (err) {
