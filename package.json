@@ -6,7 +6,7 @@
   "scripts": {
     "start": "npm run clean && NODE_ENV=development npm-run-all --print-label --parallel start:server start:webpack",
     "start:webpack": "webpack --mode=development --watch",
-    "start:server": "PORT=5000 wait-on dist/server.js && node -r esm index.ts",
+    "start:server": "wait-on dist/server.js && node -r esm index.ts",
     "start:prod": "npm run build && node -r esm index.ts",
     "start:serve": "node -r esm index.ts",
     "build": "npm run clean && webpack --mode=production",
