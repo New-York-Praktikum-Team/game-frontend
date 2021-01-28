@@ -1,15 +1,19 @@
 import 'reflect-metadata';
-import { Connection, createConnection } from 'typeorm';
+import { createConnection, getConnection } from 'typeorm';
 import { Theme } from '../entity/Theme';
 
 class DB {
-  public mongodb!: Connection;
+  public get mongodb() {
+    return getConnection('mongodb');
+  }
 
-  public postgres!: Connection;
+  public get postgres() {
+    return getConnection('postgres');
+  }
 
   public connect = async (): Promise<void> => {
     try {
-      this.postgres = await createConnection({
+      await createConnection({
         name: 'postgres',
         type: 'postgres',
         url: 'postgres://nyma:nyma@localhost:5436/nyma-api',
@@ -24,7 +28,7 @@ class DB {
     }
 
     try {
-      this.mongodb = await createConnection({
+      await createConnection({
         name: 'mongodb',
         type: 'mongodb',
         url: 'mongodb://localhost:27017/nyma-api',
