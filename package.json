@@ -86,6 +86,7 @@
     "webpack-hot-middleware": "2.25.0"
   },
   "dependencies": {
+    "@babel/plugin-proposal-decorators": "7.12.12",
     "@babel/plugin-transform-runtime": "7.12.1",
     "@babel/runtime": "7.12.1",
     "@hot-loader/react-dom": "17.0.1",
