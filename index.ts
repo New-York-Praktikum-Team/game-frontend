@@ -1,7 +1,8 @@
+import 'reflect-metadata';
 import https from 'https';
 import fs from 'fs';
 // @ts-ignore
-import { app } from './dist/server.js';
+import { app } from './server/server';
 import { db } from './server/db';
 
 const port = process.env.PORT || 5000;

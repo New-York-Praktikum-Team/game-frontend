@@ -1,6 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-
-type IVariables = Record<string, string>;
+import {
+  Column, Entity, PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class Theme {
@@ -9,7 +9,4 @@ export class Theme {
 
   @Column()
   name!: string;
-
-  @Column('jsonb')
-  variables!: IVariables;
 }

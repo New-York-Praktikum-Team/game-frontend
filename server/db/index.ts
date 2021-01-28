@@ -1,4 +1,3 @@
-import 'reflect-metadata';
 import { createConnection, getConnection } from 'typeorm';
 import { Theme } from '../entity/Theme';
 
@@ -13,15 +12,20 @@ class DB {
 
   public connect = async (): Promise<void> => {
     try {
-      await createConnection({
+      const connection = await createConnection({
         name: 'postgres',
         type: 'postgres',
         url: 'postgres://nyma:nyma@localhost:5436/nyma-api',
         synchronize: true,
         entities: [Theme],
       });
+
+      await connection.manager.find('Theme');
+
       // eslint-disable-next-line no-console
-      console.log(`connection to DB success: ${this.postgres.name}`);
+      console.log('connection to DB success: postgres');
+      // const result = await connection.manager.find(Theme);
+      // console.log(result);
     } catch (err) {
       // eslint-disable-next-line no-console
       console.error(err);

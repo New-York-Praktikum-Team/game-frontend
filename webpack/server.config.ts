@@ -5,7 +5,7 @@ import nodeExternals from 'webpack-node-externals';
 const fileRegex = /^(?!.*\.inline).*\.(svg|jpe?g|png|gif|eot|woff2?|ttf)$/;
 
 const serverConfig = {
-  entry: './server/server.ts',
+  entry: ['./index.ts'],
   name: 'server',
   target: 'node',
   node: { __dirname: false },
