@@ -1,4 +1,5 @@
 import { Connection, createConnection } from 'typeorm';
+import { Theme } from '../entity/Theme';
 
 class DB {
   public mongodb!: Connection;
@@ -12,6 +13,7 @@ class DB {
         type: 'postgres',
         url: 'postgres://nyma:nyma@localhost:5436/nyma-api',
         synchronize: true,
+        entities: [Theme],
       });
       // eslint-disable-next-line no-console
       console.log(`connection to DB success: ${this.postgres.name}`);
