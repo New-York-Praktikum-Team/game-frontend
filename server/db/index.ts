@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import { Connection, createConnection } from 'typeorm';
 import { Theme } from '../entity/Theme';
 
@@ -6,7 +7,7 @@ class DB {
 
   public postgres!: Connection;
 
-  public connect = async () => {
+  public connect = async (): Promise<void> => {
     try {
       this.postgres = await createConnection({
         name: 'postgres',
