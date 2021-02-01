@@ -6,3 +6,11 @@ const defaultOptions: Options = {
 };
 
 export const HTTPTransport = ky.create(defaultOptions);
+
+const localApiOptions: Options = {
+  prefixUrl: 'https://local.ya-praktikum.tech:5001/api/',
+  credentials: 'include',
+  mode: 'cors',
+};
+
+export const HTTPLocalTransport = ky.create(localApiOptions);

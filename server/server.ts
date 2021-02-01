@@ -9,7 +9,6 @@ import cookieParser from 'cookie-parser';
 import webpackClientConfig from '../webpack/client.config';
 import { serverRenderMiddleware } from './middlewares/server-render-middleware';
 import { serverUserAuthMiddleware } from './middlewares/server-user-auth-middleware';
-import api from './api';
 
 const app = express();
 
@@ -24,7 +23,6 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 app.use(serverUserAuthMiddleware);
-app.use('/api', api);
 app.get('/*', serverRenderMiddleware);
 
 export { app };

@@ -4,6 +4,7 @@
       "dom",
       "es2020"
     ],
+    "emitDecoratorMetadata": true,
     "noImplicitAny": true,
     "noImplicitThis": true,
     "moduleResolution": "node",

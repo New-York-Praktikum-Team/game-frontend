@@ -2,6 +2,9 @@
   "presets": ["@babel/preset-env", "@babel/preset-react", "@babel/preset-typescript"],
   "plugins": [
     ["transform-class-properties"],
+    ["@babel/plugin-proposal-decorators", {
+      "decoratorsBeforeExport": true
+    }],
     ["react-hot-loader/babel"],
     ["@babel/plugin-transform-runtime", {
       "regenerator": true

@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import axios from 'axios';
 
-export const serverUserAuthMiddleware = async (
+export const authorization = async (
   request: Request,
   response: Response,
   next: NextFunction,
