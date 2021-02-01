@@ -11,6 +11,8 @@ export const authorization = async (
     authCookie: request.cookies.authCookie,
   };
 
+  response.locals.user = null;
+
   if (requestCookies.authCookie) {
     const cookies = Object.entries(requestCookies).map(([key, value]) => `${key}=${value}`).join(';');
 
@@ -21,7 +23,6 @@ export const authorization = async (
 
       response.locals.user = data;
     } catch (err) {
-      response.locals.user = null;
       // eslint-disable-next-line no-console
       console.error(err);
     }
