@@ -12,7 +12,7 @@ class DB {
 
   public connect = async (): Promise<void> => {
     try {
-      const connection = await createConnection({
+      await createConnection({
         name: 'postgres',
         type: 'postgres',
         url: 'postgres://nyma:nyma@localhost:5436/nyma-api',
@@ -20,12 +20,8 @@ class DB {
         entities: [Theme],
       });
 
-      await connection.manager.find('Theme');
-
       // eslint-disable-next-line no-console
       console.log('connection to DB success: postgres');
-      // const result = await connection.manager.find(Theme);
-      // console.log(result);
     } catch (err) {
       // eslint-disable-next-line no-console
       console.error(err);

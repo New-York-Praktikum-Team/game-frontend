@@ -2,11 +2,16 @@ import {
   Column, Entity, PrimaryGeneratedColumn,
 } from 'typeorm';
 
+type IThemeJson = Record<string, string>;
+
 @Entity()
 export class Theme {
   @PrimaryGeneratedColumn()
-  id!: number;
+  id: number;
 
   @Column()
-  name!: string;
+  name: string;
+
+  @Column({ type: 'jsonb' })
+  json: IThemeJson;
 }
