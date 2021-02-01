@@ -1,9 +1,6 @@
 import { createConnection, getConnection } from 'typeorm';
-import dotenv from 'dotenv';
 import { Theme } from '../entity/Theme';
 import { UserTheme } from '../entity/UserTheme';
-
-dotenv.config();
 
 class DB {
   public get mongodb() {
