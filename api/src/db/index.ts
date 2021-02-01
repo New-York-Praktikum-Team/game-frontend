@@ -1,5 +1,6 @@
 import { createConnection, getConnection } from 'typeorm';
 import { Theme } from '../entity/Theme';
+import { UserTheme } from '../entity/UserTheme';
 
 class DB {
   public get mongodb() {
@@ -17,7 +18,7 @@ class DB {
         type: 'postgres',
         url: 'postgres://nyma:nyma@localhost:5436/nyma-api',
         synchronize: true,
-        entities: [Theme],
+        entities: [Theme, UserTheme],
       });
 
       // eslint-disable-next-line no-console

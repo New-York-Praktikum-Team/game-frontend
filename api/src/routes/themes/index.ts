@@ -1,6 +1,8 @@
 import express, { Request, Response } from 'express';
 import { db } from '../../db';
 import { Theme } from '../../entity/Theme';
+import { isAuth } from '../../middlewares/isAuth';
+import { UserTheme } from '../../entity/UserTheme';
 
 const router = express.Router();
 
@@ -28,11 +30,21 @@ router.post('/', async (request: Request, response: Response) => {
   }
 });
 
-router.get('/user', async (request: Request, response: Response) => {
+router.get('/user', isAuth, async (request: Request, response: Response) => {
+  const { manager } = db.postgres;
+  const { user } = response.locals;
+
   try {
-    response.json([]);
+    const savedUserTheme = await manager.findOne(UserTheme, { where: { userId: user.id } });
+
+    if (savedUserTheme) {
+      response.json(savedUserTheme);
+    } else {
+      const defaultTheme = await manager.findOne(Theme);
+      response.json(defaultTheme);
+    }
   } catch (err) {
-    response.status(500).json({ error: true, message: 'Internal Error' });
+    response.status(500).json({ error: true, message: err });
   }
 });
 
