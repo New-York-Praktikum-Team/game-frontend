@@ -18,6 +18,9 @@ class DB {
         type: 'postgres',
         url: 'postgres://nyma:nyma@localhost:5436/nyma-api',
         synchronize: true,
+        migrations: [`${__dirname}/../migrations/postgres/*.ts`],
+        migrationsRun: true,
+        migrationsTableName: 'migrations',
         entities: [Theme, UserTheme],
       });
 
