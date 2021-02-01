@@ -4,3 +4,4 @@ node_modules
 dist
 server/certificate/*
 api/src/certificate/*
+.env

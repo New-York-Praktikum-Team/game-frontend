@@ -98,6 +98,7 @@
     "cookie-parser": "1.4.5",
     "copy-webpack-plugin": "6.4.0",
     "cors": "2.8.5",
+    "dotenv": "8.2.0",
     "express": "4.17.1",
     "formik": "2.2.1",
     "html-webpack-plugin": "4.5.0",

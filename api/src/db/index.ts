@@ -1,6 +1,9 @@
 import { createConnection, getConnection } from 'typeorm';
+import dotenv from 'dotenv';
 import { Theme } from '../entity/Theme';
 import { UserTheme } from '../entity/UserTheme';
+
+dotenv.config();
 
 class DB {
   public get mongodb() {
@@ -13,10 +16,12 @@ class DB {
 
   public connect = async (): Promise<void> => {
     try {
+      const { DB_LOGIN, DB_PASSWORD } = process.env;
+
       await createConnection({
         name: 'postgres',
         type: 'postgres',
-        url: 'postgres://nyma:nyma@localhost:5436/nyma-api',
+        url: `postgres://${DB_LOGIN}:${DB_PASSWORD}@localhost:5436/nyma-api`,
         synchronize: true,
         migrations: [`${__dirname}/../migrations/postgres/*.ts`],
         migrationsRun: true,
