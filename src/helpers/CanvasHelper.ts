@@ -34,12 +34,18 @@ export const renderText = (
 };
 
 export const renderCircle = (
-  context: CanvasRenderingContext2D, center: Position, radius: number, color?: string,
+  context: CanvasRenderingContext2D,
+  center: Position,
+  radius: number,
+  color?: string,
+  opacity: number = 1,
 ) => {
   context.beginPath();
   context.arc(center.x, center.y, radius, 0, 2 * Math.PI);
   context.fillStyle = color ?? 'black';
+  context.globalAlpha = opacity;
   context.fill();
+  context.globalAlpha = 1;
   context.closePath();
 };
 
@@ -56,28 +62,59 @@ export const renderRectangle = (
   context.closePath();
 };
 
-export const getMousePosition = (event: MouseEvent, clientRect: ClientRect) => {
+export const getMousePosition = (
+  event: MouseEvent,
+  clientRect: ClientRect,
+  canvasSize: CanvasSize,
+): Position => {
   const { left, top } = clientRect;
 
+  if (!document.fullscreenElement) {
+    return {
+      x: event.clientX - left,
+      y: event.clientY - top,
+    };
+  }
+
+  const canvasRatio = canvasSize.width / canvasSize.height;
+  const clientRectRatio = clientRect.width / clientRect.height;
+
+  if (canvasRatio >= clientRectRatio) {
+    const xScale = canvasSize.width / clientRect.width;
+    const realCanvasHeight = canvasSize.height / xScale;
+
+    const yMargin = (clientRect.height - realCanvasHeight) / 2;
+
+    return ({
+      x: event.clientX * xScale,
+      y: (event.clientY - yMargin) * xScale,
+    });
+  }
+  const yScale = canvasSize.height / clientRect.height;
+  const realCanvasWidth = canvasSize.width / yScale;
+
+  const xMargin = (clientRect.width - realCanvasWidth) / 2;
+
   return ({
-    x: event.clientX - left,
-    y: event.clientY - top,
-  }) as Position;
+    x: (event.clientX - xMargin) * yScale,
+    y: event.clientY * yScale,
+  });
 };
 
 export const isPositionInsideRect = (position: Position, rectangle: Rectangle) => (
   position.x > rectangle.x
-      && rectangle.x + rectangle.width > position.x
-      && position.y > rectangle.y
-      && rectangle.y + rectangle.height > position.y
+  && rectangle.x + rectangle.width > position.x
+  && position.y > rectangle.y
+  && rectangle.y + rectangle.height > position.y
 );
 
 export const isMousePositionInsideRect = (
   event: MouseEvent,
   clientRect: ClientRect,
+  canvasSize: CanvasSize,
   targetRect: Rectangle,
 ): boolean => {
-  const mousePosition = getMousePosition(event, clientRect);
+  const mousePosition = getMousePosition(event, clientRect, canvasSize);
   return isPositionInsideRect(mousePosition, targetRect);
 };
 
@@ -118,3 +155,33 @@ export const renderButton = (
     },
   );
 };
+
+export const renderImage = (
+  context: CanvasRenderingContext2D,
+  position: Position,
+  src: string,
+): void => {
+  const render = (imageElement: HTMLImageElement) => {
+    context.drawImage(imageElement, position.x, position.y);
+  };
+
+  const image = new Image();
+  image.src = src;
+  image.onload = () => render(image);
+
+  render(image);
+};
+
+export const blurCanvas = (context: CanvasRenderingContext2D): Promise<void> => new Promise(
+  (resolve) => {
+    const img = new Image();
+    img.src = context.canvas.toDataURL('image/png');
+
+    img.addEventListener('load', () => {
+      context.filter = 'blur(3px)';
+      context.drawImage(img, 0, 0);
+      context.filter = 'none';
+      resolve();
+    });
+  },
+);

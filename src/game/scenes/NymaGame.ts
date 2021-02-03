@@ -1,26 +1,21 @@
 import { AppMode } from 'components/GameCanvas';
 import {
-  CanvasSize, clear, getMousePosition, isMousePositionInsideRect, isPositionInsideRect, renderText,
+  CanvasSize, getMousePosition, isMousePositionInsideRect,
+  isPositionInsideRect, renderText,
 } from 'helpers/CanvasHelper';
 import { Level } from 'game/levels/Level';
 import { Level1 } from 'game/levels/Level1';
 import { Hole } from 'game/objects/Hole';
 import { Nyma } from 'game/objects/Nyma';
 import { Snake } from 'game/objects/Snake';
-import { Colors } from 'consts/colors';
 import { Rectangle } from 'consts/shapes';
 import { setLeaderboard } from 'store/leaderboard/thunks';
-import { Scene } from './Scene';
-
-interface GameOptions {
-  level?: Level;
-}
+import { AppOptions, GameOptions, Scene } from './Scene';
 
 export class NymaGame extends Scene {
   constructor(canvasRef: HTMLCanvasElement, canvasSize: CanvasSize, options?: GameOptions) {
     super(canvasRef, canvasSize);
-    this.level = options?.level ?? new Level1();
-    this.score = 0;
+    this.level = options?.level ?? new Level1(this.canvasSize);
 
     this.nyma = new Nyma(this.context, this.level);
     this.hole = new Hole(this.context, this.level);
@@ -42,7 +37,9 @@ export class NymaGame extends Scene {
 
   resolveCallback: Function = () => { };
 
-  render(): Promise<AppMode> {
+  private globalId?: number;
+
+  render(): Promise<AppOptions> {
     return new Promise((resolve) => {
       this.resolveCallback = resolve;
       this.startGame();
@@ -50,6 +47,7 @@ export class NymaGame extends Scene {
   }
 
   destroy(): void {
+    super.destroy();
     this.canvasRef.removeEventListener('click', this.handleClick);
     this.canvasRef.removeEventListener('mousemove', this.handleMouseMove);
   }
@@ -59,13 +57,15 @@ export class NymaGame extends Scene {
 
     this.clearAndDrawStaticObjects();
 
-    requestAnimationFrame(() => { this.updateCanvas(); });
+    this.globalId = requestAnimationFrame(this.updateCanvas);
   }
 
   clearAndDrawStaticObjects() {
-    clear(this.context, this.canvasSize, Colors.PaleTurquoise);
+    this.level.setBackground(this.context);
     this.nyma.draw();
     this.hole.draw();
+
+    this.renderFullScreenButton();
   }
 
   private canvasRectangle: Rectangle = {
@@ -76,7 +76,7 @@ export class NymaGame extends Scene {
   };
 
   handleMouseMove = (event: MouseEvent) => {
-    const position = getMousePosition(event, this.clientRect);
+    const position = getMousePosition(event, this.clientRect, this.canvasSize);
     if (isPositionInsideRect(position, this.canvasRectangle)) {
       this.nyma.setDirection(position);
     }
@@ -86,37 +86,21 @@ export class NymaGame extends Scene {
     const isMouseInsideCanvas = isMousePositionInsideRect(
       event,
       this.clientRect,
+      this.canvasSize,
       this.canvasRectangle,
     );
 
     if (isMouseInsideCanvas) {
       this.nyma.shoot();
     }
+
+    this.handleFullScreenButtonClick(event);
   };
 
-  private needToShowBang = false;
+  score: number = 0;
 
-  private bangPosition = { x: 0, y: 0 };
-
-  showBang() {
-    if (this.needToShowBang) {
-      renderText(
-        this.context,
-        'BANG!', {
-          x: this.bangPosition.x,
-          y: this.bangPosition.y,
-          color: 'black',
-          align: 'center',
-          font: '24px Arial',
-        },
-      );
-    }
-  }
-
-  score: number;
-
-  scoring = (score: number = 5): void => {
-    this.score += score;
+  scoring = (explodedCount: number = 5): void => {
+    this.score += explodedCount * 5;
   };
 
   showScore = () => {
@@ -132,7 +116,9 @@ export class NymaGame extends Scene {
     );
   };
 
-  updateCanvas(): void {
+  private gameEndTimer?: NodeJS.Timeout;
+
+  updateCanvas = () => {
     const time = performance.now();
     const timeDelta = time - this.lastTime;
     this.lastTime = time;
@@ -143,27 +129,37 @@ export class NymaGame extends Scene {
     this.snake.clock(timeDelta);
     this.nyma.fireBall?.clock(timeDelta);
 
-    this.showBang();
     this.showScore();
 
     if (this.nyma.fireBall) {
       if (!isPositionInsideRect(this.nyma.fireBall.center, this.canvasRectangle)) {
         this.nyma.fireBall = null;
-      } else if (this.snake.collidesWith(this.nyma.fireBall)) {
-        this.scoring(5);
-        this.needToShowBang = true;
-        this.bangPosition = this.nyma.fireBall.center;
-        setTimeout(() => { this.needToShowBang = false; }, 1000);
-        this.nyma.fireBall = null;
+      } else {
+        const collisionIndex = this.snake.collisionBallIndex(this.nyma.fireBall);
+        if (collisionIndex >= 0) {
+          this.snake.addBallAtIndex(this.nyma.fireBall, collisionIndex);
+          this.nyma.fireBall = null;
+        }
       }
     }
+    this.snake.normalize();
+    const explodedCount = this.snake.explode();
+    this.scoring(explodedCount);
+
+    this.globalId = requestAnimationFrame(this.updateCanvas);
 
     if (this.snake.collidesWith(this.hole)) {
-      this.resolveCallback(AppMode.Losing);
+      cancelAnimationFrame(this.globalId!);
+      this.resolveCallback({ appMode: AppMode.Losing });
       setLeaderboard(this.score);
-      return;
+    } else if (this.snake.balls.length === 0 && !this.snake.neeedMoreBalls()) {
+      if (!this.gameEndTimer) {
+        this.gameEndTimer = setTimeout(() => {
+          cancelAnimationFrame(this.globalId!);
+          this.resolveCallback({ appMode: AppMode.Winning, options: { score: this.score } });
+          setLeaderboard(this.score);
+        }, 0);
+      }
     }
-
-    requestAnimationFrame(() => this.updateCanvas());
-  }
+  };
 }

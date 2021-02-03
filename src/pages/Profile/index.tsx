@@ -12,6 +12,7 @@ import { store } from 'store/store';
 import {
   changeUserAvatar, changeUserPassword, updateUserProfile, userLogout,
 } from 'store/user/thunks';
+import { PageMeta } from 'components/PageMeta/PageMeta';
 import { useEnhance } from './useEnhance';
 import './Profile.css';
 
@@ -45,6 +46,7 @@ export const Profile: FC = () => {
   const formFields: User = {
     ...profile,
     displayName: profile.displayName || '',
+    phone: profile.phone || '',
   };
 
   const updateProfile = useCallback(async (
@@ -79,6 +81,8 @@ export const Profile: FC = () => {
 
   return (
     <section className='profile-form-wrapper'>
+      <PageMeta title="Profile" description="Player profile" />
+
       <h1>Profile</h1>
 
       <div className="row">

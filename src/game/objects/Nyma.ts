@@ -1,16 +1,22 @@
 import { Level } from 'game/levels/Level';
-import { renderCircle, renderRectangle, renderText } from 'helpers/CanvasHelper';
-import { Position } from 'game/objects/Position';
+import { Position, positionAfterRotation } from 'game/objects/Position';
+import nymaImage from 'assets/images/Nyma.png';
+import nymaBaseImage from 'assets/images/NymaBase.png';
+import { renderImage } from 'helpers/CanvasHelper';
 import { FireBall } from './FireBall';
 import { RoundGameObject } from './RoundGameObject';
 
 export class Nyma extends RoundGameObject {
   constructor(context: CanvasRenderingContext2D, private level: Level) {
     super(context, level.nymaPosition, level.nymaRadius);
-    this.currentBall = new FireBall(context, level.nymaPosition, level);
+    this.currentBall = new FireBall(
+      context,
+      { x: this.center.x + 60, y: this.center.y },
+      level,
+    );
     this.nextBall = new FireBall(
       context,
-      { x: this.center.x + level.ballRadius * 2, y: this.center.y + level.ballRadius * 2 },
+      { x: this.center.x - 1, y: this.center.y + 54 },
       level,
     );
   }
@@ -24,32 +30,29 @@ export class Nyma extends RoundGameObject {
   public nextBall: FireBall;
 
   draw(): void {
+    this.currentBall.draw();
+
     this.context.save();
     this.context.translate(this.center.x, this.center.y);
     this.context.rotate(this.angle);
 
-    renderCircle(this.context, { x: 0, y: 0 }, this.radius, 'DarkViolet');
-    renderText(
-      this.context,
-      'Nyma', {
-        x: 0,
-        y: -15,
-        color: 'white',
-        align: 'center',
-        font: '16px Arial',
-      },
-    );
-    renderRectangle(this.context, { x: 30, y: -10 }, 70, 20, 'DarkViolet');
-
-    this.currentBall.drawRelativeToPosition(this.center);
-    this.nextBall.drawRelativeToPosition(this.center);
+    renderImage(this.context, { x: -63, y: -63 }, nymaBaseImage);
+    renderImage(this.context, { x: -31, y: -31 }, nymaImage);
 
     this.context.restore();
+
+    this.nextBall.draw();
   }
 
   rotate(angle: number) {
+    const dAngle = angle - this.angle;
+
     this.angle = angle;
+
+    this.currentBall.center = positionAfterRotation(this.currentBall.center, this.center, dAngle);
     this.currentBall.angle = angle;
+
+    this.nextBall.center = positionAfterRotation(this.nextBall.center, this.center, dAngle);
   }
 
   setDirection(position: Position) {
@@ -72,13 +75,15 @@ export class Nyma extends RoundGameObject {
       return;
     }
 
+    const currentBallCenter = this.currentBall.center;
+
     this.fireBall = this.currentBall;
-    this.fireBall!.isMoving = true;
+    this.fireBall.isMoving = true;
 
     const nextBallCenter = this.nextBall.center;
 
     this.currentBall = this.nextBall;
-    this.currentBall.center = this.center;
+    this.currentBall.center = currentBallCenter;
     this.currentBall.angle = this.angle;
 
     this.nextBall = new FireBall(

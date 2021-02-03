@@ -12,6 +12,7 @@ import { FormButton } from 'components/FormButton';
 import { FormLink } from 'components/FormLink';
 import { store } from 'store/store';
 import { signUpRequest } from 'store/auth/thunks';
+import { PageMeta } from 'components/PageMeta/PageMeta';
 import { useEnhance } from './useEnhance';
 import './SignUp.css';
 
@@ -77,6 +78,8 @@ export const SignUp: FC = () => {
 
   return (
     <section className='signup-form-wrapper'>
+      <PageMeta title="Sign up" description="New player registration" />
+
       <h1>Create account</h1>
 
       <Formik
