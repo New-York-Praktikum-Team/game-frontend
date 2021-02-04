@@ -1,6 +1,6 @@
 import React, { FC, useCallback, useRef } from 'react';
 import {
-  Form, Formik, FormikHelpers,
+  Field, Form, Formik, FormikHelpers,
 } from 'formik';
 import { object, string } from 'yup';
 import { AppUrls } from 'routes/appUrls';
@@ -19,6 +19,10 @@ import './Profile.css';
 interface PasswordFormFields {
   oldPassword: string,
   newPassword: string
+}
+
+interface Theme {
+  theme: string
 }
 
 const validationSchema = object().shape({
@@ -78,6 +82,16 @@ export const Profile: FC = () => {
   const logout = useCallback(async (): Promise<void> => {
     await store.dispatch(userLogout);
   }, []);
+
+  const changeTheme = useCallback(async (
+    values: Theme,
+    { setSubmitting }: FormikHelpers<Theme>,
+  ) => {
+    setSubmitting(true);
+    // eslint-disable-next-line no-console
+    console.log(values);
+    setSubmitting(false);
+  }, [profileFormRef]);
 
   return (
     <section className='profile-form-wrapper'>
@@ -152,6 +166,25 @@ export const Profile: FC = () => {
           </fieldset>
         </div>
         <div className="col s4">
+          <fieldset className="profile-fieldset">
+            <legend>Theme</legend>
+            <Formik
+              initialValues={{ theme: 'light' }}
+              onSubmit={changeTheme}
+            >
+              {({ isSubmitting }) => (
+                <Form>
+                  <Field as="select" name="theme">
+                    <option value="">Default</option>
+                    <option value="light">Light</option>
+                    <option value="dark">Dark</option>
+                  </Field>
+                  <hr/>
+                  <FormButton text='Save' disabled={isSubmitting} />
+                </Form>
+              )}
+            </Formik>
+          </fieldset>
           <fieldset className="profile-fieldset">
             <legend>Exit</legend>
             <div>
