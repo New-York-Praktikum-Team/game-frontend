@@ -33,11 +33,13 @@ const getHtml = (reactHtml: string, state: RootState, helmetData: HelmetData): s
       </html>
     `);
 
-export const serverRenderMiddleware = (request: Request, response: Response): void => {
+export const serverRenderMiddleware = async (
+  request: Request, response: Response,
+): Promise<void> => {
   const location: string = request.url;
 
   if (response.locals.user) {
-    store.dispatch(fetchUserSuccess(transformUser(response.locals.user)));
+    await store.dispatch(fetchUserSuccess(transformUser(response.locals.user)));
   }
 
   const jsx = (

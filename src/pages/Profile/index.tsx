@@ -1,4 +1,6 @@
-import React, { FC, useCallback, useRef } from 'react';
+import React, {
+  FC, useCallback, useEffect, useRef,
+} from 'react';
 import {
   Field, Form, Formik, FormikHelpers,
 } from 'formik';
@@ -13,6 +15,7 @@ import {
   changeUserAvatar, changeUserPassword, updateUserProfile, userLogout,
 } from 'store/user/thunks';
 import { PageMeta } from 'components/PageMeta/PageMeta';
+import { fetchThemes } from 'store/themes/thunks';
 import { useEnhance } from './useEnhance';
 import './Profile.css';
 
@@ -43,7 +46,11 @@ export const Profile: FC = () => {
   const profileFormRef = useRef<HTMLFormElement>(null);
   const passwordFormRef = useRef<HTMLFormElement>(null);
 
-  const { profile, backgroundImage } = useEnhance();
+  const { profile, backgroundImage, themes } = useEnhance();
+
+  useEffect(() => {
+    store.dispatch(fetchThemes);
+  }, []);
 
   if (!profile) return null;
 
@@ -175,9 +182,9 @@ export const Profile: FC = () => {
               {({ isSubmitting }) => (
                 <Form>
                   <Field as="select" name="theme">
-                    <option value="">Default</option>
-                    <option value="light">Light</option>
-                    <option value="dark">Dark</option>
+                    {themes.map((theme) => (
+                      <option key={theme.id} value={theme.id}>{theme.name}</option>
+                    ))}
                   </Field>
                   <hr/>
                   <FormButton text='Save' disabled={isSubmitting} />
