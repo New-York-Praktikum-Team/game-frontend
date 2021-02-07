@@ -39,6 +39,11 @@ export function userReducer(
         ...state,
         isLoading: false,
       };
+    case UserActions.CLEAR_USER:
+      return {
+        ...state,
+        data: null,
+      };
     case UserActions.USER_LOGOUT:
       return {
         ...state,

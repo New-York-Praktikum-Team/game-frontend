@@ -6,6 +6,7 @@ export enum UserActions {
   FETCH_USER_SUCCESS = '@@user/FETCH_USER_SUCCESS',
   FETCH_USER_ERROR = '@@user/FETCH_USER_ERROR',
   USER_UPDATE_SUCCESS = '@@user/USER_UPDATE_SUCCESS',
+  CLEAR_USER = '@@user/CLEAR_USER',
   USER_LOGOUT = '@@user/USER_LOGOUT',
 }
 
@@ -23,6 +24,9 @@ export function fetchUserError(): BaseActionType<UserActions> {
 }
 export function fetchUserRequest(): BaseActionType<UserActions> {
   return { type: UserActions.FETCH_USER_REQUEST };
+}
+export function clearUser(): ItemActionType {
+  return { type: UserActions.CLEAR_USER, item: null };
 }
 export function userLogoutRequest(): BaseActionType<UserActions> {
   return { type: UserActions.USER_LOGOUT };

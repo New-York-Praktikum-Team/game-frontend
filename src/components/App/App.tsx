@@ -20,13 +20,15 @@ export const App = hot(withRouter(({ history }) => {
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    if (isUserLogged) {
-      const themeFromCache = getThemeFromCache();
+    const themeFromCache = getThemeFromCache();
 
-      if (themeFromCache) {
-        setThemeStyles(themeFromCache);
-        setReady(true);
-      } else {
+    if (themeFromCache) {
+      setThemeStyles(themeFromCache);
+      setReady(true);
+    }
+
+    if (isUserLogged) {
+      if (!themeFromCache) {
         store.dispatch(getUserTheme()).then(() => {
           const { theme } = store.getState().themes;
           if (theme) {
