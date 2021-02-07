@@ -9,6 +9,10 @@ export enum ThemesActions {
   SET_USER_THEME_REQUEST = '@@user/SET_USER_THEME_REQUEST',
   SET_USER_THEME_SUCCESS = '@@user/SET_USER_THEME_SUCCESS',
   SET_USER_THEME_ERROR = '@@user/SET_USER_THEME_ERROR',
+
+  GET_USER_THEME_REQUEST = '@@user/GET_USER_THEME_REQUEST',
+  GET_USER_THEME_SUCCESS = '@@user/GET_USER_THEME_SUCCESS',
+  GET_USER_THEME_ERROR = '@@user/GET_USER_THEME_ERROR',
 }
 
 export interface ThemesActionType extends BaseActionType<ThemesActions> {
@@ -16,6 +20,10 @@ export interface ThemesActionType extends BaseActionType<ThemesActions> {
 }
 
 export interface SetThemeActionType extends BaseActionType<ThemesActions> {
+  theme: Theme;
+}
+
+export interface GetThemeActionType extends BaseActionType<ThemesActions> {
   theme: Theme;
 }
 
@@ -41,4 +49,16 @@ export function setUserThemeSuccess(theme: Theme): SetThemeActionType {
 
 export function setUserThemeError(): BaseActionType<ThemesActions> {
   return { type: ThemesActions.SET_USER_THEME_ERROR };
+}
+
+export function getUserThemeRequest(): BaseActionType<ThemesActions> {
+  return { type: ThemesActions.GET_USER_THEME_REQUEST };
+}
+
+export function getUserThemeSuccess(theme: Theme): GetThemeActionType {
+  return { type: ThemesActions.GET_USER_THEME_SUCCESS, theme };
+}
+
+export function getUserThemeError(): BaseActionType<ThemesActions> {
+  return { type: ThemesActions.GET_USER_THEME_ERROR };
 }

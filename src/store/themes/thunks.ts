@@ -6,7 +6,12 @@ import {
   ThemesActions,
   fetchThemesError,
   fetchThemesRequest,
-  fetchThemesSuccess, setUserThemeError, setUserThemeRequest, setUserThemeSuccess,
+  fetchThemesSuccess,
+  getUserThemeError,
+  getUserThemeRequest,
+  getUserThemeSuccess,
+  setUserThemeError,
+  setUserThemeRequest, setUserThemeSuccess,
 } from 'store/themes/actions';
 
 export async function fetchThemes(
@@ -29,6 +34,20 @@ export const setUserTheme = (themeId: number) => (
       dispatch(setUserThemeSuccess(theme));
     } catch (err) {
       dispatch(setUserThemeError());
+      // eslint-disable-next-line no-console
+      console.error(err);
+    }
+  }
+);
+
+export const getUserTheme = () => (
+  async (dispatch: Dispatch<BaseActionType<ThemesActions>>) => {
+    try {
+      dispatch(getUserThemeRequest());
+      const theme = await api.getUserTheme();
+      dispatch(getUserThemeSuccess(theme));
+    } catch (err) {
+      dispatch(getUserThemeError());
       // eslint-disable-next-line no-console
       console.error(err);
     }

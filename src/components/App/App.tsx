@@ -11,13 +11,18 @@ import { fetchUser } from 'store/user/thunks';
 import { loggedSelector } from 'store/user/selectors';
 import { notification } from 'components/Notification';
 import { hot } from 'react-hot-loader/root';
+import { getUserTheme } from 'store/themes/thunks';
+import { setThemeStyles } from 'modules/setTheme';
 import * as api from '../../modules/api';
 
 export const App = hot(withRouter(({ history }) => {
   const isUserLogged = useSelector(loggedSelector);
 
   useEffect(() => {
-    if (isUserLogged) return;
+    if (isUserLogged) {
+      store.dispatch(getUserTheme()).then(setThemeStyles);
+      return;
+    }
 
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get('code');

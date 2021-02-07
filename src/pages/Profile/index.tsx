@@ -16,6 +16,7 @@ import {
 } from 'store/user/thunks';
 import { PageMeta } from 'components/PageMeta/PageMeta';
 import { fetchThemes, setUserTheme } from 'store/themes/thunks';
+import { setThemeStyles } from 'modules/setTheme';
 import { useEnhance } from './useEnhance';
 import './Profile.css';
 
@@ -46,7 +47,9 @@ export const Profile: FC = () => {
   const profileFormRef = useRef<HTMLFormElement>(null);
   const passwordFormRef = useRef<HTMLFormElement>(null);
 
-  const { profile, backgroundImage, themes } = useEnhance();
+  const {
+    profile, backgroundImage, themes, theme,
+  } = useEnhance();
 
   useEffect(() => {
     store.dispatch(fetchThemes);
@@ -96,6 +99,7 @@ export const Profile: FC = () => {
   ) => {
     setSubmitting(true);
     await store.dispatch(setUserTheme(Number(values.theme)));
+    setThemeStyles();
     setSubmitting(false);
   }, [profileFormRef]);
 
@@ -175,14 +179,14 @@ export const Profile: FC = () => {
           <fieldset className="profile-fieldset">
             <legend>Theme</legend>
             <Formik
-              initialValues={{ theme: '1' }}
+              initialValues={{ theme: theme ? theme.id.toString() : '1' }}
               onSubmit={changeTheme}
             >
               {({ isSubmitting }) => (
                 <Form>
                   <Field as="select" name="theme">
-                    {themes.map((theme) => (
-                      <option key={theme.id} value={theme.id}>{theme.name}</option>
+                    {themes.map(({ name, id }) => (
+                      <option key={id} value={id}>{name}</option>
                     ))}
                   </Field>
                   <hr/>

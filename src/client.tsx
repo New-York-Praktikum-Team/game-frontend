@@ -8,6 +8,7 @@ import { store } from './store/store';
 
 import 'materialize-css/dist/css/materialize.min.css';
 import 'materialize-css/dist/js/materialize.min';
+import './assets/styles/theme.css';
 
 ReactDOM.hydrate(
   <Provider store={store}>

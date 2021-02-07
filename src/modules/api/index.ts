@@ -69,6 +69,7 @@ export const OAuthYandexSignInRequest = async (
 ): Promise<string> => HTTPTransport.post('oauth/yandex', { json: { code } }).text();
 
 export const getThemes = async (): Promise<Theme[]> => HTTPLocalTransport.get('theme').json<Theme[]>();
+export const getUserTheme = async (): Promise<Theme> => HTTPLocalTransport.get('theme/user').json<Theme>();
 
 export const setUserTheme = async (themeId: number): Promise<Theme> => HTTPLocalTransport.put('theme/user', {
   json: { themeId },
