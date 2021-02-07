@@ -1,6 +1,6 @@
 import { Theme } from 'interfaces';
 import { BaseActionType } from 'store/types';
-import { ThemesActionType, ThemesActions } from 'store/themes/actions';
+import { SetThemeActionType, ThemesActionType, ThemesActions } from 'store/themes/actions';
 
 type ThemesReducer = {
   themes: Theme[];
@@ -34,6 +34,11 @@ export function themesReducer(
       return {
         ...state,
         isLoading: false,
+      };
+    case ThemesActions.SET_USER_THEME_SUCCESS:
+      return {
+        ...state,
+        theme: (action as SetThemeActionType).theme,
       };
     default:
       return state;

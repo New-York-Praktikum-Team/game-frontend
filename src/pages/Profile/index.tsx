@@ -15,7 +15,7 @@ import {
   changeUserAvatar, changeUserPassword, updateUserProfile, userLogout,
 } from 'store/user/thunks';
 import { PageMeta } from 'components/PageMeta/PageMeta';
-import { fetchThemes } from 'store/themes/thunks';
+import { fetchThemes, setUserTheme } from 'store/themes/thunks';
 import { useEnhance } from './useEnhance';
 import './Profile.css';
 
@@ -95,8 +95,7 @@ export const Profile: FC = () => {
     { setSubmitting }: FormikHelpers<Theme>,
   ) => {
     setSubmitting(true);
-    // eslint-disable-next-line no-console
-    console.log(values);
+    await store.dispatch(setUserTheme(Number(values.theme)));
     setSubmitting(false);
   }, [profileFormRef]);
 
@@ -176,7 +175,7 @@ export const Profile: FC = () => {
           <fieldset className="profile-fieldset">
             <legend>Theme</legend>
             <Formik
-              initialValues={{ theme: 'light' }}
+              initialValues={{ theme: '1' }}
               onSubmit={changeTheme}
             >
               {({ isSubmitting }) => (
