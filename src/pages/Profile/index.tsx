@@ -98,8 +98,12 @@ export const Profile: FC = () => {
     { setSubmitting }: FormikHelpers<Theme>,
   ) => {
     setSubmitting(true);
-    await store.dispatch(setUserTheme(Number(values.theme)));
-    setThemeStyles();
+    const themeId = Number(values.theme);
+    await store.dispatch(setUserTheme(themeId));
+    const selectedTheme = themes.find((t) => t.id === themeId);
+    if (selectedTheme) {
+      setThemeStyles(selectedTheme);
+    }
     setSubmitting(false);
   }, [profileFormRef]);
 
@@ -190,7 +194,7 @@ export const Profile: FC = () => {
                     ))}
                   </Field>
                   <hr/>
-                  <FormButton text='Save' disabled={isSubmitting} />
+                  <FormButton text='Apply' disabled={isSubmitting} />
                 </Form>
               )}
             </Formik>
