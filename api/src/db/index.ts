@@ -1,4 +1,5 @@
 import { createConnection, getConnection } from 'typeorm';
+import { Feedback } from '../entity/Feedback';
 import { Theme } from '../entity/Theme';
 import { UserTheme } from '../entity/UserTheme';
 
@@ -40,6 +41,7 @@ class DB {
         url: 'mongodb://localhost:27017/nyma-api',
         useUnifiedTopology: true,
         synchronize: true,
+        entities: [Feedback],
       });
 
       // eslint-disable-next-line no-console
