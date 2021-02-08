@@ -27,8 +27,8 @@ app.use('/api', routes);
 
   if (certificateIsExist) {
     https.createServer({
-      key: fs.readFileSync('server/certificate/server.key'),
-      cert: fs.readFileSync('server/certificate/server.cert'),
+      key: fs.readFileSync('api/src/certificate/server.key'),
+      cert: fs.readFileSync('api/src/certificate/server.cert'),
     }, app)
       .listen(port, () => {
         // eslint-disable-next-line no-console
