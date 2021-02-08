@@ -1,5 +1,5 @@
 import {
-  Column, Entity, JoinTable, ManyToOne,
+  Column, Entity, ManyToOne,
 } from 'typeorm';
 import { Theme } from './Theme';
 
@@ -9,6 +9,5 @@ export class UserTheme {
   userId: number;
 
   @ManyToOne(() => Theme, (theme) => theme.json)
-  @JoinTable()
   theme: Theme;
 }
