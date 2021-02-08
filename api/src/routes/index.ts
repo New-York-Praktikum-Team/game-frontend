@@ -5,6 +5,6 @@ import themes from './themes';
 const router = express.Router();
 
 router.use('/geolocation', geolocationRouter);
-router.use('/themes', themes);
+router.use('/theme', themes);
 
 export default router;

@@ -3,9 +3,12 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import https from 'https';
 import fs from 'fs';
+import dotenv from 'dotenv';
 import { db } from './db';
 import routes from './routes';
 import { authorization } from './middlewares/authorization';
+
+dotenv.config();
 
 const port = process.env.PORT || 5001;
 const certificateIsExist = fs.existsSync('api/src/certificate/server.key') && fs.existsSync('api/src/certificate/server.cert');
