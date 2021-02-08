@@ -102,3 +102,9 @@ export interface OAuthGetYandexServiceResponseDTO {
 export interface OAuthYandexService {
   serviceId: string;
 }
+
+export interface Theme {
+  id: number;
+  name: string,
+  json: Record<string, string>
+}

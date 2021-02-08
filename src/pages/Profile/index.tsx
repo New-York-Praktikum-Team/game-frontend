@@ -1,6 +1,8 @@
-import React, { FC, useCallback, useRef } from 'react';
+import React, {
+  FC, useCallback, useEffect, useRef,
+} from 'react';
 import {
-  Form, Formik, FormikHelpers,
+  Field, Form, Formik, FormikHelpers,
 } from 'formik';
 import { object, string } from 'yup';
 import { AppUrls } from 'routes/appUrls';
@@ -13,12 +15,18 @@ import {
   changeUserAvatar, changeUserPassword, updateUserProfile, userLogout,
 } from 'store/user/thunks';
 import { PageMeta } from 'components/PageMeta/PageMeta';
+import { fetchThemes, setUserTheme } from 'store/themes/thunks';
+import { setThemeStyles } from 'modules/setTheme';
 import { useEnhance } from './useEnhance';
 import './Profile.css';
 
 interface PasswordFormFields {
   oldPassword: string,
   newPassword: string
+}
+
+interface Theme {
+  theme: string
 }
 
 const validationSchema = object().shape({
@@ -39,7 +47,13 @@ export const Profile: FC = () => {
   const profileFormRef = useRef<HTMLFormElement>(null);
   const passwordFormRef = useRef<HTMLFormElement>(null);
 
-  const { profile, backgroundImage } = useEnhance();
+  const {
+    profile, backgroundImage, themes, theme,
+  } = useEnhance();
+
+  useEffect(() => {
+    store.dispatch(fetchThemes);
+  }, []);
 
   if (!profile) return null;
 
@@ -78,6 +92,20 @@ export const Profile: FC = () => {
   const logout = useCallback(async (): Promise<void> => {
     await store.dispatch(userLogout);
   }, []);
+
+  const changeTheme = useCallback(async (
+    values: Theme,
+    { setSubmitting }: FormikHelpers<Theme>,
+  ) => {
+    setSubmitting(true);
+    const themeId = Number(values.theme);
+    await store.dispatch(setUserTheme(themeId));
+    const selectedTheme = themes.find((t) => t.id === themeId);
+    if (selectedTheme) {
+      setThemeStyles(selectedTheme);
+    }
+    setSubmitting(false);
+  }, [profileFormRef]);
 
   return (
     <section className='profile-form-wrapper'>
@@ -152,6 +180,25 @@ export const Profile: FC = () => {
           </fieldset>
         </div>
         <div className="col s4">
+          <fieldset className="profile-fieldset">
+            <legend>Theme</legend>
+            <Formik
+              initialValues={{ theme: theme ? theme.id.toString() : '1' }}
+              onSubmit={changeTheme}
+            >
+              {({ isSubmitting }) => (
+                <Form>
+                  <Field as="select" name="theme">
+                    {themes.map(({ name, id }) => (
+                      <option key={id} value={id}>{name}</option>
+                    ))}
+                  </Field>
+                  <hr/>
+                  <FormButton text='Apply' disabled={isSubmitting} />
+                </Form>
+              )}
+            </Formik>
+          </fieldset>
           <fieldset className="profile-fieldset">
             <legend>Exit</legend>
             <div>

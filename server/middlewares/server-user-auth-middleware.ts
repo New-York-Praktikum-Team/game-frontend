@@ -13,7 +13,7 @@ export const serverUserAuthMiddleware = async (
 
   response.locals.user = null;
 
-  if (requestCookies.authCookie) {
+  if (requestCookies.authCookie && requestCookies.uuid) {
     const cookies = Object.entries(requestCookies).map(([key, value]) => `${key}=${value}`).join(';');
 
     try {

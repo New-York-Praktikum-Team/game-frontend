@@ -3,6 +3,10 @@
   margin-bottom: 50px;
 }
 
+.profile-form-wrapper select {
+  display: block;
+}
+
 .profile-fieldset {
   margin-bottom: 20px;
 }

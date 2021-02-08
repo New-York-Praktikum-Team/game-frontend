@@ -1,7 +1,7 @@
 import {
   transformSignUp, transformUser, transformUserUpdate, transformYandexService,
 } from 'modules/transform';
-import { HTTPTransport } from 'modules/HTTPTransport';
+import { HTTPLocalTransport, HTTPTransport } from 'modules/HTTPTransport';
 
 import {
   GetLeaderboardRequest,
@@ -11,7 +11,7 @@ import {
   SetLeaderboardItemRequest,
   SignUpRequest,
   SignUpRequestDTO,
-  SignUpResponse,
+  SignUpResponse, Theme,
   User,
   UserDTO,
 } from 'interfaces';
@@ -67,3 +67,10 @@ export const getYandexOAuthService = async (): Promise<OAuthYandexService> => {
 export const OAuthYandexSignInRequest = async (
   code: string,
 ): Promise<string> => HTTPTransport.post('oauth/yandex', { json: { code } }).text();
+
+export const getThemes = async (): Promise<Theme[]> => HTTPLocalTransport.get('theme').json<Theme[]>();
+export const getUserTheme = async (): Promise<Theme> => HTTPLocalTransport.get('theme/user').json<Theme>();
+
+export const setUserTheme = async (themeId: number): Promise<Theme> => HTTPLocalTransport.put('theme/user', {
+  json: { themeId },
+}).json<Theme>();

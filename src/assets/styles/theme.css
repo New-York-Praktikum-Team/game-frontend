@@ -1,0 +1,22 @@
+:root {
+  --primaryColor: #ee6e73;
+  --backgroundColor: #ffffff;
+  --textColor: #222222;
+}
+
+body {
+  background-color: var(--backgroundColor);
+  color: var(--textColor);
+}
+
+input {
+  color: var(--textColor);
+}
+
+nav {
+  background-color: var(--primaryColor);
+}
+
+td, th {
+  border-color: var(--primaryColor);
+}

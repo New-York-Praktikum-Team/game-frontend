@@ -1,4 +1,5 @@
 import React, { FC, useEffect } from 'react';
+// @ts-ignore
 import dollar from 'assets/images/dollar.png';
 import { PageMeta } from 'components/PageMeta/PageMeta';
 import { store } from 'store/store';

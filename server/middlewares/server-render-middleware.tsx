@@ -8,7 +8,7 @@ import { App } from '../../src/components/App';
 import { store } from '../../src/store/store';
 import { AppUrls } from '../../src/routes/appUrls';
 import { RootState } from '../../src/store/rootReducer';
-import { fetchUserSuccess } from '../../src/store/user/actions';
+import { clearUser, fetchUserSuccess } from '../../src/store/user/actions';
 import { transformUser } from '../../src/modules/transform';
 
 const getHtml = (reactHtml: string, state: RootState, helmetData: HelmetData): string => (`
@@ -33,11 +33,15 @@ const getHtml = (reactHtml: string, state: RootState, helmetData: HelmetData): s
       </html>
     `);
 
-export const serverRenderMiddleware = (request: Request, response: Response): void => {
+export const serverRenderMiddleware = async (
+  request: Request, response: Response,
+): Promise<void> => {
   const location: string = request.url;
 
   if (response.locals.user) {
-    store.dispatch(fetchUserSuccess(transformUser(response.locals.user)));
+    await store.dispatch(fetchUserSuccess(transformUser(response.locals.user)));
+  } else {
+    await store.dispatch(clearUser());
   }
 
   const jsx = (
