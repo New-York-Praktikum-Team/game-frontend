@@ -9,10 +9,7 @@ export class Feedback {
   } 
 
   @ObjectIdColumn()
-  _id?: ObjectID;
-
-  @PrimaryGeneratedColumn()
-  id?: number;
+  id?: ObjectID;
 
   @Column()
   user?: string;

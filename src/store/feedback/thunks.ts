@@ -12,6 +12,8 @@ import {
   fetchFeedbackRequest,
   fetchFeedbackSuccess,
 } from 'store/feedback/actions';
+import { getErrorFromRequest } from 'modules/getErrorFromRequest';
+import { notification } from 'components/Notification';
 
 export async function fetchFeedback(
   dispatch: Dispatch<FeedbackActionType | BaseActionType<FeedbackActions>>,
@@ -35,6 +37,9 @@ export const addFeedback = (text: string) => (
       dispatch(addFeedbackError());
       // eslint-disable-next-line no-console
       console.error(err);
+
+      const error = await getErrorFromRequest(err);
+      notification.error(error.message);
     }
   }
 );

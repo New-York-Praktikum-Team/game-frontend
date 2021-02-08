@@ -1,6 +1,6 @@
 import React, { TextareaHTMLAttributes, useCallback } from 'react';
 import {
-  ErrorMessage, FormikContextType, FormikValues, connect, Field,
+  ErrorMessage, Field, FormikContextType, FormikValues, connect,
 } from 'formik';
 import './FormTextArea.css';
 
@@ -33,7 +33,7 @@ const FormTextAreaComponent = (props: ConnectedFormFieldProps) => {
         component='textarea'
         {...rest}
       />
-      
+
       <ErrorMessage
         className='helper-text materialize-red-text'
         component='span'

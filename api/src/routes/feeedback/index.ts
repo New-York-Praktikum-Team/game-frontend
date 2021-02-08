@@ -35,4 +35,15 @@ router.post('/', async (request: Request, response: Response) => {
   }
 });
 
+// Clear feedback table
+router.delete('/', async (request: Request, response: Response) => {
+  try {
+    const notes = await db.mongodb.manager.find(Feedback);
+    await db.mongodb.manager.remove(notes);
+    response.json({ error: false });
+  } catch (err) {
+    response.status(500).json({ error: true, message: `Internal Error: ${err}` });
+  }
+});
+
 export default router;
