@@ -1,4 +1,6 @@
-import React, { FC, useCallback, useEffect, useRef } from 'react';
+import React, {
+  FC, useCallback, useEffect, useRef,
+} from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { AppUrls } from 'routes/appUrls';
