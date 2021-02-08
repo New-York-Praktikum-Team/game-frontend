@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC, useCallback, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { AppUrls } from 'routes/appUrls';
@@ -6,17 +6,43 @@ import { loggedSelector } from 'store/user/selectors';
 import { PageMeta } from 'components/PageMeta/PageMeta';
 import './Home.css';
 import { store } from 'store/store';
-import { fetchFeedback } from 'store/feedback/thunks';
-import { useEnhance } from './useEnhance';
+import { addFeedback, fetchFeedback } from 'store/feedback/thunks';
+import { Feedback } from 'interfaces';
+import { feedbackListSelector } from 'store/feedback/selectors';
+import { Form, Formik, FormikHelpers } from 'formik';
+import { FormButton } from 'components/FormButton';
+import { object, string } from 'yup';
+import { FormTextArea } from 'components/FormTextArea';
+
+interface FeedbackFormFields {
+  review: string
+}
+
+const validationSchema = object().shape({
+  review: string().required('Text should not be empty'),
+});
 
 export const Home: FC = () => {
+  const feedbackFormRef = useRef<HTMLFormElement>(null);
+
+  const isLoggedIn = useSelector(loggedSelector);
+
+  const feedbackList: Feedback[] = useSelector(feedbackListSelector);
+
   useEffect(() => {
     store.dispatch(fetchFeedback);
   }, []);
 
-  const { feedbackList } = useEnhance();
-
-  const isLoggedIn = useSelector(loggedSelector);
+  const submitFeedback = useCallback(async (
+    { review }: FeedbackFormFields,
+    { setSubmitting, resetForm }: FormikHelpers<FeedbackFormFields>,
+  ) => {
+    setSubmitting(true);
+    await store.dispatch(addFeedback(review));
+    await store.dispatch(fetchFeedback);
+    setSubmitting(false);
+    resetForm();
+  }, [feedbackFormRef]);
 
   return (
     <section className="home">
@@ -29,35 +55,34 @@ export const Home: FC = () => {
         : <p>But first things first, <Link to={AppUrls.SignIn}>Sign In</Link></p>
       }
 
-      <table className="table table-feedback">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Feedback</th>
-          </tr>
-        </thead>
-        <tbody>
-          {feedbackList.length
-            ? feedbackList.map(({ text, user }, index) => (
-              <tr key={index}>
-                <td>
-                  <span>{user}</span>
-                </td>
-                <td>
-                  <span>{text}</span>
-                </td>
-              </tr>
-            ))
-            : (
-              <tr>
-                <td colSpan={2}>
-                  <span>Be the first</span>
-                </td>
-              </tr>
-            )
-          }
-        </tbody>
-      </table>
+      <h3>Player reviews</h3>
+
+      <Formik
+        initialValues={{ review: '' }}
+        validationSchema={validationSchema}
+        validateOnChange={false}
+        validateOnBlur={false}
+        onSubmit={submitFeedback}
+      >
+        {({ isSubmitting }) => (
+          <Form ref={feedbackFormRef}>
+            <FormTextArea label="Leave your review:" name="review" rows={5} cols={75}></FormTextArea>
+            <FormButton text='Send' disabled={isSubmitting} />
+          </Form>
+        )}
+      </Formik>
+
+      {feedbackList.length
+        ? feedbackList.map(({ text, user }, index) => (
+          <p key={index}>
+            <span>{user}: </span>
+            <cite>{text}</cite>
+          </p>
+        ))
+        : (
+          <p>We want to hear from you, leave your feedback!</p>
+        )
+      }
 
     </section>
   );
