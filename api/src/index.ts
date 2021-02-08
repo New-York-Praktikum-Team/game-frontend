@@ -17,7 +17,8 @@ const app = express();
 
 app.use(cookieParser());
 app.use(express.json());
-app.use(cors({ credentials: true, origin: 'https://local.ya-praktikum.tech:5000' }));
+// app.use(cors({ credentials: true, origin: 'https://local.ya-praktikum.tech:5000' }));
+app.use(cors({ credentials: true, origin: 'https://localhost:5000' }));
 app.use(authorization);
 
 app.use('/api', routes);

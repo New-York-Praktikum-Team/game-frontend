@@ -108,3 +108,9 @@ export interface Theme {
   name: string,
   json: Record<string, string>
 }
+
+export interface Feedback {
+  id: string;
+  user: string;
+  text: string;
+}

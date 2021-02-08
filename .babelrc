@@ -6,7 +6,8 @@
       "decoratorsBeforeExport": true
     }],
     ["react-hot-loader/babel"],
-    ["@babel/plugin-transform-runtime", { "regenerator": true }],
-    ["@babel/plugin-proposal-decorators", { "legacy": true }]
-]
+    ["@babel/plugin-transform-runtime", {
+      "regenerator": true
+    }
+  ]]
 }

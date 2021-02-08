@@ -1,9 +1,9 @@
 import { Entity, Column, ObjectID, ObjectIdColumn, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
-export class Note {
+export class Feedback {
 
-  constructor(user: string = "anonymus", text: string = "test") {
+  constructor(user: string = "anonymus", text: string = "") {
     this.user = user;
     this.text = text;
   } 
