@@ -35,9 +35,15 @@ router.post('/', isAuth, async (request: Request, response: Response) => {
 });
 
 // Get or create user theme
-router.get('/user', isAuth, async (request: Request, response: Response) => {
+router.get('/user', async (request: Request, response: Response) => {
   const { manager } = db.postgres;
   const { user } = response.locals;
+
+  if (!user) {
+    const defaultTheme = await manager.findOne(Theme);
+    response.json(defaultTheme);
+    return;
+  }
 
   try {
     const savedUserTheme = await manager.findOne(UserTheme, {
@@ -55,6 +61,7 @@ router.get('/user', isAuth, async (request: Request, response: Response) => {
       const userTheme = new UserTheme();
       userTheme.userId = user.id;
       userTheme.theme = defaultTheme;
+
       await manager.save(userTheme);
 
       response.json(defaultTheme);
