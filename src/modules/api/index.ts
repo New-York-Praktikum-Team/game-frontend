@@ -78,5 +78,5 @@ export const setUserTheme = async (themeId: number): Promise<Theme> => HTTPLocal
 
 export const getFeedback = async (): Promise<Feedback[]> => HTTPLocalTransport.get('feedback').json<Feedback[]>();
 export const addFeedback = async (text: string): Promise<Feedback> => HTTPLocalTransport.post('feedback', {
-  json: text,
+  json: { text },
 }).json<Feedback>();
