@@ -4,6 +4,7 @@ import {
 import { HTTPLocalTransport, HTTPTransport } from 'modules/HTTPTransport';
 
 import {
+  Feedback,
   GetLeaderboardRequest,
   GetLeaderboardResponseItem,
   OAuthGetYandexServiceResponseDTO,
@@ -74,3 +75,8 @@ export const getUserTheme = async (): Promise<Theme> => HTTPLocalTransport.get('
 export const setUserTheme = async (themeId: number): Promise<Theme> => HTTPLocalTransport.put('theme/user', {
   json: { themeId },
 }).json<Theme>();
+
+export const getFeedback = async (): Promise<Feedback[]> => HTTPLocalTransport.get('feedback').json<Feedback[]>();
+export const addFeedback = async (text: string): Promise<Feedback> => HTTPLocalTransport.post('feedback', {
+  json: { text },
+}).json<Feedback>();
