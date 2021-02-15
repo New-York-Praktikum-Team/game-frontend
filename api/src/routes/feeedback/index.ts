@@ -1,5 +1,5 @@
+import 'reflect-metadata';
 import express, { Request, Response } from 'express';
-import "reflect-metadata";
 import { Feedback } from '../../entity/Feedback';
 import { db } from '../../db';
 

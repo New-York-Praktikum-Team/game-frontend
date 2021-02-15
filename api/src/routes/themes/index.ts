@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import express, { Request, Response } from 'express';
 import { db } from '../../db';
 import { Theme } from '../../entity/Theme';
@@ -12,7 +13,7 @@ router.get('/', isAuth, async (request: Request, response: Response) => {
     const themes = await db.postgres.manager.find(Theme);
     response.json(themes);
   } catch (err) {
-    response.status(500).json({ error: true, message: 'Internal Error' });
+    response.status(500).json({ error: true, message: err });
   }
 });
 
