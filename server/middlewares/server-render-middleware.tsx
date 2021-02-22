@@ -16,7 +16,7 @@ const getHtml = (reactHtml: string, state: RootState, helmetData: HelmetData): s
       <html lang="en">
         <head>
             <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <meta name="viewport" content="width=1230"/>
             <link rel="shortcut icon" type="image/png" href="favicon.ico">
             <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
             <link rel="stylesheet" href="main.css">

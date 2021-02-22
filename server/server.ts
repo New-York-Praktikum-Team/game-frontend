@@ -14,7 +14,8 @@ const app = express();
 
 app.use(cookieParser());
 app.use(express.json());
-app.use(compression()).use(express.static(path.resolve(__dirname, '../dist')));
+app.use(compression());
+app.use(express.static(path.resolve(__dirname, '../dist')));
 
 if (process.env.NODE_ENV === 'development') {
   const compiler = webpack(webpackClientConfig(undefined, { mode: 'development' }));
