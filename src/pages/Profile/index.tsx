@@ -200,7 +200,7 @@ export const Profile: FC = () => {
             </Formik>
           </fieldset>
           <fieldset className="profile-fieldset">
-            <legend>Exit</legend>
+            <legend>Logout</legend>
             <div>
               <span>To exit the profile, use the button below</span>
             </div>
