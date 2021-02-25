@@ -14,8 +14,10 @@ import { SignInRequest } from 'interfaces';
 import { store } from 'store/store';
 import { loginRequest } from 'store/auth/thunks';
 import { PageMeta } from 'components/PageMeta/PageMeta';
-import { useEnhance } from './useEnhance';
 import './SignIn.css';
+import { getUserTheme } from 'store/themes/thunks';
+import { setThemeStyles } from 'modules/setTheme';
+import { useEnhance } from './useEnhance';
 
 const initialValues: SignInRequest = {
   login: '',
@@ -68,6 +70,14 @@ export const SignIn: FC = () => {
     if (isUserLogged) {
       notification.success(`You are logged in as ${login}`);
       history.push(AppUrls.Game);
+
+      store.dispatch(getUserTheme()).then(() => {
+        const { theme } = store.getState().themes;
+
+        if (theme) {
+          setThemeStyles(theme);
+        }
+      });
     }
   }, [isUserLogged]);
 

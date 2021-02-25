@@ -13,7 +13,8 @@
     "build": "npm run clean && webpack --mode=production",
     "clean": "rimraf dist",
     "test": "echo \"Error: Tests is not implemented\" && exit 1",
-    "lint": "eslint --fix ./src --config ./.eslintrc --ext .js,.ts,.tsx"
+    "lint": "eslint --fix ./src --config ./.eslintrc --ext .js,.ts,.tsx",
+    "deploy": "npm run build && rsync -av --delete ./. elfexor@new-york-nyma-01.ya-praktikum.tech:www/nyma/"
   },
   "repository": {
     "type": "git",
@@ -98,6 +99,7 @@
     "cookie-parser": "1.4.5",
     "copy-webpack-plugin": "6.4.0",
     "cors": "2.8.5",
+    "dotenv": "8.2.0",
     "express": "4.17.1",
     "formik": "2.2.1",
     "html-webpack-plugin": "4.5.0",

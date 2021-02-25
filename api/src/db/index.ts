@@ -1,5 +1,7 @@
 import { createConnection, getConnection } from 'typeorm';
+import { Feedback } from '../entity/Feedback';
 import { Theme } from '../entity/Theme';
+import { UserTheme } from '../entity/UserTheme';
 
 class DB {
   public get mongodb() {
@@ -12,12 +14,17 @@ class DB {
 
   public connect = async (): Promise<void> => {
     try {
+      const { DB_LOGIN, DB_PASSWORD } = process.env;
+
       await createConnection({
         name: 'postgres',
         type: 'postgres',
-        url: 'postgres://nyma:nyma@localhost:5436/nyma-api',
+        url: `postgres://${DB_LOGIN}:${DB_PASSWORD}@localhost:5436/nyma-api`,
         synchronize: true,
-        entities: [Theme],
+        migrations: [`${__dirname}/../migrations/postgres/*.ts`],
+        migrationsRun: true,
+        migrationsTableName: 'migrations',
+        entities: [Theme, UserTheme],
       });
 
       // eslint-disable-next-line no-console
@@ -34,6 +41,7 @@ class DB {
         url: 'mongodb://localhost:27017/nyma-api',
         useUnifiedTopology: true,
         synchronize: true,
+        entities: [Feedback],
       });
 
       // eslint-disable-next-line no-console
