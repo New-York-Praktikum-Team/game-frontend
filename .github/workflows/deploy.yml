@@ -1,0 +1,20 @@
+name: SSH Deploy
+
+on:
+  push:
+    branches: [ ci ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: deploy
+        uses: garygrossgarten/github-action-ssh@release
+        with:
+          command: ls -a
+          host: new-york-nyma-01.ya-praktikum.tech
+          username: elfexor
+#          passphrase: ${{ secrets.PASSPHRASE }}
+          privateKey: ${{ secrets.SSH_KEY}}
